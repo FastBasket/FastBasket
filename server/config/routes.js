@@ -1,0 +1,7 @@
+var productController = require('../controllers/productController');
+var storeController = require('../controllers/storeController');
+
+module.exports = function (app, express) {
+  app.get('/api/product/getProducts', productController.getProducts);
+  app.get('/api/store/getStores', storeController.getStores);
+};

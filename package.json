@@ -1,0 +1,23 @@
+{
+  "name": "fastbasket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FastBasket/FastBasket.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FastBasket/FastBasket/issues"
+  },
+  "homepage": "https://github.com/FastBasket/FastBasket#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "morgan": "^1.6.1",
+    "pg": "^4.4.3"
+  }
+}
