@@ -1,0 +1,12 @@
+
+
+<button ng-click="cart.clearAll()">empty cart</button>
+
+<div ng-repeat="(name, attr) in cart.store">
+    <p> {{name}} {{attr.count}} x {{attr.price | currency: "$" : 2}} = {{attr.price * attr.count}}  </p>
+    <button ng-click="cart.removeOneItem(attr)">remove 1 </button>
+    <button ng-click="cart.removeAllItem(attr)">remove all </button>
+</div>
+<div>TOTAL: {{cart.total | currency: "$" : 2}}</div>
+
+<a ng-show="cart.size" href="#/checkout">checkout</a>

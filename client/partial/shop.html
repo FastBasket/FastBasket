@@ -1,0 +1,6 @@
+
+<div ng-repeat="product in produce  | filter:queryText">
+  {{product.name}}
+  {{product.price}}
+  <button ng-click="cart.addOneItem(product)">[ADD]</button>
+</div>
