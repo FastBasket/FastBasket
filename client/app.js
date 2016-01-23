@@ -1,72 +1,67 @@
-var fastBasket = angular.module('fastBasket', [
+var fastBasket = angular.module('fastBasket', ['ui.router', 'ngMaterial',
   'fastBasket.shop',
   'fastBasket.cart',
   'ngRoute']).
-  config(function($routeProvider){
-    $routeProvider
-      .when('/store', {
-        templateUrl: 'partial/shop.html',
+  config(function($stateProvider, $mdThemingProvider, $urlRouterProvider, $httpProvider){
+
+    $stateProvider
+      .state('store', {
+        url: '/store',
+        templateUrl : 'partial/shop.html',
         controller: 'shopcontroller'
       })
-      .when('/products/:productSku', {
-        templateUrl: 'partials/product.html'
-      })
-      .when('/cart', {
-        templateUrl: 'partial/cart.html',
+      .state('cart', {
+        url: '/cart',
+        templateUrl : 'partial/cart.html',
         controller: 'cartcontroller'
       })
-      .when('/checkout', {
-        templateUrl: 'partial/checkout.html'
-        // controller: 'checkoutcontroller'
-      })
-      .otherwise({
-        redirectTo: '/store'
-      })
+      .state('checkout', {
+        url: '/checkout',
+        templateUrl : 'partial/checkout.html'
+      });
+
+    $urlRouterProvider
+      .otherwise('/store');
+
+    $mdThemingProvider.theme('default')
+      .primaryPalette('green')
+      .accentPalette('lime');
   })
-  .controller('appcontroller', function($scope, Cart){
-    $scope.cart = Cart.storage
-  })
+  .controller('appcontroller', function($scope, Cart, $http){
+    $scope.cart = Cart.storage;
+
+    function elasticSearch(text){
+      return $http({
+        method: 'GET',
+        url: '/api/product/search/' + text
+      })
+      .then(function(products){
+        return products.data;
+      });
+    }
+
+    this.querySearch = function(text){
+      if (text && text.trim() !== ''){
+        return elasticSearch(text);
+      } else {
+        return [];
+      }
+    };
+    
+    this.searchTextChange = function(text){
+      if (text && text.trim() !== ''){
+        return elasticSearch(text);
+      } else {
+        return [];
+      }
+    };
+  });
 
 fastBasket.factory("Cart", function(){
-
-
-  var basket = function(){
-    this.store = {}
-    this.total = 0
-    this.size = 0
-  }
-  basket.prototype.addOneItem = function(item){
-    this.store[item.name] ? this.store[item.name].count += 1 : this.store[item.name] = {count: 1, price: item.price, name: item.name}
-    this.total += Number(item.price)
-    this.size++
-  }
-  basket.prototype.removeOneItem = function(item){
-    if(this.store[item.name].count > 1){
-      this.store[item.name].count -= 1
-      this.total -= Number(item.price)
-      this.size--
-    }
-    else if (this.store[item.name].count == 1){
-      delete this.store[item.name]
-      this.total -=  Number(item.price)
-      this.size--
-    }
-  }
-  basket.prototype.removeAllItem = function(item){
-    this.total -=  Number(item.price) * this.store[item.name].count
-    this.size -= this.store[item.name].count
-    delete this.store[item.name]
-  }
-  basket.prototype.clearAll = function(){
-    this.store = {}
-    this.total = 0
-    this.size = 0
-  }
-
-  userBasket = new basket()
+  userBasket = new basket();
 
   return {
     storage: userBasket
-  }
+  };
 
-})
+});

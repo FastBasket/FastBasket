@@ -16,7 +16,11 @@ module.exports = {
     var textToSearch = req.params.text + "~";
     elastic.search({q: textToSearch})
       .then(function(body){
-        res.status(200).json(body.hits.hits);
+        var result = [];
+        for (var i=0; i<body.hits.hits.length; i++){
+          result.push(body.hits.hits[i]._source);
+        }
+        res.status(200).json(result);
       },
       function (err) {
         console.log(err);
