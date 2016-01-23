@@ -1,4 +1,5 @@
 var productModel = require('../models/productModel');
+var elastic = require('../elastic');
 
 module.exports = {
   getProducts: function(req, res, next){
@@ -9,5 +10,17 @@ module.exports = {
         res.status(200).json(products);
       }
     });
+  },
+
+  search: function(req, res, next){
+    var textToSearch = req.params.text + "~";
+    elastic.search({q: textToSearch})
+      .then(function(body){
+        res.status(200).json(body.hits.hits);
+      },
+      function (err) {
+        console.log(err);
+        res.sendStatus(400);
+      });
   }
 };

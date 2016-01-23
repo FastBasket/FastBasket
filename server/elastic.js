@@ -1,10 +1,9 @@
 var elasticsearch = require('elasticsearch');
+var constants = require('./config/constants');
+
 var client = new elasticsearch.Client({
-  host: 'localhost:9200',
+  host: constants.ELASTIC_URL,
   log: 'trace'
 });
 
-client.search({q: "nilk~"})
-  .then(function(body){
-    console.log(body.hits.hits);
-  });
+module.exports = client;
