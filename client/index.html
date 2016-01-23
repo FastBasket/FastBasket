@@ -2,21 +2,71 @@
 <html ng-app="fastBasket">
   <head>
     <title>Fast Basket</title>
+    <link href="lib/angular-material/angular-material.css" rel="stylesheet" />
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="lib/angular-material/angular-material.css" rel="stylesheet"/>
   </head>
-  <body ng-controller="appcontroller">
+  <body>
 
-    <div class="navigation">
+<!--     <div class="navigation">
       <a href="#/">home</a>
       <a>store</a>
-      <input type="text" ng-model='queryText' placeholder="Query for...">
-      <a href="#/">search</a>
+      <form ng-submit='sendQuery()'>
+        <input type="text" ng-model='queryText' placeholder="Query for...">
+      </form>
       <a>profile</a>
       <a href="#/cart">cart {{cart.size}}</a>
     </div>
-    <div ng-view ></div>
+    <div ng-view ></div> -->
+
+  
+  <div class='container' ng-controller='appcontroller as ctrl'>
+
+    <!-- toolbar/header material ui element -->
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h1>
+          <span>FastBasket</span>
+        </h1>
+
+        <span flex></span>
+
+        <md-autocomplete
+            md-selected-item="ctrl.selectedItem"
+            md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+            md-search-text="ctrl.searchText"
+            md-selected-item-change="ctrl.selectedItemChange(item)"
+            md-items="item in ctrl.querySearch(ctrl.searchText)"
+            md-item-text="item.name"
+            md-min-length="0"
+            placeholder="Search...">
+          <md-item-template>
+            <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+          </md-item-template>
+          <md-not-found>
+            No products "{{ctrl.searchText}}" were found.
+          </md-not-found>
+        </md-autocomplete>
+      </div>
+    </md-toolbar>
+
+    <div class='viewContainer'>
+      <div ui-view></div>
+    </div>
+    
+  </div>
+
   </body>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-  <script type="text/javascript" src="https://code.angularjs.org/1.2.0rc1/angular-route.js"></script>
+
+  <script src='lib/angular/angular.js'></script>
+  <script src='lib/angular-ui-router/release/angular-ui-router.min.js'></script>
+  <script src='lib/angular-route/angular-route.js'></script>
+  <script src='lib/angular-bootstrap/ui-bootstrap-tpls.js'></script>
+  <script src='lib/angular-bootstrap/ui-bootstrap.js'></script>
+  <script src="lib/angular-animate/angular-animate.js" type="text/javascript" ></script>
+  <script src="lib/angular-aria/angular-aria.js" type="text/javascript" ></script>
+  <script src="lib/angular-material/angular-material.js" type="text/javascript" ></script>
+  <script src="js/basket.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/shop.js"></script>
   <script src="app.js"></script>
