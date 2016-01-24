@@ -30,11 +30,3 @@ var fastBasket = angular.module('fastBasket',
       .primaryPalette('green')
       .accentPalette('lime');
   });
-// fastBasket.factory("Cart", function(){
-//   userBasket = new basket();
-
-//   return {
-//     storage: userBasket
-//   };
-
-// });

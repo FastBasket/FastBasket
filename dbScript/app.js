@@ -1,7 +1,7 @@
 var readline = require('readline');
 var fs = require('fs');
 var pg = require('pg-then');
-var client = pg.Client('postgres://postgres:zubur1@localhost/postgres');
+var client = pg.Client('postgres://postgres@localhost:5432/fastbasket');
 
 //creates stores, categories and products table if needed
 
