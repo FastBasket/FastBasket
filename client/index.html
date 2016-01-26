@@ -4,11 +4,16 @@
     <title>Fast Basket</title>
     <link href="lib/angular-material/angular-material.css" rel="stylesheet" />
     <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="lib/angular-material/angular-material.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="assets/style.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   </head>
   <body>
 
   <div class='container'>
+    <div class="viewContainer">
+      <div ui-view="login"></div>
+    </div>
     <div class='viewContainer'>
       <div ui-view="searchBar"></div>  
     </div>

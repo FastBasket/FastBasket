@@ -24,32 +24,30 @@ module.exports = {
     });
   },
 
-  authenticateUser: function(facebookProfile, done){
-    
-    // usersController
-    //   .findByFacebookId(profile.id)
-    //   .then(function(user){
-    //     if (user){
-    //       user.name = profile.displayName;
-    //       user.picture = profile.photos[0].value;
-    //       user.gender = profile._json.gender;
-    //       user.save();
-    //       return done(null, user);
-    //     } else {
-    //       usersController.create({
-    //         facebookId: profile.id,
-    //         name: profile.displayName,
-    //         picture: profile.photos[0].value,
-    //         gender: profile._json.gender
-    //       })
-    //       .then(function(newUser){
-    //         return done(null, newUser);
-    //       })
-    //       .fail(function (error) {
-    //         console.log(error);
-    //         next(error);
-    //       });
-    //     }
-    //   });
+  authenticateUser: function(facebookProfile, callback){
+    console.log('im here');
+    userModel.findByFacebookId(facebookProfile.id, function(err, user){
+      if (user){
+        console.log('user does exists');
+        //TODO update user information
+        callback(user);
+      } else {
+        console.log('before userInser');
+        var userToInsert = {
+          facebookid: facebookProfile.id,
+          name: facebookProfile.displayName,
+          picture: facebookProfile.photos[0].value
+        };
+        console.log('user doesnt exists');
+        userModel.insertUser(userToInsert, function(err, userCreated){
+          if (err){
+            console.log('error when inserting');
+            callback(err);
+          }
+          console.log('user inserted', userCreated);
+          callback(userCreated);
+        });
+      }
+    });
   }
 };

@@ -1,12 +1,13 @@
 angular.module('fastBasket.searchBar', [])
 .controller('searchBarController', function($scope, $http, $rootScope, $state){
+
   function elasticSearch(text){
     return $http({
       method: 'GET',
       url: '/api/product/search/' + text
     })
-    .then(function(products){
-      return products.data;
+    .then(function(result){
+      return result.data;
     });
   }
 

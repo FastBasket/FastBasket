@@ -1,20 +1,15 @@
-<md-content class="md-padding" layout-xs="column" layout="row">
-  <md-card ng-repeat="product in products">
-    <md-card-title>
-      <md-card-title-text>
-        <span class="md-headline">{{product.name}}</span>
-        <span class="md-subhead">$5.99</span>
-      </md-card-title-text>
-    </md-card-title>
-    <md-card-content layout="row" layout-align="space-between">
-      <div class="md-media-xl card-media">
-        <img style="width: 100%" ng-src="https://d2d8wwwkmhfcva.cloudfront.net/350x/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b9ddd8f0-95c8-4f39-ae1b-eaaa9789276b.jpg">
-      </div>
-      <md-card-actions layout="column">
+<div class='md-padding' layout="row" layout-wrap>
+    <md-card style="width: 300px;" ng-repeat="product in products">
+      <img ng-src="https://d2d8wwwkmhfcva.cloudfront.net/350x/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b9ddd8f0-95c8-4f39-ae1b-eaaa9789276b.jpg" class="md-card-image" alt="user avatar">
+      <md-card-content>
+        <h2>{{product.name}}</h2>
+        <p>$ {{product.price}}</p>
+      </md-card-content>
+      <div class="md-actions" layout="row" layout-align="end center">
         <md-button class="md-icon-button" aria-label="Favorite">
           <md-icon md-svg-icon="assets/shopping_cart.svg"></md-icon>
         </md-button>
-      </md-card-actions>
-    </md-card-content>
-  </md-card>
-</md-content>
+      </div>
+    </md-card>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<html>
+<head>
+  <title></title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/bloodhound.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.jquery.js"></script>
+  <style type="text/css">
+    #multiple-datasets .league-name {
+      margin: 0 20px 5px 20px;
+      padding: 3px 0;
+      border-bottom: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div id="multiple-datasets">
+    <input class="typeahead" type="text" placeholder="">
+  </div>
+
+  <script type="text/javascript">
+
+    var productsSource = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+          url: 'http://127.0.0.1:8000/api/product/search/%QUERY',
+          wildcard: '%QUERY'
+        }
+    });
+
+    var categoriesSource = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+          url: 'http://127.0.0.1:8000/api/product/searchCategories/%QUERY',
+          wildcard: '%QUERY'
+        }
+    });
+
+    $('#multiple-datasets .typeahead').typeahead({
+      highlight: true
+    },
+    {
+      name: 'products',
+      display: 'name',
+      source: productsSource,
+      templates: {
+        header: '<h3 class="league-name">Products</h3>'
+      }
+    },
+    {
+      name: 'categories',
+      display: 'name',
+      source: categoriesSource,
+      templates: {
+        header: '<h3 class="league-name">Categories</h3>'
+      }
+    }
+    );
+  </script>
+</body>
+</html>

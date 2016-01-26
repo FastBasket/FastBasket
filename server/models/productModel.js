@@ -14,6 +14,15 @@ module.exports = {
       .catch(function(error){
         callback(error, null);
       });
-  }
+  },
 
+  getCategories: function(callback){
+    db.query("Select * from Categories")
+    .then(function(categories){
+      callback(null, categories);
+    })
+    .catch(function(error){
+      callback(error, null);
+    });
+  }
 };
