@@ -73,7 +73,7 @@ module.exports = {
           if (err){
             console.log('error from redis', err);
           } else {
-            console.log(redisRed);
+            console.log('orders in queue', redisRed);
             redis.publish('jobs', 6);
           }
           res.status(200).json(order);
