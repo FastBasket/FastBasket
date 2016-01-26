@@ -1,0 +1,49 @@
+var amqp = require('amqplib/callback_api');
+
+
+
+
+module.exports = function (app, backlog, redis) {
+  redis.on("message", function (channel, message) {
+    console.log("client1 channel " + channel + ": " + message);
+    if (message === '6') {
+      // empty redis
+      redis.unsubscribe()
+      redis.lrange('number', 0, -1, function(err, reply){
+        console.log(reply)
+
+        // process data
+          // grab from postgres
+        var buckets = {
+          0: [],
+          1: [],
+          2: []
+        }
+          // groups of 2
+          reply.forEach(function(element, index){
+            buckets[index % 3].push(element)
+          })
+
+          // queue up
+          amqp.connect('amqp://localhost', function(err, conn) {
+            conn.createChannel(function(err, ch) {
+              var q = 'task_queue';
+                for(var key in buckets){
+                  var msg = buckets[key]
+
+                  ch.assertQueue(q, {durable: true});
+                  ch.sendToQueue(q, new Buffer(msg), {persistent: true});
+                  console.log(" [x] Sent '%s'", msg);
+                }
+            });
+            setTimeout(function() { conn.close(); process.exit(0) }, 500);
+          });
+
+          redis.subscribe("jobs");
+      })
+
+
+    }
+  });
+
+};
