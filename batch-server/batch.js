@@ -8,11 +8,10 @@ redis.on('connect', function() {
 });
 redis.subscribe("jobs");
 
-var backlog = 0;
-require('./config/routes.js')(app, backlog, redis);
+require('./config/routes.js')(app, redis);
 
 app.listen((process.env.PORT || 8001), function () {
-  console.log('App listening on port', (process.env.PORT || 8000));
+  console.log('App listening on port', (process.env.PORT || 8001));
 });
 
 module.exports = app;
