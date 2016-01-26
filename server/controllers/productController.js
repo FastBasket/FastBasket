@@ -58,6 +58,18 @@ module.exports = {
         console.log(err);
         res.sendStatus(400);
       });
+  },
+
+  checkout: function(req, res, next){
+    var request = req.body;
+    productModel.checkout(request, function(err, order){
+      if (err){
+        console.log(err);
+        res.sendStatus(400);
+      } else {
+        res.status(200).json(order);
+      }
+    });
   }
 
 };
