@@ -15,11 +15,20 @@ Create Table Users(
   Active boolean
 );
 
-Create Table Products(
-  Id bigserial PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS categories(
+  Id serial PRIMARY KEY, 
+  Name Varchar(100), 
+  Category INTEGER NULL REFERENCES categories(Id)
+);
+CREATE TABLE IF NOT EXISTS products (
+  Id bigserial PRIMARY KEY, 
   Name Varchar(100),
-  Price decimal(6,2),
-  StoreId serial REFERENCES Stores (Id)
+  Size Varchar(20), 
+  SizeUnit Varchar(20), 
+  Price decimal(6,2), 
+  PriceUnit varchar(100), 
+  category INTEGER NOT NULL REFERENCES Categories(Id), 
+  subcategory INTEGER NULL REFERENCES Categories(Id)
 );
 
 Create Table Orders (
