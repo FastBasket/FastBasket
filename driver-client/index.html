@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <script src="https://cdn.socket.io/socket.io-1.4.4.js"></script>
+    <script>
+      var socket = io();
+      // socket.emit('request');
+
+      socket.on('dequeue', function(data){
+         console.log(data)
+         bob = data
+       });
+    </script>
+  </head>
+  <body>
+    this is driver page
+  </body>
+
+</html>
