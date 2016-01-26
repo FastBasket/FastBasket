@@ -6,7 +6,8 @@ angular.module('fastBasket.searchBar', [])
       total: 0,
       productIds: [],
       shippingAddress: "55 9th St. 94103, San Francisco CA",
-      userId: "4"
+      userId: "4",
+      storeId: "1"
     };
 
     for (var i=0; i<$rootScope.shopCart.length; i++){

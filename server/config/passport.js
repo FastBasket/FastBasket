@@ -20,9 +20,7 @@ passport.use(new FacebookStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      console.log('facebook profile', profile.id);
       userController.authenticateUser(profile, function(user){
-        console.log('inside callback', user);
         return done(null, user);
       });
     });
