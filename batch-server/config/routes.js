@@ -10,8 +10,8 @@ module.exports = function (app, redis) {
       // empty redis
       redis.unsubscribe()
 
-      redis.lrange('number', 0, 5, function(err, reply){
-        redis.ltrim('number', 6, -1)
+      redis.lrange('1', 0, 5, function(err, reply){
+        redis.ltrim('1', 6, -1)
         console.log(reply)
 
         // process data

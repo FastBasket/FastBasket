@@ -3,9 +3,9 @@ var db = require('../db/db');
 module.exports = {
 
   checkout: function(request, callback){
-    var orderParams = [request.userId, request.shippingAddress, request. total, 'pending'];
-    db.one('Insert into Orders(UserId, ShippingAddress, Total, Status) ' +
-            ' Values ($1, $2, $3, $4) returning id', orderParams)
+    var orderParams = [request.userId, request.shippingAddress, request. total, 'pending', request.storeId];
+    db.one('Insert into Orders(UserId, ShippingAddress, Total, Status, StoreId) ' +
+            ' Values ($1, $2, $3, $4, $5) returning id', orderParams)
     .then(function(orderInserted){
 
       var oderDetailParams = [orderInserted.id];
@@ -16,8 +16,8 @@ module.exports = {
       }
       strQuery = strQuery.slice(0, -1);
 
-      db.none('Insert into OrderDetails(OrderId, ProductId) ' +
-              ' Select $1, id from Products where id in (' + strQuery + '); ', oderDetailParams)
+      db.none('Insert into OrderDetails(OrderId, ProductId, price) ' +
+              ' Select $1, id, price from Products where id in (' + strQuery + '); ', oderDetailParams)
       .then(function(){
         callback(null, orderInserted);
       });
