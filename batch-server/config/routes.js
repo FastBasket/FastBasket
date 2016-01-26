@@ -9,7 +9,9 @@ module.exports = function (app, redis) {
     if (message === '6') {
       // empty redis
       redis.unsubscribe()
-      redis.lrange('number', 0, -1, function(err, reply){
+
+      redis.lrange('number', 0, 5, function(err, reply){
+        redis.ltrim('number', 6, -1)
         console.log(reply)
 
         // process data
