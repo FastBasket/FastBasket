@@ -9,6 +9,14 @@ var fastBasket = angular.module('fastBasket',
   config(function($stateProvider, $mdThemingProvider, $urlRouterProvider, $httpProvider){
 
     $stateProvider
+      .state('login', {
+        url: "/login",
+        views: {
+          "login": {
+            templateUrl : 'partial/login.html'
+          }
+        }
+      })
       .state('search', {
         url: "/search",
         views: {
@@ -24,7 +32,7 @@ var fastBasket = angular.module('fastBasket',
       });
 
     $urlRouterProvider
-      .otherwise('/search');
+      .otherwise('/login');
 
     $mdThemingProvider.theme('default')
       .primaryPalette('green')

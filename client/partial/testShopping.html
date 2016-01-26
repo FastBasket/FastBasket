@@ -1,0 +1,713 @@
+<body>
+  <header>
+    <style type="text/scss">
+      @import "bourbon";
+
+      // variables - colors
+
+      $main-text: #31353d; // main text
+      $link: #435779; // anchor tags
+      $background: #eeeff7; // background color
+      $header-bg: #31353d;
+
+      $border: #e0e6ef;
+      $light-text: #a5aebc;
+      $green: #7dcf85;
+
+      $shadow-layer-bg: rgba(#435779, .6);
+
+      // variables - fonts 
+
+      $primary-font: 'PT Sans', sans-serif;
+
+      // variables - z-index
+
+      $header-zindex: 4;
+      $sidebar-zindex: 3;
+      $shadow-zindex: 2;
+      $main-zindex: 1;
+
+      // mixins - rem fallback - credits: http://zerosixthree.se/
+
+      @function calculateRem($size) {
+        $remSize: $size / 16px;
+        @return $remSize * 1rem;
+      }
+
+      @mixin font-size($size) {
+        font-size: $size;
+        font-size: calculateRem($size);
+      }
+
+      // mixins - center vertically and/or horizontally an absolute positioned element
+
+      @mixin center($xy:xy) {
+        @if $xy == xy {
+          left: 50%;
+          top: 50%;
+          bottom: auto;
+          right: auto;
+          @include transform(translateX(-50%) translateY(-50%));
+        }
+        @else if $xy == x {
+          left: 50%;
+          right: auto;
+          @include transform(translateX(-50%));
+        }
+        @else if $xy == y {
+          top: 50%;
+          bottom: auto;
+          @include transform(translateY(-50%));
+        }
+      }
+
+      // mixins - border radius
+
+      @mixin border-radius($radius:.25em) {
+        border-radius: $radius;
+      }
+
+      // layout - breakpoints
+
+      $S:     480px;    
+      $M:     768px;     
+      $L:     1200px;     
+
+      // layout - media queries
+
+      @mixin MQ($canvas) {
+        @if $canvas == S {
+         @media only screen and (min-width: $S) { @content; } 
+        }
+        @else if $canvas == M {
+         @media only screen and (min-width: $M) { @content; } 
+        }
+        @else if $canvas == L {
+         @media only screen and (min-width: $L) { @content; } 
+        }
+      }
+
+      // layout - super light grid - it works with the .cd-container class
+
+      @mixin column($percentage, $float-direction:left) {
+        width: 100% * $percentage;
+        float: $float-direction;
+      }
+
+      /* -------------------------------- 
+
+      Primary style
+
+      -------------------------------- */
+
+      html * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      *, *:after, *:before {
+        @include box-sizing(border-box);
+      }
+
+      body {
+        font: {
+          size: 100%;
+          family: $primary-font;
+        }
+        color: $main-text;
+        background-color: $background;
+        
+        &.overflow-hidden {
+          /* prevent 2 vertical scrollbars on ie and firefox when the cart is visible */ 
+          overflow: hidden;
+        }
+      }
+
+      a {
+        color: $link;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      /* -------------------------------- 
+
+      Modules - reusable parts of our design
+
+      -------------------------------- */
+
+      .cd-container { /* this class is used to horizontally align the gallery of items */
+        position: relative;
+        width: 90%;
+        max-width: $L; 
+        margin: 0 auto;
+
+        &::after { /* clearfix */
+          content: '';
+          display: table;
+          clear: both;
+        }
+      }
+
+      .cd-img-replace { /* replace text with a background-image */
+        display: inline-block;
+        overflow: hidden;
+        text-indent: 100%;
+        white-space: nowrap;
+      }
+
+      /* -------------------------------- 
+
+      xheader 
+
+      -------------------------------- */
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 50px;
+        width: 100%;
+        background: $header-bg;
+        text-align: center;
+        box-shadow: 0 2px 0 rgba(#000, .1);
+
+        z-index: $header-zindex;
+
+        @include MQ(L) {
+          height: 80px;
+        }
+      }
+
+      #logo {
+        padding-top: 5px;
+
+        /* delete this property if you don't want your logo to scale down on mobile devices */
+        @include transform(scale(.8)); 
+
+        @include MQ(L) {
+          padding-top: 20px;
+          position: absolute;
+          /* logo left margin on Dekstop */
+          left: 2.4em; 
+          top: 0;
+          @include transform(scale(1));
+        }
+      }
+
+      #cd-hamburger-menu, #cd-cart-trigger {
+        position: absolute;
+        top: 0;
+        height: 100%;
+
+        a {
+          width: 60px;
+          height: 100%;
+        }
+      }
+
+      #cd-hamburger-menu {
+        left: 0;
+
+        a {
+          background: darken($header-bg, 5%) url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/cd-hamburger-menu.svg') no-repeat center center;
+        }
+
+        @include MQ(L) {
+          display: none;
+        }
+      }
+
+      #cd-cart-trigger {
+        right: 0;
+
+        a {
+          background: darken($header-bg, 5%) url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/cd-cart.svg') no-repeat center center;
+        }
+
+        @include MQ(L) {
+          /* cart right margin on desktop */
+          right: 0;
+
+          a {
+            position: relative;
+            width: 100px;
+            border-left: none;
+            background-color: darken($header-bg, 5%);
+          }
+        }
+      }
+
+      #main-nav, #cd-cart {
+        position: fixed;
+        top: 0;
+        height: 100%;
+        width: 260px;
+
+        /* header height */
+        padding-top: 50px; 
+
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+
+        box-shadow: 0 0 20px rgba(#000, .2);
+
+        z-index: $sidebar-zindex;
+
+        @include MQ(M) {
+          width: 350px;
+        }
+
+        @include MQ(L) {
+          width: 30%;
+
+          /* header height has changed */
+          padding-top: 80px; 
+        }
+      }
+
+      #main-nav {
+        left: -100%;
+        background: #FFF;
+
+        @include transition(left .3s);
+
+        &.speed-in {
+          left: 0;
+        }
+
+        ul {
+
+          a {
+            display: block;
+            height: 50px;
+            line-height: 50px;
+            padding: 0 1em;
+            border-bottom: 1px solid $border;
+          }
+
+          .current {
+            box-shadow: inset 3px 0 $link;
+          }
+        }
+
+        @include MQ(L) { /* reset main nav style */
+          position: absolute;
+          height: auto;
+          width: auto;
+          left: auto;
+          right: 8em;
+          padding-top: 0;
+          top: 0;
+          background: transparent;
+          box-shadow: none;
+
+          /* header height */
+          line-height: 80px; 
+
+          z-index: $header-zindex;
+
+          li {
+            display: inline-block;
+            margin-left: 1em;
+          }
+
+          ul a {
+            display: inline-block;
+            height: auto;
+            line-height: 1;
+            padding: 1em 1.4em;
+            border-bottom: none;
+            color: rgba(#FFF, .8);
+            @include border-radius;
+
+            &.current {
+              box-shadow: none;
+              background: $link;
+              color: #FFF;
+            }
+
+            .no-touch &:hover {
+              background: $link;
+              color: #FFF;
+            }
+          }
+        }
+
+        .no-js & {
+          position: fixed;
+        }
+      }
+
+      #cd-cart {
+        right: -100%;
+        background: #FFF;
+
+        @include transition(right .3s);
+
+        &.speed-in {
+          right: 0;
+        }
+
+        > * {
+          padding: 0 1em;
+        }
+
+        h2 {
+          @include font-size(14px);
+          font-weight: bold;
+          text-transform: uppercase;
+          margin: 1em 0;
+        }
+
+        .cd-cart-items {
+          padding: 0;
+
+          li {
+            position: relative;
+            padding: 1em;
+            border-top: 1px solid $border;
+
+            &:last-child {
+              border-bottom: 1px solid $border;
+            }
+          }
+        }
+
+        .cd-qty, .cd-price {
+          color: $light-text;
+        }
+
+        .cd-price {
+          margin-top: .4em;
+        }
+
+        .cd-item-remove {
+          position: absolute;
+          right: 1em;
+          @include center(y); 
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/cd-remove-item.svg') no-repeat center center;
+
+          .no-touch &:hover {
+            background-color: $border;
+          }
+        }
+
+        .cd-cart-total {
+          padding-top: 1em;
+          padding-bottom: 1em;
+
+          span {
+            float: right;
+          }
+
+          &::after { /* clearfix */
+            content: '';
+            display: table;
+            clear: both;
+          }
+        }
+
+        .checkout-btn {
+          display: block;
+          width: 100%;
+          height: 60px;
+          line-height: 60px;
+          background: $green;
+          color: #FFF;
+          text-align: center;
+
+          .no-touch &:hover {
+            background: lighten($green, 10%);
+          }
+        }
+
+        .cd-go-to-cart {
+          text-align: center;
+          margin: 1em 0;
+
+          a {
+            text-decoration: underline;
+          }
+        }
+
+        @include MQ(L) {
+          > * {
+            padding: 0 2em;
+          }
+
+          .cd-cart-items li {
+            padding: 1em 2em;
+          }
+
+          .cd-item-remove {
+            right: 2em;
+          }
+        }
+      }
+
+      /* -------------------------------- 
+
+      xgallery 
+
+      -------------------------------- */
+
+      main {
+        position: relative;
+        min-height: 100%;
+        background: $background;
+        padding-top: 70px;
+
+        z-index: $main-zindex;
+
+        @include MQ(M) {
+          padding-top: 90px;
+        }
+
+        @include MQ(L) {
+          padding-top: 120px;
+        }
+      }
+
+      #cd-gallery-items {
+        li {
+          margin-bottom: 1.5em;
+
+          img {
+            width: 100%;
+            display: block;
+            @include border-radius;
+          }
+        }
+
+        @include MQ(M) {
+          li {
+            @include column(.48); 
+            margin-bottom: 2em;
+            margin-right: 4%;
+
+            &:nth-child(2n) {
+              margin-right: 0;
+            }
+          }
+        }
+
+        @include MQ(L) {
+          li {
+            @include column(.31);
+            margin-bottom: 2.5em;
+            margin-right: 3.5%;
+
+            &:nth-child(2n) {
+              margin-right: 3.5%;
+            }
+
+            &:nth-child(3n) {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+
+      #cd-shadow-layer {
+        position: fixed;
+        min-height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background: $shadow-layer-bg;
+        cursor: pointer;
+
+        z-index: $shadow-zindex;
+
+        display: none;
+
+        &.is-visible {
+          display: block;
+          @include animation(cd-fade-in .3s);
+        }
+      }
+
+      /* -------------------------------- 
+
+      xkeyframes 
+
+      -------------------------------- */
+
+      @include keyframes(cd-fade-in) {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+    <div id="logo"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/cd-logo.svg" alt="Homepage"></div>
+    <div id="cd-hamburger-menu"><a class="cd-img-replace" href="#0">Menu</a></div>
+    <div id="cd-cart-trigger"><a class="cd-img-replace" href="#0">Cart</a></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js" ></script>
+  </header>
+
+  <nav id="main-nav">
+    <ul>
+      <li><a href="#0">Home</a></li>
+      <li><a href="#0">About</a></li>
+      <li><a class="current" href="#0">Services</a></li>
+      <li><a href="#0">Gallery</a></li>
+      <li><a href="#0">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <ul id="cd-gallery-items" class="cd-container">
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+
+      <li>
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/thumb.jpg" alt="Preview image">
+      </li>
+    </ul> <!-- cd-gallery-items -->
+  </main>
+
+  <div id="cd-shadow-layer"></div>
+
+  <div id="cd-cart">
+    <h2>Cart</h2>
+    <ul class="cd-cart-items">
+      <li>
+        <span class="cd-qty">1x</span> Product Name
+        <div class="cd-price">$9.99</div>
+        <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+      </li>
+
+      <li>
+        <span class="cd-qty">2x</span> Product Name
+        <div class="cd-price">$19.98</div>
+        <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+      </li>
+
+      <li>
+        <span class="cd-qty">1x</span> Product Name
+        <div class="cd-price">$9.99</div>
+        <a href="#0" class="cd-item-remove cd-img-replace">Remove</a>
+      </li>
+    </ul> <!-- cd-cart-items -->
+
+    <div class="cd-cart-total">
+      <p>Total <span>$39.96</span></p>
+    </div> <!-- cd-cart-total -->
+
+    <a href="#0" class="checkout-btn">Checkout</a>
+    
+    <p class="cd-go-to-cart"><a href="#0">Go to cart page</a></p>
+  </div> <!-- cd-cart -->
+
+  <script type="text/javascript">
+    jQuery(document).ready(function($){
+      //if you change this breakpoint in the style.css file (or _layout.scss if you use SASS), don't forget to update this value as well
+      var $L = 1200,
+        $menu_navigation = $('#main-nav'),
+        $cart_trigger = $('#cd-cart-trigger'),
+        $hamburger_icon = $('#cd-hamburger-menu'),
+        $lateral_cart = $('#cd-cart'),
+        $shadow_layer = $('#cd-shadow-layer');
+
+      //open lateral menu on mobile
+      $hamburger_icon.on('click', function(event){
+        event.preventDefault();
+        //close cart panel (if it's open)
+        $lateral_cart.removeClass('speed-in');
+        toggle_panel_visibility($menu_navigation, $shadow_layer, $('body'));
+      });
+
+      //open cart
+      $cart_trigger.on('click', function(event){
+        event.preventDefault();
+        //close lateral menu (if it's open)
+        $menu_navigation.removeClass('speed-in');
+        toggle_panel_visibility($lateral_cart, $shadow_layer, $('body'));
+      });
+
+      //close lateral cart or lateral menu
+      $shadow_layer.on('click', function(){
+        $lateral_cart.removeClass('speed-in');
+        $menu_navigation.removeClass('speed-in');
+        $shadow_layer.removeClass('is-visible');
+        $('body').removeClass('overflow-hidden');
+      });
+
+      //move #main-navigation inside header on laptop
+      //insert #main-navigation after header on mobile
+      move_navigation( $menu_navigation, $L);
+      $(window).on('resize', function(){
+        move_navigation( $menu_navigation, $L);
+        
+        if( $(window).width() >= $L && $menu_navigation.hasClass('speed-in')) {
+          $menu_navigation.removeClass('speed-in');
+          $shadow_layer.removeClass('is-visible');
+          $('body').removeClass('overflow-hidden');
+        }
+
+      });
+    });
+
+    function toggle_panel_visibility ($lateral_panel, $background_layer, $body) {
+      if( $lateral_panel.hasClass('speed-in') ) {
+        $lateral_panel.removeClass('speed-in');
+        $background_layer.removeClass('is-visible');
+        $body.removeClass('overflow-hidden');
+      } else {
+        $lateral_panel.addClass('speed-in');
+        $background_layer.addClass('is-visible');
+        $body.addClass('overflow-hidden');
+      }
+    }
+
+    function move_navigation( $navigation, $MQ) {
+      if ( $(window).width() >= $MQ ) {
+        $navigation.detach();
+        $navigation.appendTo('header');
+      } else {
+        $navigation.detach();
+        $navigation.insertAfter('header');
+      }
+    }
+  </script>
+
+</body>
