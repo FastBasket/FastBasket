@@ -1,5 +1,5 @@
-﻿Create Table IF NOT EXISTS Stores(
-  Id serial PRIMARY KEY,
+Create Table IF NOT EXISTS Stores(
+  Id bigserial PRIMARY KEY,
   Name varchar(250)
 );
 
@@ -30,16 +30,25 @@ CREATE TABLE IF NOT EXISTS products (
   PriceUnit varchar(100), 
   category INTEGER NOT NULL REFERENCES Categories(Id), 
   subcategory INTEGER NULL REFERENCES Categories(Id)
+  Price decimal(6,2),
+  StoreId bigserial REFERENCES Stores (Id)
+);
+
+Create Table IF NOT EXISTS Jobs(
+  Id bigserial PRIMARY KEY,
+  Status boolean,
+  UserId bigserial REFERENCES Users (Id)
 );
 
 Create Table IF NOT EXISTS Orders (
   Id bigserial PRIMARY KEY,
-  UserId serial REFERENCES Users (Id),
+  UserId bigserial REFERENCES Users (Id),
   ShippingAddress varchar(250),
   ShippingAddressPoint Point,
   Total decimal(6,2),
   StoreId serial REFERENCES Stores (Id),
-  Status Varchar(10)
+  Status Varchar(10),
+  JobId bigserial REFERENCES Jobs (Id)
 );
 
 Create Table IF NOT EXISTS OrderDetails (
