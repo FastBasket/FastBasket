@@ -1,0 +1,9 @@
+<div layout="row">
+  <div flex>Order Received <md-progress-linear md-mode="{{modeOrderReceived}}" ng-if="showOrderReceived" value="100" ></md-progress-linear> </div>
+  <div flex>In Progress <md-progress-linear md-mode="{{modeInProgress}}" ng-if="showInProgress" value="100" ></md-progress-linear></div>
+  <div flex>On the Way <md-progress-linear md-mode="{{modeOntheWay}}" ng-if="showOntheWay" value="100" ></md-progress-linear></div>
+</div>
+<br>
+<button ng-click="doneOrderReceived()">Done Order Received</button>
+<button ng-click="doneInProgress()">Done In Progress</button>
+<button ng-click="doneOntheWay()">Done On the Way</button>

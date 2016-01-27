@@ -6,6 +6,7 @@ var fastBasket = angular.module('fastBasket',
   'fastBasket.products',
   'fastBasket.searchBar',
   'fastBasket.checkout',
+  'fastBasket.finish',
   'ngRoute']).
   config(function($stateProvider, $mdThemingProvider, $urlRouterProvider, $httpProvider){
 
@@ -41,6 +42,20 @@ var fastBasket = angular.module('fastBasket',
           "content": {
             templateUrl : 'partial/checkout.html',
             controller: 'checkoutController'
+          }
+        }
+      })
+      .state('finish', {
+        url: "/finish",
+        params: { order: null },
+        views: {
+          "searchBar": {
+            templateUrl : 'partial/searchBar.html',
+            controller: 'searchBarController as ctrl'
+          },
+          "content": {
+            templateUrl : 'partial/finish.html',
+            controller: 'finishController as finCtrl'
           }
         }
       });

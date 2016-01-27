@@ -68,12 +68,12 @@ module.exports = {
         console.log(err);
         res.sendStatus(400);
       } else {
-        redis.rpush(request.storeId, JSON.stringify({ x: request.x, y: request.y, id: order.id }), function(err, redisRed){
+        redis.rpush(request.storeId, JSON.stringify({ x: request.x, y: request.y, id: order.id }), function(err, redisRes){
           if (err){
             console.log('error from redis', err);
           } else {
-            console.log('orders in queue', redisRed);
-            redis.publish('jobs', 6);
+            console.log('orders in queue', redisRes);
+            redis.publish('jobs', redisRes);
           }
           res.status(200).json(order);
         });
