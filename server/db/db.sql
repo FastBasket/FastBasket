@@ -36,6 +36,7 @@ Create Table IF NOT EXISTS Orders (
   Id bigserial PRIMARY KEY,
   UserId serial REFERENCES Users (Id),
   ShippingAddress varchar(250),
+  ShippingAddressPoint Point,
   Total decimal(6,2),
   StoreId serial REFERENCES Stores (Id),
   Status Varchar(10)
