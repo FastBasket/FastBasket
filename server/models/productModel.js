@@ -3,9 +3,9 @@ var db = require('../db/db');
 module.exports = {
 
   checkout: function(request, callback){
-    var orderParams = [request.userId, request.shippingAddress, request. total, 'pending', request.storeId];
-    db.one('Insert into Orders(UserId, ShippingAddress, Total, Status, StoreId) ' +
-            ' Values ($1, $2, $3, $4, $5) returning id', orderParams)
+    var orderParams = [request.userId, request.shippingAddress, request. total, 'pending', request.storeId, request.x, request.y];
+    db.one('Insert into Orders(UserId, ShippingAddress, Total, Status, StoreId, ShippingAddressPoint) ' +
+            ' Values ($1, $2, $3, $4, $5, point($6, $7)) returning id', orderParams)
     .then(function(orderInserted){
 
       var oderDetailParams = [orderInserted.id];

@@ -68,8 +68,7 @@ module.exports = {
         console.log(err);
         res.sendStatus(400);
       } else {
-        //TODO: get x and y
-        redis.rpush(request.storeId, JSON.stringify({ x: '123', y: '123', id: order.id }), function(err, redisRed){
+        redis.rpush(request.storeId, JSON.stringify({ x: request.x, y: request.y, id: order.id }), function(err, redisRed){
           if (err){
             console.log('error from redis', err);
           } else {
