@@ -1,5 +1,6 @@
 var productModel = require('../models/productModel');
 var elastic = require('../elastic');
+var redis = require('redis').createClient();
 
 module.exports = {
   getProducts: function(req, res, next){
@@ -67,7 +68,16 @@ module.exports = {
         console.log(err);
         res.sendStatus(400);
       } else {
-        res.status(200).json(order);
+        //TODO: get x and y
+        redis.rpush(request.storeId, JSON.stringify({ x: '123', y: '123', id: order.id }), function(err, redisRed){
+          if (err){
+            console.log('error from redis', err);
+          } else {
+            console.log('orders in queue', redisRed);
+            redis.publish('jobs', 6);
+          }
+          res.status(200).json(order);
+        });
       }
     });
   }
