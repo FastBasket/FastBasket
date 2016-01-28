@@ -1,14 +1,15 @@
-_ = require('underscore')
-HR = [-122.40866616368294, 37.78774223089045];
-bob = [{y:37.79174413982033, x:-122.3985381424427, id: 1},
-  {y:37.788963175233846, x:-122.39656403660774, id: 2},
-  {y:37.79805179347195, x:-122.41227105259895, id: 4},
-  {y:37.801035872043144, x:-122.4179358780384, id: 3},
-  {y:37.78591077655136, x:-122.42814972996712, id: 6},
-  {y:37.77994127700315, x:-122.44231179356575, id: 5},
-  {y:37.774988939930005, x:-122.40351632237434, id: 8},
-  {y:37.77743122981216, x:-122.40943863987923, id: 7}
-];
+_ = require('underscore');
+HR = [37.78774223089045, -122.40866616368294];
+// HR = [-122.40866616368294, 37.78774223089045];
+// bob = [{y:37.79174413982033, x:-122.3985381424427, id: 1},
+//   {y:37.788963175233846, x:-122.39656403660774, id: 2},
+//   {y:37.79805179347195, x:-122.41227105259895, id: 4},
+//   {y:37.801035872043144, x:-122.4179358780384, id: 3},
+//   {y:37.78591077655136, x:-122.42814972996712, id: 6},
+//   {y:37.77994127700315, x:-122.44231179356575, id: 5},
+//   {y:37.774988939930005, x:-122.40351632237434, id: 8},
+//   {y:37.77743122981216, x:-122.40943863987923, id: 7}
+// ];
 
 
 // HR = [0,0]
@@ -92,6 +93,7 @@ ZERO = new vector({
 });
 
 kmeans = function(array, k , r){
+  var clusters;
   // convert{ x: , y: , id: } into vector
   vectors = _.map(array, function(element){
     vec = new vector(element);
@@ -114,7 +116,7 @@ kmeans = function(array, k , r){
 
 for(var x = 0; x < r; x++){
   // find closest cluster
-  console.log('====================  ' + x + '  ======================')
+  console.log('====================  ' + x + '  ======================');
   clusters = {};
 
   _.each(centers, function(c, i){
@@ -148,22 +150,20 @@ for(var x = 0; x < r; x++){
         // });
 
         sum = _.reduce(buck, function(a,b){
-          return a.add(b.normalize())
-        }, ZERO)
-        avg = sum.normalize()
-        centers[cent] = avg
-
-
-    }
+          return a.add(b.normalize());
+        }, ZERO);
+        avg = sum.normalize();
+        centers[cent] = avg;
+      }
     });
       console.log(clusters);
-      console.log(centers)
+      console.log(centers);
   }
 
-  return clusters
+  return clusters;
 };
 
 // revert into x,y
 
-module.exports = kmeans
+module.exports = kmeans;
 // export
