@@ -1,5 +1,5 @@
 angular.module('fastBasket.checkout', [])
-.controller('checkoutController', function($scope, $http, $rootScope){
+.controller('checkoutController', function($scope, $http, $rootScope, $state){
   var geocoder = new google.maps.Geocoder();
 
   function geocodeAddress(callback) {
@@ -41,7 +41,7 @@ angular.module('fastBasket.checkout', [])
           data: request
         })
         .then(function(result){
-          console.log(result.data);
+          $state.go('finish', { order: result.data });
         });
       });
     }

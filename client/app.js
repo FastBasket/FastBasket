@@ -6,6 +6,8 @@ var fastBasket = angular.module('fastBasket',
   'fastBasket.products',
   'fastBasket.searchBar',
   'fastBasket.checkout',
+  'fastBasket.finish',
+  'btford.socket-io',
   'ngRoute']).
   config(function($stateProvider, $mdThemingProvider, $urlRouterProvider, $httpProvider){
 
@@ -43,6 +45,20 @@ var fastBasket = angular.module('fastBasket',
             controller: 'checkoutController'
           }
         }
+      })
+      .state('finish', {
+        url: "/finish",
+        params: { order: null },
+        views: {
+          "searchBar": {
+            templateUrl : 'partial/searchBar.html',
+            controller: 'searchBarController as ctrl'
+          },
+          "content": {
+            templateUrl : 'partial/finish.html',
+            controller: 'finishController as finCtrl'
+          }
+        }
       });
 
     $urlRouterProvider
@@ -51,4 +67,7 @@ var fastBasket = angular.module('fastBasket',
     $mdThemingProvider.theme('default')
       .primaryPalette('green')
       .accentPalette('lime');
-  });
+  })
+.factory('mySocket', function (socketFactory) {
+  return socketFactory();
+});

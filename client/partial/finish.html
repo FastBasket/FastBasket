@@ -1,0 +1,7 @@
+<h1 class="md-display-2" style="text-align: center">{{message}}</h1>
+<br>
+<div layout="row">
+  <div flex>Order Received <md-progress-linear md-mode="{{modeOrderReceived}}" ng-if="showOrderReceived" value="100" ></md-progress-linear> </div>
+  <div flex>In Progress <md-progress-linear md-mode="{{modeInProgress}}" ng-if="showInProgress" value="100" ></md-progress-linear></div>
+  <div flex>On the Way <md-progress-linear md-mode="{{modeOntheWay}}" ng-if="showOntheWay" value="100" ></md-progress-linear></div>
+</div>
