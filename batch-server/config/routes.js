@@ -1,4 +1,5 @@
 var amqp = require('amqplib/callback_api');
+var kmeans = require('./kmeans.js')
 
 module.exports = function (app, redis) {
   redis.on("message", function (channel, message) {

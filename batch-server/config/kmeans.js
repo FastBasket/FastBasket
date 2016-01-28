@@ -148,7 +148,7 @@ for(var x = 0; x < r; x++){
         // });
 
         sum = _.reduce(buck, function(a,b){
-          return a.add(b)
+          return a.add(b.normalize())
         }, ZERO)
         avg = sum.normalize()
         centers[cent] = avg
@@ -165,5 +165,5 @@ for(var x = 0; x < r; x++){
 
 // revert into x,y
 
-kmeans(bob, 5, 2)
+module.exports = kmeans
 // export
