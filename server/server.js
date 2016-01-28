@@ -7,9 +7,9 @@ var io = require('socket.io')(server);
 module.exports = io;
 
 io.sockets.on('connection', function(socket) {
-  socket.on('create', function(room) {
-    console.log(room, 'room created');
-    socket.join(room);
+  socket.on('create', function(orderId) {
+    console.log(orderId, 'room created');
+    socket.join(orderId);
   });
 });
 

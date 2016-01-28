@@ -8,6 +8,7 @@ module.exports = {
 
     res.sendStatus(200);
   },
+
   doneInProgress: function(req, res, next){
     var orderId = req.body.orderId;
 
@@ -15,6 +16,7 @@ module.exports = {
 
     res.sendStatus(200);
   },
+  
   doneOntheWay: function(req, res, next){
     var orderId = req.body.orderId;
 
