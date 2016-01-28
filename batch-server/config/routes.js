@@ -7,21 +7,19 @@ module.exports = function (app, redis) {
       // empty redis
       redis.unsubscribe();
 
-      redis.lrange('1', 0, 5, function(err, reply){
-        redis.ltrim('1', 6, -1);
-        console.log(reply);
 
+      redis.lrange('number', 0, 9, function(err, reply){
+        redis.ltrim('number', 10, -1)
+        console.log(reply)
+
+
+        data = reply.map(function(ele){
+          return JSON.parse(ele)
+        })
         // process data
           // grab from postgres
-        var buckets = {
-          0: [],
-          1: [],
-          2: []
-        };
-          // groups of 2
-          reply.forEach(function(element, index){
-            buckets[index % 3].push(element);
-          });
+
+          buckets = kmeans(data ,5)
 
           // queue up
           amqp.connect('amqp://localhost', function(err, conn) {
