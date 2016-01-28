@@ -1,5 +1,8 @@
 <form ng-submit="submit()">
-  <input type="text" ng-model="address" placeholder="Address">
-  <input type="text" placeholder="Credit Card">
+  <input type="text" ng-model="address" placeholder="Address" style="width: 50%"><br>
   <input type="submit" id="submit" value="Submit">
+  <!-- TODO: show order summary, fill complete address in a nice way -->
 </form>
+<br>
+
+<button ng-show="order !== null" ng-click="pay()" > Pay ${{total}} </button>
