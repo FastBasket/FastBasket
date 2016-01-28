@@ -4,12 +4,12 @@ var kmeans = require('./kmeans.js');
 module.exports = function (app, redis) {
   redis.on("message", function (channel, message) {
     console.log("client1 channel " + channel + ": " + message);
-    if (parseInt(message, 10) > 6) {
-      // empty redis
-      redis.unsubscribe();
 
-      //TODO: 1 is the store key, think about how to scale this
-      redis.lrange('1', 0, 9, function(err, reply){
+    message = JSON.parse(message);
+    console.log(message);
+    if (message.len > 6) {
+      redis.unsubscribe();
+      redis.lrange(message.storeId, 0, 9, function(err, reply){
         // redis.ltrim('1', 10, -1); //TODO uncomment this for production
         console.log(reply);
 
