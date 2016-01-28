@@ -38,7 +38,7 @@ module.exports = {
           if (err){
             console.log('error from redis', err);
           } else {
-            redis.publish('jobs', redisRes);
+            redis.publish('jobs', JSON.stringify({ len: redisRes, storeId: request.storeId }));
           }
           res.status(200).json(order);
         });
