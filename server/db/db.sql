@@ -34,11 +34,12 @@ CREATE TABLE IF NOT EXISTS products (
 
 Create Table IF NOT EXISTS Orders (
   Id bigserial PRIMARY KEY,
-  UserId serial REFERENCES Users (Id),
+  UserId bigserial REFERENCES Users (Id),
   ShippingAddress varchar(250),
   ShippingAddressPoint Point,
   Total decimal(6,2),
   StoreId serial REFERENCES Stores (Id),
+  JobId bigserial REFERENCES Jobs (Id),
   Status Varchar(10)
 );
 
@@ -49,4 +50,9 @@ Create Table IF NOT EXISTS OrderDetails (
   Price decimal(6,2)
 );
 
+Create Table IF NOT EXISTS Jobs(
+  Id bigserial PRIMARY KEY,
+  Status boolean,
+  UserId bigserial REFERENCES Users (Id)
+);
 insert into Stores(name) Values ('test store')
