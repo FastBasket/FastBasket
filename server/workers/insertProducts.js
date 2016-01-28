@@ -15,7 +15,7 @@ productModel.getProducts(function(err, products){
       body: bulkBody
     } , function (err, resp) {
       if (err){
-        console.log('ERROR', err);
+        console.log(err);
       } else {
         console.log(resp);
       }

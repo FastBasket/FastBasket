@@ -15,7 +15,7 @@ productModel.getCategories(function(err, categories){
       body: bulkBody
     } , function (err, resp) {
       if (err){
-        console.log('ERROR', err);
+        console.log(err);
       } else {
         console.log(resp);
       }

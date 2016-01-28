@@ -7,6 +7,7 @@ var fastBasket = angular.module('fastBasket',
   'fastBasket.searchBar',
   'fastBasket.checkout',
   'fastBasket.finish',
+  'btford.socket-io',
   'ngRoute']).
   config(function($stateProvider, $mdThemingProvider, $urlRouterProvider, $httpProvider){
 
@@ -66,4 +67,7 @@ var fastBasket = angular.module('fastBasket',
     $mdThemingProvider.theme('default')
       .primaryPalette('green')
       .accentPalette('lime');
-  });
+  })
+.factory('mySocket', function (socketFactory) {
+  return socketFactory();
+});

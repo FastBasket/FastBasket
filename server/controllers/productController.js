@@ -72,7 +72,6 @@ module.exports = {
           if (err){
             console.log('error from redis', err);
           } else {
-            console.log('orders in queue', redisRes);
             redis.publish('jobs', redisRes);
           }
           res.status(200).json(order);

@@ -1,6 +1,7 @@
 angular.module('fastBasket.finish', [])
-.controller('finishController', function($scope, $http, $rootScope, $state, $stateParams){
-  console.log($stateParams.order);
+.controller('finishController', function($scope, $http, $rootScope, $state, $stateParams, mySocket){
+  var orderId = $stateParams.order.id;
+
   $scope.modeOrderReceived = "indeterminate";
   $scope.showOrderReceived = true;
   $scope.modeInProgress = "indeterminate";
@@ -8,17 +9,36 @@ angular.module('fastBasket.finish', [])
   $scope.modeOntheWay = "indeterminate";
   $scope.showOntheWay = false;
 
-  $scope.doneOrderReceived = function(){
-    $scope.modeOrderReceived = "determinate";
-    $scope.showInProgress = true;
+  var doneOrderReceived = function(){
+    $scope.$apply(function() {
+      $scope.modeOrderReceived = "determinate";
+      $scope.showInProgress = true;
+    });
   };
 
-  $scope.doneInProgress = function(){
+  var doneInProgress = function(){
     $scope.modeInProgress = "determinate";
     $scope.showOntheWay = true;
   };
 
-  $scope.doneOntheWay = function(){
+  var doneOntheWay = function(){
     $scope.modeOntheWay = "determinate";
   };
+
+  mySocket.emit('create', orderId);
+
+  mySocket.on('doneOrderReceived', function (data) {
+    console.log(data);
+    doneOrderReceived();
+  });
+
+  mySocket.on('doneInProgress', function (data) {
+    console.log(data);
+    doneInProgress();
+  });
+
+  mySocket.on('doneOntheWay', function (data) {
+    console.log(data);
+    doneOntheWay();
+  });
 });
