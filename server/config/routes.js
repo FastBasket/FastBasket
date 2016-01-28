@@ -2,13 +2,16 @@ var productController = require('../controllers/productController');
 var storeController = require('../controllers/storeController');
 var userController = require('../controllers/userController');
 var driverController = require('../controllers/driverController');
+var checkoutController = require('../controllers/checkoutController');
 var passport = require('./passport');
 
 module.exports = function (app, express) {
   app.get('/api/product/search/:text', productController.search);
   app.get('/api/product/searchCategories/:text', productController.searchCategories);
   app.get('/api/product/showResults/:text', productController.showResults);
-  app.post('/api/product/checkout', productController.checkout);
+
+  app.post('/api/checkout/createOrder', checkoutController.checkout);
+  app.post('/api/checkout/charge', checkoutController.charge);
 
   app.get('/api/product/getProducts', productController.getProducts);
   app.get('/api/store/getStores', storeController.getStores);

@@ -1,6 +1,5 @@
 var productModel = require('../models/productModel');
 var elastic = require('../elastic');
-var redis = require('redis').createClient();
 
 module.exports = {
   getProducts: function(req, res, next){
@@ -59,25 +58,6 @@ module.exports = {
         console.log(err);
         res.sendStatus(400);
       });
-  },
-
-  checkout: function(req, res, next){
-    var request = req.body;
-    productModel.checkout(request, function(err, order){
-      if (err){
-        console.log(err);
-        res.sendStatus(400);
-      } else {
-        redis.rpush(request.storeId, JSON.stringify({ x: request.x, y: request.y, id: order.id }), function(err, redisRes){
-          if (err){
-            console.log('error from redis', err);
-          } else {
-            redis.publish('jobs', redisRes);
-          }
-          res.status(200).json(order);
-        });
-      }
-    });
   }
 
 };

@@ -1,5 +1,7 @@
 angular.module('fastBasket.checkout', [])
 .controller('checkoutController', function($scope, $http, $rootScope, $state){
+  $scope.order = null;
+  $scope.total = 0;
   var geocoder = new google.maps.Geocoder();
 
   function geocodeAddress(callback) {
@@ -13,7 +15,7 @@ angular.module('fastBasket.checkout', [])
     });
   }
 
-  $scope.submit = function(item){
+  $scope.submit = function(){
     if ($scope.address){
       geocodeAddress(function(coords){
         if (!coords){
@@ -31,19 +33,54 @@ angular.module('fastBasket.checkout', [])
         };
 
         for (var i=0; i<$rootScope.shopCart.length; i++){
-          request.total +=  parseInt($rootScope.shopCart[i].price, 10);
+          request.total += parseFloat($rootScope.shopCart[i].price);
           request.productIds.push($rootScope.shopCart[i].dbId);
         }
 
         $http({
           method: "POST",
-          url: '/api/product/checkout',
+          url: '/api/checkout/createOrder',
           data: request
         })
         .then(function(result){
-          $state.go('finish', { order: result.data });
+          $scope.order = result.data;
+          $scope.total = request.total;
         });
       });
     }
   };
+
+  // ============== stripe ===========================
+
+  function onReceiveToken(token, args) {
+    $http({
+      url: '/api/checkout/charge',
+      method: 'POST',
+      data: {
+        stripeToken: token.id,
+        amount: Math.round($scope.total * 100)
+      }
+    })
+    .then(function(result){
+      $state.go('finish', { order: $scope.order });
+    });
+   }
+
+  var checkout = StripeCheckout.configure({
+    key: 'pk_test_QuMujd8pj8I5GBZLxpUu5t7v',
+    token: onReceiveToken,
+    image: 'https://pbs.twimg.com/media/CTuJIpkU8AAOUu5.jpg',
+    name: 'Fast Basket',
+    description: 'groceries',
+    amount: Math.round($scope.total * 100),
+    billingAddress: 'false'
+  });
+
+  $scope.pay = function(){
+    checkout.open();
+    return false;
+  };
+
+  // ============== stripe ===========================
+
 });
