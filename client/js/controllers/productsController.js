@@ -1,7 +1,9 @@
 angular.module('fastBasket.products', [])
 .controller('productsController', function($scope, $http, $rootScope){
-  $rootScope.shopCart = [];
-  $rootScope.shopCartTotal = 0;
+  if ($rootScope.shopCart === undefined || $rootScope.shopCart === null){
+    $rootScope.shopCart = [];
+    $rootScope.shopCartTotal = 0;
+  }
 
   function calculateTotal(){
     $rootScope.shopCartTotal = 0;

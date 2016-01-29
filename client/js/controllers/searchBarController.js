@@ -43,6 +43,19 @@ angular.module('fastBasket.searchBar', [])
     $state.go('checkout');
   };
 
+  $scope.removeItem = function(item, index){
+    $rootScope.shopCart.splice(index, 1);
+    calculateTotal();
+  };
+
+  function calculateTotal(){
+    $rootScope.shopCartTotal = 0;
+    for (var i=0; i<$rootScope.shopCart.length; i++){
+      $rootScope.shopCartTotal += parseFloat($rootScope.shopCart[i].price);
+    }
+    $rootScope.shopCartTotal = $rootScope.shopCartTotal.toFixed(2);
+  }
+
   function elasticSearch(text){
     return $http({
       method: 'GET',
