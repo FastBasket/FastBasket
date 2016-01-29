@@ -1,7 +1,7 @@
 <md-toolbar>
   <div class="md-toolbar-tools">
     <h1>
-      <span><a href="/#/search">Fast Basket</a></span>
+      <span><a href="/#/search" style="color: white">Fast Basket</a></span>
     </h1>
 
     <span flex></span>
@@ -26,9 +26,47 @@
       </md-not-found>
     </md-autocomplete>
 
-    <button ng-click="checkout()">
-      checkout
-    </button>
+
+    <md-button class="md-icon-button" aria-label="cart">
+      <md-icon md-svg-icon="assets/shoppingcart.svg" ng-click="toggleRight()" ng-hide="isOpenRight()" ></md-icon>
+    </md-button>
     
   </div>
 </md-toolbar>
+
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+  <md-toolbar class="md-theme-light">
+    <h1 class="md-toolbar-tools" style="color: white">Shopping Cart</h1>
+  </md-toolbar>
+  <md-content ng-controller="RightCtrl" layout-padding>
+    <div class="warehouse-cart-header">
+      
+    </div>
+    <div class="cart-items">
+      <table class="table">
+        <tbody>
+          <tr ng-repeat="item in shopCart track by $index">
+            <td class="qty">
+              <div>1</div>
+            </td>
+            <td>
+              <div>{{item.name}}</div>
+            </td>
+            <td>
+              <div>${{item.price}}</div>
+            </td>
+            <td>
+              <md-button class="md-icon-button" aria-label="remove">
+                <md-icon md-svg-icon="assets/close.svg" ng-click="removeItem(item, $index)" ></md-icon>
+              </md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <md-button ng-click="checkout()" class="md-raised md-warn" ng-show="shopCart.length > 0">
+      Checkout  ${{shopCartTotal}}
+    </md-button>
+    <span class="md-subhead" ng-show="shopCart.length === 0" >Empty Cart</span>
+  </md-content>
+</md-sidenav>

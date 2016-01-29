@@ -37,6 +37,8 @@ angular.module('fastBasket.checkout', [])
           request.productIds.push($rootScope.shopCart[i].dbId);
         }
 
+        request.total = request.total.toFixed(2);
+
         $http({
           method: "POST",
           url: '/api/checkout/createOrder',
