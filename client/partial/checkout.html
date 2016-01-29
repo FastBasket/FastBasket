@@ -1,8 +1,54 @@
-<form ng-submit="submit()">
-  <input type="text" ng-model="address" placeholder="Address" style="width: 50%"><br>
-  <input type="submit" id="submit" value="Submit">
-  <!-- TODO: show order summary, fill complete address in a nice way -->
-</form>
-<br>
-
-<button ng-show="order !== null" ng-click="pay()" > Pay ${{total}} </button>
+<div layout="column" ng-cloak class="md-inline-form" style="padding: 100px">
+  <md-content layout-padding>
+    <div>
+      <form ng-submit="submit()" name="userForm">
+        <md-input-container class="md-icon-float md-block">
+          <label>Name</label>
+          <md-icon md-svg-src="assets/person.svg" class="name"></md-icon>
+          <input ng-model="user.name" type="text">
+        </md-input-container>
+        <md-input-container md-no-float class="md-block">
+          <md-icon md-svg-src="assets/phone.svg"></md-icon>
+          <input ng-model="user.phone" type="text" placeholder="Phone Number">
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Address</label>
+          <input ng-model="user.address">
+        </md-input-container>
+        <md-input-container md-no-float class="md-block">
+          <input ng-model="user.address2" placeholder="Address 2">
+        </md-input-container>
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>City</label>
+            <input ng-model="user.city">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>State</label>
+            <md-select ng-model="user.state">
+              <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+                {{state.abbrev}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Zip Code</label>
+            <input name="postalCode" ng-model="user.postalCode" placeholder="12345"
+                   required ng-pattern="/^[0-9]{5}$/" md-maxlength="5">
+            <div ng-messages="userForm.postalCode.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a zip code.</div>
+              <div ng-message="pattern" class="my-message">That doesn't look like a valid zip
+                code.
+              </div>
+              <div ng-message="md-maxlength" class="my-message">
+                Don't use the long version.
+              </div>
+            </div>
+          </md-input-container>
+        </div>
+        <md-button type="submit" class="md-raised md-primary">Submit Order</md-button>
+      </form>
+      <md-button class="md-raised md-warn" ng-show="order !== null" ng-click="pay()">Pay ${{total}}</md-button>
+    </div>
+  </md-content>
+</div>
