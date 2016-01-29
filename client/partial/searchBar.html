@@ -53,7 +53,7 @@
               <div>{{item.name}}</div>
             </td>
             <td>
-              <div>${{item.price}}</div>
+              <div>$ {{item.price}}</div>
             </td>
             <td>
               <md-button class="md-icon-button" aria-label="remove">
@@ -65,7 +65,7 @@
       </table>
     </div>
     <md-button ng-click="checkout()" class="md-raised md-warn" ng-show="shopCart.length > 0">
-      Checkout  ${{shopCartTotal}}
+      Checkout  $ {{shopCartTotal}}
     </md-button>
     <span class="md-subhead" ng-show="shopCart.length === 0" >Empty Cart</span>
   </md-content>

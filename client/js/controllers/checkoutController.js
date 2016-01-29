@@ -57,6 +57,7 @@ angular.module('fastBasket.checkout', [])
         .then(function(result){
           $scope.order = result.data;
           $scope.total = request.total;
+          checkout.open();
         });
       });
     }
@@ -88,10 +89,10 @@ angular.module('fastBasket.checkout', [])
     billingAddress: 'false'
   });
 
-  $scope.pay = function(){
-    checkout.open();
-    return false;
-  };
+  // $scope.pay = function(){
+  //   checkout.open();
+  //   return false;
+  // };
 
   // ============== stripe ===========================
 
