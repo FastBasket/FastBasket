@@ -22,7 +22,7 @@ module.exports = {
         res.sendStatus(500, err);
       } else {
         //TODO: update Order table status as paid
-        res.sendStatus(204);
+        res.sendStatus(202);
       }
     });
   },

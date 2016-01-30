@@ -23,7 +23,6 @@ angular.module('fastBasket.searchBar', [])
       $mdSidenav(navID)
         .toggle()
         .then(function () {
-          $log.debug("toggle " + navID + " is done");
         });
     }, 200);
   }
@@ -32,7 +31,6 @@ angular.module('fastBasket.searchBar', [])
       $mdSidenav(navID)
         .toggle()
         .then(function () {
-          $log.debug("toggle " + navID + " is done");
         });
     };
   }
@@ -101,11 +99,10 @@ angular.module('fastBasket.searchBar', [])
     }
   };
 })
-.controller('RightCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+.controller('RightCtrl', function ($scope, $timeout, $mdSidenav) {
   $scope.close = function () {
     $mdSidenav('right').close()
       .then(function () {
-        $log.debug("close RIGHT is done");
       });
   };
 });

@@ -32,8 +32,6 @@ module.exports = {
           for (var i=0; i<body.hits.hits.length; i++){
             resultCategory.push(body.hits.hits[i]._source);
           }
-
-          console.log(resultCategory);
           result = resultCategory.concat(result);
           
           res.status(200).json(result);
