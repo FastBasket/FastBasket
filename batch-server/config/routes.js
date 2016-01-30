@@ -6,11 +6,10 @@ module.exports = function (app, redis) {
     console.log("client1 channel " + channel + ": " + message);
 
     message = JSON.parse(message);
-    console.log(message);
-    if (message.len > 6) {
+    if (message.len > 1) {
       redis.unsubscribe();
       redis.lrange(message.storeId, 0, 9, function(err, reply){
-        // redis.ltrim('1', 10, -1); //TODO uncomment this for production
+        redis.ltrim('1', 10, -1);
         console.log(reply);
 
         var data = reply.map(function(ele){

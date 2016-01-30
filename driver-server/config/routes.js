@@ -1,7 +1,18 @@
-var userController = require('../../server/controllers/userController.js')
+var userController = require('../../server/controllers/userController.js');
 var jobModel = require('../../server/models/jobModel');
 
 module.exports = function(app,express,passport){
+
+  app.post('/api/getorders', function(req, res, next){
+    var orderIds = req.body.orderIds;
+    jobModel.getOrders(orderIds, function(err, response){
+      if (err){
+        res.sendStatus(400);
+      } else{
+        res.status(200).json(response);
+      }
+    });
+  });
 
 //test This
   app.get('/api/myJob',function(req, res){

@@ -5,13 +5,30 @@ angular.module('driverSide.profile', ['ngCookies'])
   $rootScope.socketConnect = function(){
 	$scope.socket = io();
   $scope.userId = JSON.parse($cookies.get('user')).id;
- 
+  $scope.orders = [];
+
   $scope.hasJob;
-  $scope.myJob;
   
   $scope.socket.on('dequeue', function(job){
-        console.log('Got Job:', job);    
+    if (job === false){
+      console.log('empty job');
+      return;
+    }
+
+    $scope.ordersIds = [];
+    job = JSON.parse(job);
+    for (var i=0; i<job.data.length; i++){
+      $scope.ordersIds.push(job.data[i].id);
+    }
+
+    $http({
+      method: "POST",
+      url: '/api/getorders',
+      data: { orderIds: $scope.ordersIds }
+    }).then(function(result){
+      $scope.orders = result.data;
     });
+  });
   };
 
   $scope.checkJobs = function(){
@@ -26,15 +43,41 @@ angular.module('driverSide.profile', ['ngCookies'])
         $scope.hasJob = false;
       }else{
         $scope.hasJob = true;
-        $scope.myJob = result.data;
-        console.log($scope.myJob);
       }
     });
   };
 
-  $scope.getJob = function(){
+  $scope.doneOrderIsReady = function(orderId){
+    $http({
+      method: "POST",
+      url: 'http://127.0.0.1:8000/api/driverNotifications/doneOrderReceived',
+      data: { orderId: orderId }
+    }).then(function(result){
+      
+    });
+  };
 
+  $scope.doneOrderIsOnItsWay = function(orderId){
+    $http({
+      method: "POST",
+      url: 'http://127.0.0.1:8000/api/driverNotifications/doneInProgress',
+      data: { orderId: orderId }
+    }).then(function(result){
+      
+    });
+  };
+
+  $scope.doneOrderDelivered = function(orderId){
+    $http({
+      method: "POST",
+      url: 'http://127.0.0.1:8000/api/driverNotifications/doneOntheWay',
+      data: { orderId: orderId }
+    }).then(function(result){
+      
+    });
+  };
+
+  $scope.getJob = function(){
     $scope.socket.emit('request', $scope.userId);
-     console.log($scope.userId);
   };
 });
