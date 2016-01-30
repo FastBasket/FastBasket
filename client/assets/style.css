@@ -9,3 +9,9 @@
 .gridListdemoBasicUsage md-grid-tile {
   transition: all 400ms ease-out 50ms;
 }
+
+md-sidenav, md-sidenav.md-locked-open, md-sidenav.md-closed.md-locked-open-add-active {
+ min-width: 350px !important;
+ width: 50vw !important;
+ max-width: 550px !important;
+}

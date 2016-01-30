@@ -1,9 +1,58 @@
 angular.module('fastBasket.searchBar', [])
-.controller('searchBarController', function($scope, $http, $rootScope, $state){
+.controller('searchBarController', function($scope, $http, $rootScope, $state, $mdSidenav){
+  $scope.toggleRight = buildToggler('right');
+  $scope.isOpenRight = function(){
+    return $mdSidenav('right').isOpen();
+  };
+
+  function debounce(func, wait, context) {
+    var timer;
+    return function debounced() {
+      var context = $scope,
+          args = Array.prototype.slice.call(arguments);
+      $timeout.cancel(timer);
+      timer = $timeout(function() {
+        timer = undefined;
+        func.apply(context, args);
+      }, wait || 10);
+    };
+  }
+
+  function buildDelayedToggler(navID) {
+    return debounce(function() {
+      $mdSidenav(navID)
+        .toggle()
+        .then(function () {
+        });
+    }, 200);
+  }
+  function buildToggler(navID) {
+    return function() {
+      $mdSidenav(navID)
+        .toggle()
+        .then(function () {
+        });
+    };
+  }
+
+  //===========================================================
 
   $scope.checkout = function(){
     $state.go('checkout');
   };
+
+  $scope.removeItem = function(item, index){
+    $rootScope.shopCart.splice(index, 1);
+    calculateTotal();
+  };
+
+  function calculateTotal(){
+    $rootScope.shopCartTotal = 0;
+    for (var i=0; i<$rootScope.shopCart.length; i++){
+      $rootScope.shopCartTotal += parseFloat($rootScope.shopCart[i].price);
+    }
+    $rootScope.shopCartTotal = $rootScope.shopCartTotal.toFixed(2);
+  }
 
   function elasticSearch(text){
     return $http({
@@ -48,5 +97,12 @@ angular.module('fastBasket.searchBar', [])
     if (keycode === 13){
       this.selectedItemChange({name: this.searchText});
     }
+  };
+})
+.controller('RightCtrl', function ($scope, $timeout, $mdSidenav) {
+  $scope.close = function () {
+    $mdSidenav('right').close()
+      .then(function () {
+      });
   };
 });
