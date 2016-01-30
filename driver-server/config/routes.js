@@ -1,49 +1,38 @@
-module.exports = function (app, express, io, amqp) {
+var userController = require('../../server/controllers/userController.js')
+var jobModel = require('../../server/models/jobModel');
 
-  io.on('connection', function(socket){
-    console.log('a driver connected');
+module.exports = function(app,express,passport){
 
-    socket.on('request', function(msg){
-      console.log('driver selected, picking up items');
-
-      amqp.connect('amqp://localhost', function(err, conn) {
-        conn.createChannel(function(err, ch) {
-          var q = 'task_queue';
-
-         ch.assertQueue(q, {durable: true});
-         ch.prefetch(1);
-         console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
-         ch.consume(q, function(order) {
-
-           // send job
-          console.log(" [x] Received %s", order);
-          setTimeout(function() {
-            console.log(" [x] Done");
-            socket.emit('dequeue', JSON.parse(order.content.toString()))
-            // ch.ack(order);
-            // conn.close()
-          }, 1000);
-         });
-        });
-        // dequeue and send job to driver
-
+//test This
+  app.get('/api/myJob',function(req, res){
+      var user = JSON.parse(req.cookies.user);
+      var userId = user.id;
+      
+      jobModel.getJob(userId, function(err, job){
+        console.log("this is the job returned from api/myJob", job);
+        res.json(job);
       });
-
-    socket.on('arriving', function(msg){
-      console.log('driver arriving');
-    });
-
-    socket.on('shipped', function(msg){
-      console.log('order complete');
-    });
   });
 
+//<---------Passport-------->
+  app.get('/api/auth/facebook',
+    passport.authenticate('facebook', { scope: ['public_profile'] }),
+    function(req, res){
 
+    });
 
-    // socket.on('disconnect', function(){
-    //   console.log('driver disconnected');
-    //
-    //   // need to consider reconnections on incomplete orders
-    // });
+  app.get('/api/auth/facebook/callback',
+    passport.authenticate('facebook', { failureRedirect: '/#/login' }),
+    function(req, res) {
+      console.log("This is the user before adding him to cookie", req.user);
+      res.cookie('user', JSON.stringify(req.user));
+      res.redirect('/#/profile/dashboard');
+    });
+
+  app.get('/api/logout', function(req, res){
+    req.logout();
+    res.redirect('/#/login');
   });
+//<---------Passport-------->
+
 };

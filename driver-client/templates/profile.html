@@ -1,0 +1,6 @@
+<h1>Welcome to your Profile</h1>
+<button ng-click = "getJob()" ng-hide = "hasJob">Give me a Job</button>
+<div ng-show = "hasJob">{{myJob}}</div>
+<hr/>
+
+<div ui-view ng-init = 'socketConnect(); checkJobs()'></div>
