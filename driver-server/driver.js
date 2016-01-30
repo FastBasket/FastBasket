@@ -12,6 +12,8 @@ require('./config/middleware.js')(app, express, passport);
 require('./config/driverController.js')(app, express, io, amqp);
 require('./config/routes.js')(app,express,passport);
 
-server.listen(8009);
+server.listen(8009, function () {
+  console.log('App listening on port', (process.env.PORT || 8009), constants.API_URL);
+});
 
 module.exports = app;
