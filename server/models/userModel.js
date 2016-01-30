@@ -15,8 +15,7 @@ module.exports = {
   insertUser: function(userToInsert, callback){
     var parameters = [userToInsert.name || "", userToInsert.email || "", userToInsert.facebookid || "", userToInsert.zipcode || "", userToInsert.address || "", userToInsert.phone || "", userToInsert.picture || "", true];
     db.one("insert into users(name, email, facebookid, zipcode, address, phone, picture, active) values($1, $2, $3, $4, $5, $6, $7, $8) returning id",
-      parameters)
-      .then(function (newUser) {
+      parameters) .then(function (newUser) {
           callback(null, newUser);
       })
       .catch(function (error) {
@@ -33,5 +32,11 @@ module.exports = {
       .catch(function(error){
         callback(error, null);
       });
+  },
+  getUserProfile: function(userId, callback){
+    //query for db for orders ids and orderdetails for products 
+    db.query('select * from OrderDetails INNER JOIN products on orderDetails.ProductId = products.Id INNER JOIN orders ON orders.id = orderDetails.OrderId', function(err, res){
+    callback(err, res);
+    } )
   }
 };
