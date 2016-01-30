@@ -21,7 +21,7 @@ module.exports = {
     //TODO: get 4158025390 from the request
     io.to(orderId).emit('doneOrderReceived', { message: "done with Order received " + orderId });
     sendSms('4158025390', 'done with Order received', function(message){
-      console.log('message sent');
+      
     });
 
     res.sendStatus(200);
@@ -33,7 +33,7 @@ module.exports = {
     //TODO: get 4158025390 from the request
     io.to(orderId).emit('doneInProgress', { message: "done with In Progress " + orderId });
     sendSms('4158025390', 'done with In Progress', function(message){
-      console.log('message sent');
+      
     });
 
     res.sendStatus(200);
@@ -45,7 +45,7 @@ module.exports = {
     //TODO: get 4158025390 from the request
     io.to(orderId).emit('doneOntheWay', { message: "done with On the Way " + orderId });
     sendSms('4158025390', 'done with On the Way', function(message){
-      console.log('message sent');
+      
     });
 
     res.sendStatus(200);
