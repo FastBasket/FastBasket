@@ -1,8 +1,81 @@
-<form ng-submit="submit()">
-  <input type="text" ng-model="address" placeholder="Address" style="width: 50%"><br>
-  <input type="submit" id="submit" value="Submit">
-  <!-- TODO: show order summary, fill complete address in a nice way -->
-</form>
-<br>
-
-<button ng-show="order !== null" ng-click="pay()" > Pay ${{total}} </button>
+<div layout="column" ng-cloak class="md-inline-form" style="padding: 100px">
+  <md-content layout-padding>
+    <div>
+      <form ng-submit="submit()" name="userForm" novalidate>
+        <md-input-container class="md-icon-float md-block">
+          <label>Name</label>
+          <md-icon md-svg-src="assets/person.svg" class="name"></md-icon>
+          <input name="name" ng-model="user.name" type="text" required>
+          <div ng-messages="userForm.name.$error" role="alert">
+            <div ng-message="required" class="my-message" ng-show="userForm.name.$error.required && userForm.$dirty">You must your name</div>
+          </div>
+        </md-input-container>
+        <md-input-container md-no-float class="md-block">
+          <label>Phone</label>
+          <md-icon md-svg-src="assets/phone.svg"></md-icon>
+          <input name="phone" ng-model="user.phone" type="number" minlength="10" maxlength="10" required>
+          <div ng-messages="userForm.phone.$error" role="alert">
+            <div ng-message="['maxlength']" class="my-message" ng-show="userForm.phone.$error.maxlength && userForm.$dirty">Invalid phone number</div>
+            <div ng-message="required" class="my-message" ng-show="userForm.phone.$error.required && userForm.$dirty">You must supply your phone number</div>
+          </div>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Email</label>
+          <input required type="email" name="email" ng-model="user.email"
+                 minlength="4" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+          <div ng-messages="userForm.email.$error" role="alert">
+            <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']" ng-show="userForm.email.$error.required && userForm.$dirty">
+              Your email doesn't look like an e-mail address.
+            </div>
+          </div>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Address</label>
+          <input name="address" ng-model="user.address" required>
+          <div ng-messages="userForm.address.$error" role="alert">
+            <div ng-message="required" class="my-message" ng-show="userForm.address.$error.required && userForm.$dirty" >You must supply your address</div>
+          </div>
+        </md-input-container>
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>City</label>
+            <input name="city" ng-model="user.city" required>
+            <div ng-messages="userForm.city.$error" role="alert">
+              <div ng-message="required" class="my-message" ng-show="userForm.city.$error.required && userForm.$dirty">You must supply your city</div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>State</label>
+            <md-select name="state" ng-model="user.state" required>
+              <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+                {{state.abbrev}}
+              </md-option>
+            </md-select>
+            <div ng-messages="userForm.state.$error" role="alert">
+              <div ng-message="required" class="my-message" ng-show="userForm.state.$error.required && userForm.$dirty">You must supply your state</div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Zip Code</label>
+            <input name="postalCode" ng-model="user.postalCode" placeholder="12345"
+                   required ng-pattern="/^[0-9]{5}$/" md-maxlength="5">
+            <div ng-messages="userForm.postalCode.$error" role="alert">
+              <div ng-message="required" class="my-message" ng-show="userForm.postalCode.$error.required && userForm.$dirty">You must supply a zip code.</div>
+              <div ng-message="pattern" class="my-message" ng-show="userForm.postalCode.$error.pattern && userForm.$dirty">That doesn't look like a valid zip
+                code.
+              </div>
+              <div ng-message="md-maxlength" class="my-message" ng-show="userForm.postalCode.$error.md-maxlength && userForm.$dirty">
+                Don't use the long version.
+              </div>
+            </div>
+          </md-input-container>
+        </div>
+        <md-input-container class="md-block">
+          <label>Driver Instructions</label>
+          <textarea ng-model="user.driverInstructions" columns="1" md-maxlength="150" rows="5"></textarea>
+        </md-input-container>
+        <md-button type="submit" class="md-raised md-primary" ng-disabled='userForm.$invalid' >Submit Order $ {{shopCartTotal}}</md-button>
+      </form>
+    </div>
+  </md-content>
+</div>

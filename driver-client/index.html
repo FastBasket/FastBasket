@@ -1,18 +1,17 @@
 <html>
-  <head>
+    <head>
     <script src="https://cdn.socket.io/socket.io-1.4.4.js"></script>
-    <script>
-      var socket = io();
-      // socket.emit('request');
+    </head>
 
-      socket.on('dequeue', function(data){
-         console.log(data)
-         bob = data
-       });
-    </script>
-  </head>
-  <body>
-    this is driver page
-  </body>
+    <body ng-app="driverSide">
+        <div ui-view></div>
 
+ 	
+ 	<script src='client/lib/angular/angular.js'></script>
+	<script src='client/lib/angular-ui-router/release/angular-ui-router.js'></script>
+ 	<script src='client/lib/angular-cookies/angular-cookies.js'></script>
+ 	<script src="js/controllers/profileController.js"></script>
+ 	<script src="js/app.js"></script>
+
+    </body>
 </html>

@@ -30,6 +30,7 @@ build/Release
 node_modules/
 bower_components/
 client/lib/
+driver-client/client/lib/
 dump.rdb
 
 # Optional npm cache directory

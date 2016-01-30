@@ -1,4 +1,4 @@
-﻿Create Table IF NOT EXISTS Stores(
+Create Table IF NOT EXISTS Stores(
   Id serial PRIMARY KEY,
   Name varchar(250)
 );
@@ -12,7 +12,8 @@ Create Table IF NOT EXISTS Users(
   Address Varchar(200),
   Phone Varchar(10),
   Picture Varchar(200),
-  Active boolean
+  active boolean,
+  isDriver boolean
 );
 
 CREATE TABLE IF NOT EXISTS categories(
@@ -39,7 +40,7 @@ Create Table IF NOT EXISTS Orders (
   ShippingAddressPoint Point,
   Total decimal(6,2),
   StoreId serial REFERENCES Stores (Id),
-  JobId bigserial REFERENCES Jobs (Id),
+  JobId BIGINT REFERENCES Jobs (Id),
   Status Varchar(10)
 );
 

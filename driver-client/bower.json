@@ -1,0 +1,20 @@
+{
+  "name": "driver-client",
+  "homepage": "https://github.com/dkorenblyum/FastBasket",
+  "description": "",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-cookies": "~1.4.9",
+    "angular-ui-router": "~0.2.17"
+  }
+}
