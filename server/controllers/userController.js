@@ -42,5 +42,12 @@ module.exports = {
         });
       }
     });
+  },
+  getUserProfile: funciton(req, res){
+    var userId = req.params.id;
+    userModel.getUserProfile(userId, function(err, profile){
+    if(err) { console.log(err) };
+      res.json(profile);
+    }
   }
 };

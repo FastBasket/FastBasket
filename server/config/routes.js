@@ -17,6 +17,7 @@ module.exports = function (app, express) {
   app.get('/api/store/getStores', storeController.getStores);
   app.get('/api/user/getUsers', userController.getUsers);
   app.post('/api/user/', userController.insertUser);
+  app.get('/api/user/:id', userController.getUserProfile);
 
 //<--------- driverNotifications start -------->
 
