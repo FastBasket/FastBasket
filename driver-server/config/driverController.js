@@ -22,13 +22,12 @@ module.exports = function (app, express, io, amqp) {
 
           if (err){
             console.log(err);
-          };
+          }
 
           var fetchedJob = order.content.toString();
           var fetchedJobParse = JSON.parse(fetchedJob);
-
-          //TESTING
-          fetchedJobParse = [{orderId:1},{orderId:2},{orderId:3}]
+          var arrayOfOrderId = fetchedJobParse.data;
+          console.log('HERE ARE THE ORDERIDS', arrayOfOrderId);
           
           //create job  fsdvsdv
           var newJob = {
@@ -42,16 +41,16 @@ module.exports = function (app, express, io, amqp) {
             } else {
               console.log('jobCreated!:', jobCreated);
 
-              for (var i = 0; i < fetchedJobParse.length; i++){
-                //using the current orderID, updated order with JobID
-                jobModel.updateOrder(fetchedJobParse[i]["orderId"], jobCreated.id, function(orderUpdated){
+              arrayOfOrderId.forEach(function(item){
+                var orderParsed = JSON.parse(item);
+                jobModel.updateOrder(orderParsed.id, jobCreated.id, function(orderUpdated){
                     if (err){
                       console.log('err',err);
                     } else {
                       console.log('orderUpdated!:', orderUpdated);
                     }
-                })
-              }
+                });
+              });
             }
           });
 
@@ -61,7 +60,7 @@ module.exports = function (app, express, io, amqp) {
             console.log(" [x] Done", fetchedJob);
             socket.emit('dequeue', fetchedJob);
             
-            conn.close()
+            conn.close();
        
          }, {noAck:false});
         });
