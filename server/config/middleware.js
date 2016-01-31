@@ -3,9 +3,11 @@ var bodyParser = require('body-parser');
 var passport = require('./passport');
 var session = require('express-session');
 var constants = require('./constants');
+var cors = require('cors');
 
 module.exports = function (app, express) {
   app.use(morgan('dev'));
+  app.use(cors());
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   app.use(express.static(__dirname + '/../../client'));

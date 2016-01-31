@@ -1,6 +1,20 @@
 <h1>Welcome to your Profile</h1>
 <button ng-click = "getJob()">Give me a Job</button>
 <div ng-show = "hasJob">{{myJob}}</div>
+
 <hr/>
+
+<div ng-repeat="order in orders">
+  <h3>{{order.shippingaddress}} | ${{order.total}}</h3>
+  <button ng-click="doneOrderIsReady(order.id)" >Order is Ready</button>
+  <button ng-click="doneOrderIsOnItsWay(order.id)" >Order is on its way</button>
+  <button ng-click="doneOrderDelivered(order.id)" >Order delivered</button>
+  <ul>
+    <li ng-repeat="orderDetail in order.orderDetails" >
+      {{orderDetail.name}} | ${{orderDetail.price}}
+    </li>
+  </ul>
+  <hr/>
+</div>
 
 <div ui-view ng-init = 'socketConnect(); checkJobs()'></div>
