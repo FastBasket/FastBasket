@@ -1,5 +1,16 @@
 var db = require('../db/db');
 module.exports = {
+  
+  updateJobStatus: function(jobId, callback){
+    db.query('UPDATE jobs SET status = $1 where id = $2', [true, jobId])
+      .then(function(){
+        callback();
+      })
+      .catch(function(error){
+        callback(error);
+      });
+  },
+
   updateOrderStatus: function(status, orderId, callback){
     db.query('UPDATE orders SET status = $1 where id = $2', [status, orderId])
       .then(function(){

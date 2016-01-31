@@ -3,6 +3,17 @@ var jobModel = require('../../server/models/jobModel');
 
 module.exports = function(app,express,passport){
 
+  app.post('/api/finishJob', function(req, res, next){
+    var jobId = req.body.jobId;
+    jobModel.updateJobStatus(jobId, function(err){
+      if (err){
+        res.sendStatus(400);
+      } else {
+        res.sendStatus(200);
+      }
+    });
+  });
+
   app.post('/api/getorders', function(req, res, next){
     var orderIds = req.body.orderIds;
     jobModel.getOrders(orderIds, function(err, response){
