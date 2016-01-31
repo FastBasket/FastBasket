@@ -6,6 +6,8 @@ angular.module('driverSide.profile', ['ngCookies'])
 	$scope.socket = io();
   $scope.userId = JSON.parse($cookies.get('user')).id;
   $scope.orders = [];
+  $scope.ordersDone = 0;
+  $scope.jobId = null;
 
   $scope.hasJob;
   
@@ -16,9 +18,10 @@ angular.module('driverSide.profile', ['ngCookies'])
     }
 
     $scope.ordersIds = [];
-    job = JSON.parse(job);
-    for (var i=0; i<job.data.length; i++){
-      $scope.ordersIds.push(job.data[i].id);
+    $scope.jobId = job.jobId;
+
+    for (var i=0; i<job.orders.length; i++){
+      $scope.ordersIds.push(job.orders[i].id);
     }
 
     $http({
@@ -73,7 +76,17 @@ angular.module('driverSide.profile', ['ngCookies'])
       url: 'http://127.0.0.1:8000/api/driverNotifications/doneOntheWay',
       data: { orderId: orderId }
     }).then(function(result){
-      
+      $scope.ordersDone++;
+      if ($scope.ordersDone === $scope.orders.length){
+        $http({
+          method: "POST",
+          url: '/api/finishJob',
+          data: { jobId: $scope.jobId }
+        }).
+        then(function(result){
+          
+        });
+      }
     });
   };
 

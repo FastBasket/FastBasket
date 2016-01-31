@@ -22,6 +22,8 @@ module.exports = function (app, express, io, amqp) {
             console.log(err);
           }
           if (order && order.content){
+            console.log('order.content',order.content.toString());
+
             var fetchedJob = order.content.toString();
             var fetchedJobParse = JSON.parse(fetchedJob);
             var arrayOfOrderId = fetchedJobParse.data;
@@ -51,14 +53,16 @@ module.exports = function (app, express, io, amqp) {
                       }
                     });
                   });
+
+                  console.log(" [x] Received %s", fetchedJob);
+                  console.log(" [x] Done", fetchedJob);
+                  socket.emit('dequeue', { orders: fetchedJobParse.data, jobId: jobCreated.id });
                 }
               });
 
               //add jobId to every order in the new Job
        
-              console.log(" [x] Received %s", fetchedJob);
-              console.log(" [x] Done", fetchedJob);
-              socket.emit('dequeue', fetchedJob);
+              
             }
           } else{
             console.log('no jobs in queue');
