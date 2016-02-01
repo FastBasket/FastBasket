@@ -1,5 +1,13 @@
-angular.module('fastBasket.searchBar', [])
-.controller('searchBarController', function($scope, $http, $rootScope, $state, $mdSidenav){
+angular.module('fastBasket.searchBar', ['ngCookies'])
+.controller('searchBarController', function($scope, $http, $rootScope, $state, $mdSidenav, $cookies){
+  $rootScope.user = JSON.parse($cookies.get('user'));
+  if ($rootScope.user.phone && $rootScope.user.phone.trim().length > 0 && $rootScope.user.phone.trim().length === 10){
+    $rootScope.user.phone = parseInt($rootScope.user.phone, 10);
+  }
+  if ($rootScope.user.zipcode && $rootScope.user.zipcode.trim().length > 0 && $rootScope.user.zipcode.trim().length === 5){
+    $rootScope.user.zipcode = parseInt($rootScope.user.zipcode, 10);
+  }
+
   $scope.toggleRight = buildToggler('right');
   $scope.isOpenRight = function(){
     return $mdSidenav('right').isOpen();

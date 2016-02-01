@@ -10,7 +10,10 @@ Create Table IF NOT EXISTS Users(
   FacebookId Varchar(100),
   ZipCode Varchar(5),
   Address Varchar(200),
+  City Varchar(100),
+  State Varchar(2),
   Phone Varchar(10),
+  DriverInstructions Varchar(200),
   Picture Varchar(200),
   active boolean,
   isDriver boolean
@@ -21,7 +24,7 @@ CREATE TABLE IF NOT EXISTS categories(
   Name Varchar(100), 
   Category INTEGER NULL REFERENCES categories(Id)
 );
-
+  
 CREATE TABLE IF NOT EXISTS products (
   Id bigserial PRIMARY KEY, 
   Name Varchar(100),

@@ -37,6 +37,7 @@ module.exports = function (app, express) {
   app.get('/api/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/#/login' }),
     function(req, res) {
+      res.cookie('user', JSON.stringify(req.user));
       res.redirect('/#/search');
     });
 
