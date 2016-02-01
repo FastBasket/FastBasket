@@ -19,7 +19,13 @@ module.exports = {
       db.none('Insert into OrderDetails(OrderId, ProductId, price) ' +
               ' Select $1, id, price from Products where id in (' + strQuery + '); ', oderDetailParams)
       .then(function(){
-        callback(null, orderInserted);
+
+        db.none('update users set name = $1, phone = $2, email = $3, address = $4, city = $5, state = $6, zipcode = $7, DriverInstructions = $8 where id = $9',
+          [request.user.name, request.user.phone, request.user.email, request.user.address, request.user.city, request.user.state, request.user.zipcode, request.user.driverinstructions, request.userId])
+        .then(function(){
+          callback(null, orderInserted);
+        });
+
       });
     })
     .catch(function(error){
