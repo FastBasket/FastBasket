@@ -1,37 +1,41 @@
 angular.module('driverSide.profile', ['ngCookies'])
 .controller('profileController', function($scope, $http, $rootScope, $cookies){
   $scope.socket;
-
-  $rootScope.socketConnect = function(){
-	$scope.socket = io();
+  $scope.socket = io();
   $scope.userId = JSON.parse($cookies.get('user')).id;
   $scope.orders = [];
   $scope.ordersDone = 0;
   $scope.jobId = null;
 
   $scope.hasJob;
-  
-  $scope.socket.on('dequeue', function(job){
-    if (job === false){
-      console.log('empty job');
-      return;
-    }
 
-    $scope.ordersIds = [];
-    $scope.jobId = job.jobId;
+  $rootScope.socketConnect = function(){
+    $scope.socket.on('dequeue', function(job){
+      if (job === false){
+        console.log('empty job');
+        return;
+      }
 
-    for (var i=0; i<job.orders.length; i++){
-      $scope.ordersIds.push(job.orders[i].id);
-    }
+      $scope.ordersIds = [];
+      $scope.jobId = job.jobId;
 
-    $http({
-      method: "POST",
-      url: '/api/getorders',
-      data: { orderIds: $scope.ordersIds }
-    }).then(function(result){
-      $scope.orders = result.data;
+      for (var i=0; i<job.orders.length; i++){
+        $scope.ordersIds.push(job.orders[i].id);
+      }
+
+      $http({
+        method: "POST",
+        url: '/api/getorders',
+        data: { 
+          orderIds: $scope.ordersIds,
+          userId: $scope.userId
+        }
+      }).then(function(result){
+        $scope.orders = result.data;
+        $scope.hasJob = true;
+        console.log("here are the orders",$scope.orders)
+      });
     });
-  });
   };
 
   $scope.checkJobs = function(){
@@ -41,11 +45,15 @@ angular.module('driverSide.profile', ['ngCookies'])
     }).then(function(result){
 
       var job = result.data;
-
-      if (job === null){
+      job = JSON.parse(job);
+      if (!job){
         $scope.hasJob = false;
+        console.log("this is the value of hasJob if no job was returned", $scope.hasJob)
       }else{
         $scope.hasJob = true;
+        // var parsedOrders = JSON.parse(job);
+        $scope.orders = job;
+        console.log("this is the value of hasJob if a job was returned", $scope.hasJob)
       }
     });
   };
@@ -81,10 +89,15 @@ angular.module('driverSide.profile', ['ngCookies'])
         $http({
           method: "POST",
           url: '/api/finishJob',
-          data: { jobId: $scope.jobId }
+          data: { 
+            jobId: $scope.jobId,
+            userId: $scope.userId 
+          }
         }).
         then(function(result){
-          
+          $scope.ordersDone = 0;
+          $scope.orders = [];
+          $scope.hasJob = false;
         });
       }
     });

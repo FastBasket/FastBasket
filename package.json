@@ -16,6 +16,7 @@
   "homepage": "https://github.com/FastBasket/FastBasket#readme",
   "dependencies": {
     "amqplib": "^0.4.0",
+    "bluebird": "^3.2.1",
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.1",
     "cors": "^2.7.1",

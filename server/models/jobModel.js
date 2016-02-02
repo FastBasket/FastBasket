@@ -1,9 +1,20 @@
 var db = require('../db/db');
+var redis = require('redis');
+
+var client = redis.createClient();
+
+
 module.exports = {
   
-  updateJobStatus: function(jobId, callback){
+  updateJobStatus: function(jobId, userId,callback){
     db.query('UPDATE jobs SET status = $1 where id = $2', [true, jobId])
       .then(function(){
+
+        var newKeyUserId = "driver" + JSON.stringify(userId);
+        var value = JSON.stringify(false);
+
+        client.set(newKeyUserId,value);
+
         callback();
       })
       .catch(function(error){
@@ -46,27 +57,31 @@ module.exports = {
   
   },
   getJob : function(userId,callback){
-    db.query('select * from jobs where UserId = $1 AND status = false', [userId])
-      .then(function(job){
-        var result;
-        
-        if (job.length > 0){
-          var jobId;
-          result = job[0];
-          jobId = result.id;
+    // db.query('select * from jobs where UserId = $1 AND status = false', [userId])
+    //   .then(function(job){
+    //     var result;
+    //     if (job.length > 0){
+    //       var jobId;
+    //       result = job[0];
+    //       jobId = result.id;
 
-          callback(null, result);
-        }else{  
-          callback(null,null);
-        }
+    //       callback(null, result);
+    //     }else{  
+    //       callback(null, null);
+    //     }
 
-      })
-      .catch(function (err) {
-        console.log('err when getting job',err)
-      })
+    //   })
+    //   .catch(function (err) {
+    //     console.log('err when getting job',err)
+    //   })
+    var redisKey = "driver" + JSON.stringify(userId);
+    
+    client.get(redisKey, function(err, res){
+      callback(null,res);
+    })
   },
 
-  getOrders: function(orderIds, callback){
+  getOrders: function(orderIds, userId, callback){
     var orders = [];
     var params = [];
     var strQuery = "";
@@ -89,6 +104,11 @@ module.exports = {
           }
         }
       }
+
+      var redisKeyUserId = "driver" + JSON.stringify(userId);
+      var redisValueUsersJob = JSON.stringify(orders); 
+      client.set(redisKeyUserId,redisValueUsersJob)
+
       callback(null, orders);
     });
   }
