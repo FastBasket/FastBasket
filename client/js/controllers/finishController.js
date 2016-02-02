@@ -35,17 +35,14 @@ angular.module('fastBasket.finish', [])
   };
 
   mySocket.on('doneOrderReceived', function (data) {
-    console.log(data);
     doneOrderReceived();
   });
 
   mySocket.on('doneInProgress', function (data) {
-    console.log(data);
     doneInProgress();
   });
 
   mySocket.on('doneOntheWay', function (data) {
-    console.log(data);
     doneOntheWay();
   });
 });

@@ -1,5 +1,5 @@
 angular.module('fastBasket.checkout', [])
-.controller('checkoutController', function($scope, $http, $rootScope, $state){
+.controller('checkoutController', function($scope, $http, $rootScope, $state, shopCart){
   $scope.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS ' +
     'MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI ' +
     'WY').split(' ').map(function(state) {
@@ -71,7 +71,10 @@ angular.module('fastBasket.checkout', [])
     })
     .then(function successCallback(result){
       createOrder(function(orderCreated){
-        $state.go('finish', { order: orderCreated });
+        shopCart.setCart($rootScope.user.id, [])
+        .then(function(){
+          $state.go('finish', { order: orderCreated });
+        });
       });
     }, function errorCallback(response) {
       console.log(response);

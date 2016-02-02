@@ -70,4 +70,32 @@ var fastBasket = angular.module('fastBasket',
   })
 .factory('mySocket', function (socketFactory) {
   return socketFactory();
+})
+.factory('shopCart', function ($http) {
+  var getCart = function(userId) {
+    return $http({
+      method: 'POST',
+      url: '/api/cart/getCart',
+      data: {userId: userId}
+    })
+    .then(function (cart) {
+      return cart.data;
+    });
+  };
+
+  var setCart = function(userId, cart) {
+    return $http({
+      method: 'POST',
+      url: '/api/cart/setCart',
+      data: { userId: userId, cart: cart }
+    })
+    .then(function () {
+      
+    });
+  };
+
+  return {
+    getCart: getCart,
+    setCart: setCart
+  };
 });
