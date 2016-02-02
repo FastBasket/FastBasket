@@ -18,6 +18,9 @@ module.exports = function (app, express) {
   app.get('/api/user/getUsers', userController.getUsers);
   app.post('/api/user/', userController.insertUser);
 
+  app.post('/api/cart/getCart', productController.getShoppingCart);
+  app.post('/api/cart/setCart', productController.setShoppingCart);
+
 //<--------- driverNotifications start -------->
 
   app.post('/api/driverNotifications/doneOrderReceived', driverController.doneOrderReceived);

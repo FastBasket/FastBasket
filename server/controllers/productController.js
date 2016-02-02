@@ -1,7 +1,33 @@
 var productModel = require('../models/productModel');
 var elastic = require('../elastic');
+var redis = require('redis').createClient();
 
 module.exports = {
+  getShoppingCart: function(req, res, next){
+    var userId = req.body.userId;
+
+    redis.get(userId + "cart", function(err, redisRes){
+      if (err) {
+        res.status(200).json(false);
+      } else {
+        res.status(200).json(redisRes);
+      }
+    });
+  },
+
+  setShoppingCart: function(req, res, next){
+    var userId = req.body.userId;
+    var cart = JSON.stringify(req.body.cart);
+
+    redis.set(userId + "cart", cart, function(err, redisRes){
+      if (err) {
+        res.sendStatus(400);
+      } else {
+        res.status(200).json(true);
+      }
+    });
+  },
+
   getProducts: function(req, res, next){
     productModel.getProducts(function(err, products){
       if (err){

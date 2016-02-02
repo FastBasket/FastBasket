@@ -1,8 +1,14 @@
 angular.module('fastBasket.products', [])
-.controller('productsController', function($scope, $http, $rootScope){
+.controller('productsController', function($scope, $http, $rootScope, shopCart){
   if ($rootScope.shopCart === undefined || $rootScope.shopCart === null){
     $rootScope.shopCart = [];
     $rootScope.shopCartTotal = 0;
+
+    shopCart.getCart($rootScope.user.id)
+    .then(function(redisRes){
+      $rootScope.shopCart = JSON.parse(redisRes);
+      calculateTotal();
+    });
   }
 
   function calculateTotal(){
@@ -16,5 +22,8 @@ angular.module('fastBasket.products', [])
   $scope.addItem = function(item){
     $rootScope.shopCart.push(item);
     calculateTotal();
+    shopCart.setCart($rootScope.user.id, $rootScope.shopCart)
+    .then(function(){
+    });
   };
 });
