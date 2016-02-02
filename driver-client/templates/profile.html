@@ -1,6 +1,7 @@
+<div ng-init = 'socketConnect(); checkJobs()'>
+
 <h1>Welcome to your Profile</h1>
-<button ng-click = "getJob()">Give me a Job</button>
-<div ng-show = "hasJob">{{myJob}}</div>
+<button ng-click = "getJob()" ng-hide="hasJob">Give me a Job</button>
 
 <hr/>
 
@@ -17,4 +18,6 @@
   <hr/>
 </div>
 
-<div ui-view ng-init = 'socketConnect(); checkJobs()'></div>
+<div ui-view></div>
+
+</div>
