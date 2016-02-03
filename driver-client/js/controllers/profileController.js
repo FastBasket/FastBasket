@@ -30,10 +30,8 @@ angular.module('driverSide.profile', ['ngCookies'])
           userId: $scope.userId
         }
       }).then(function(result){
-        console.log('dataaaa', result.data);
         $scope.orders = result.data;
         $scope.hasJob = true;
-        console.log("here are the orders",$scope.orders);
       });
     });
   };
