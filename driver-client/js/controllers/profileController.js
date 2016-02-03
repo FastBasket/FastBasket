@@ -6,7 +6,6 @@ angular.module('driverSide.profile', ['ngCookies'])
   $scope.orders = [];
   $scope.ordersDone = 0;
   $scope.jobId = null;
-
   $scope.hasJob;
 
   $rootScope.socketConnect = function(){
@@ -26,14 +25,15 @@ angular.module('driverSide.profile', ['ngCookies'])
       $http({
         method: "POST",
         url: '/api/getorders',
-        data: { 
+        data: {
           orderIds: $scope.ordersIds,
           userId: $scope.userId
         }
       }).then(function(result){
+        console.log('dataaaa', result.data);
         $scope.orders = result.data;
         $scope.hasJob = true;
-        console.log("here are the orders",$scope.orders)
+        console.log("here are the orders",$scope.orders);
       });
     });
   };
@@ -43,55 +43,53 @@ angular.module('driverSide.profile', ['ngCookies'])
       method: "GET",
       url: '/api/myJob'
     }).then(function(result){
-
       var job = result.data;
       job = JSON.parse(job);
+      console.log('refreshh',job);
       if (!job){
         $scope.hasJob = false;
-        console.log("this is the value of hasJob if no job was returned", $scope.hasJob)
       }else{
         $scope.hasJob = true;
-        // var parsedOrders = JSON.parse(job);
         $scope.orders = job;
-        console.log("this is the value of hasJob if a job was returned", $scope.hasJob)
       }
     });
   };
 
-  $scope.doneOrderIsReady = function(orderId){
+  $scope.doneOrderIsReady = function(orderId, phone){
+    console.log(this);
     $http({
       method: "POST",
       url: 'http://127.0.0.1:8000/api/driverNotifications/doneOrderReceived',
-      data: { orderId: orderId }
+      data: { orderId: orderId, phone: phone }
     }).then(function(result){
       
     });
   };
 
-  $scope.doneOrderIsOnItsWay = function(orderId){
+  $scope.doneOrderIsOnItsWay = function(orderId, phone){
     $http({
       method: "POST",
       url: 'http://127.0.0.1:8000/api/driverNotifications/doneInProgress',
-      data: { orderId: orderId }
+      data: { orderId: orderId, phone: phone }
     }).then(function(result){
       
     });
   };
 
-  $scope.doneOrderDelivered = function(orderId){
+  $scope.doneOrderDelivered = function(orderId, phone){
     $http({
       method: "POST",
       url: 'http://127.0.0.1:8000/api/driverNotifications/doneOntheWay',
-      data: { orderId: orderId }
+      data: { orderId: orderId, phone: phone }
     }).then(function(result){
       $scope.ordersDone++;
       if ($scope.ordersDone === $scope.orders.length){
         $http({
           method: "POST",
           url: '/api/finishJob',
-          data: { 
+          data: {
             jobId: $scope.jobId,
-            userId: $scope.userId 
+            userId: $scope.userId
           }
         }).
         then(function(result){
