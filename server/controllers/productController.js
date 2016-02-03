@@ -39,10 +39,44 @@ module.exports = {
   },
 
   search: function(req, res, next){
-    var textToSearch = req.params.text + "*~";
+    var textToSearch = req.params.text;
     elastic.search({
-      type:'products',
-      q: textToSearch,
+      type: 'products',
+      body: {
+        query: {
+          bool: {
+            should: [
+              {
+                match_phrase: {
+                  name: {
+                    query: textToSearch,
+                    fuzziness: 10,
+                    prefix_length: 1
+                  }
+                }
+              },
+              {
+                match_phrase: {
+                  category: {
+                    query: textToSearch,
+                    fuzziness: 10,
+                    prefix_length: 1
+                  }
+                }
+              },
+              {
+                match_phrase: {
+                  subCategory: {
+                    query: textToSearch,
+                    fuzziness: 10,
+                    prefix_length: 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       size: 5
     })
     .then(function(body){
@@ -51,8 +85,27 @@ module.exports = {
         result.push(body.hits.hits[i]._source);
       }
 
-      //=========== appending categories =================
-      elastic.search({ type:'categories', q: textToSearch, size: 2 })
+      // //=========== appending categories =================
+      elastic.search({
+        type:'categories',
+        body: {
+          query: {
+            bool: {
+              should: [
+                {
+                  match_phrase: {
+                    name: {
+                      query: textToSearch,
+                      fuzziness: 10,
+                      prefix_length: 1
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        size: 2 })
         .then(function(body){
           var resultCategory = [];
           for (var i=0; i<body.hits.hits.length; i++){
@@ -66,7 +119,8 @@ module.exports = {
           console.log(err);
           res.sendStatus(400);
         });
-      //========== appending categories ==================
+      // //========== appending categories ==================
+
     },
     function (err) {
       console.log(err);
@@ -74,36 +128,58 @@ module.exports = {
     });
   },
 
-  searchCategories: function(req, res, next){
-    var textToSearch = req.params.text + "*~";
-    elastic.search({ type:'categories', q: textToSearch, size: 2 })
-      .then(function(body){
-        var result = [];
-        for (var i=0; i<body.hits.hits.length; i++){
-          result.push(body.hits.hits[i]._source);
-        }
-        res.status(200).json(result);
-      },
-      function (err) {
-        console.log(err);
-        res.sendStatus(400);
-      });
-  },
-
   showResults: function(req, res, next){
-    var textToSearch = req.params.text + "*~";
-    elastic.search({ type:'products', q: textToSearch })
-      .then(function(body){
-        var result = [];
-        for (var i=0; i<body.hits.hits.length; i++){
-          result.push(body.hits.hits[i]._source);
+    var textToSearch = req.params.text;
+    elastic.search({
+      type: 'products',
+      body: {
+        query: {
+          bool: {
+            should: [
+              {
+                match_phrase: {
+                  name: {
+                    query: textToSearch,
+                    fuzziness: 10,
+                    prefix_length: 1
+                  }
+                }
+              },
+              {
+                match_phrase: {
+                  category: {
+                    query: textToSearch,
+                    fuzziness: 10,
+                    prefix_length: 1
+                  }
+                }
+              },
+              {
+                match_phrase: {
+                  subCategory: {
+                    query: textToSearch,
+                    fuzziness: 10,
+                    prefix_length: 1
+                  }
+                }
+              }
+            ]
+          }
         }
-        res.status(200).json(result);
       },
-      function (err) {
-        console.log(err);
-        res.sendStatus(400);
-      });
+      size: 100
+    })
+    .then(function(body){
+      var result = [];
+      for (var i=0; i<body.hits.hits.length; i++){
+        result.push(body.hits.hits[i]._source);
+      }
+      res.status(200).json(result);
+    },
+    function (err) {
+      console.log(err);
+      res.sendStatus(400);
+    });
   }
 
 };
