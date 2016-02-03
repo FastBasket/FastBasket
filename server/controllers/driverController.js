@@ -18,16 +18,15 @@ var sendSms = function(toNumber, message, callback){
 module.exports = {
   doneOrderReceived: function(req, res, next){
     var orderId = req.body.orderId;
+    var phone = req.body.phone;
 
-    //take orderId and update status to Order Received
     jobModel.updateOrderStatus('ready', orderId, function(err){
       if (err){
         console.log('error from controller', err);
         req.sendStatus(400);
       } else {
         io.to(orderId).emit('doneOrderReceived', { message: "Your order is ready to be shipped " + orderId });
-        //TODO: get 4158025390 from the request
-        sendSms('4158025390', 'Your order is ready to be shipped', function(message){
+        sendSms(phone, 'Your order is ready to be shipped', function(message){
           
         });
         res.sendStatus(200);
@@ -37,15 +36,15 @@ module.exports = {
 
   doneInProgress: function(req, res, next){
     var orderId = req.body.orderId;
+    var phone = req.body.phone;
 
     jobModel.updateOrderStatus('inProgress', orderId, function(err){
       if (err){
         console.log('error from controller', err);
         req.sendStatus(400);
       } else {
-        //TODO: get 4158025390 from the request
         io.to(orderId).emit('doneInProgress', { message: "Your order is on route " + orderId });
-        sendSms('4158025390', 'Your order is on route', function(message){
+        sendSms(phone, 'Your order is on route', function(message){
           
         });
 
@@ -57,15 +56,15 @@ module.exports = {
   
   doneOntheWay: function(req, res, next){
     var orderId = req.body.orderId;
+    var phone = req.body.phone;
 
     jobModel.updateOrderStatus('delivered', orderId, function(err){
       if (err){
         console.log('error from controller', err);
         req.sendStatus(400);
       } else {
-        //TODO: get 4158025390 from the request
         io.to(orderId).emit('doneOntheWay', { message: "Your order was delivered, Thanks for using FastBasket " + orderId });
-        sendSms('4158025390', 'Your order was delivered, Thanks for using FastBasket', function(message){
+        sendSms(phone, 'Your order was delivered, Thanks for using FastBasket', function(message){
           
         });
 

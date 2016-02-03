@@ -90,7 +90,7 @@ module.exports = {
       strQuery += "$" + (i+1) + ",";
     }
     strQuery = strQuery.slice(0, -1);
-    db.query('Select * from Orders where id in (' + strQuery + ')', params)
+    db.query('Select o.*, u.name, u.picture, u.phone, u.driverinstructions from Orders as o inner join Users as u on u.id = o.userId where o.id in (' + strQuery + ')', params)
     .then(function(ordersRes){
       orders = ordersRes;
       return db.query('Select p.name, p.price, p.size, od.orderid from OrderDetails as od inner join products as p on p.id = od.productId where orderId in ('+ strQuery +')', params);
@@ -106,8 +106,8 @@ module.exports = {
       }
 
       var redisKeyUserId = "driver" + JSON.stringify(userId);
-      var redisValueUsersJob = JSON.stringify(orders); 
-      client.set(redisKeyUserId,redisValueUsersJob)
+      var redisValueUsersJob = JSON.stringify(orders);
+      client.set(redisKeyUserId,redisValueUsersJob);
 
       callback(null, orders);
     });

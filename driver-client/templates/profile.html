@@ -1,23 +1,57 @@
-<div ng-init = 'socketConnect(); checkJobs()'>
-
-<h1>Welcome to your Profile</h1>
-<button ng-click = "getJob()" ng-hide="hasJob">Give me a Job</button>
-
-<hr/>
-
-<div ng-repeat="order in orders">
-  <h3>{{order.shippingaddress}} | ${{order.total}}</h3>
-  <button ng-click="doneOrderIsReady(order.id)" >Order is Ready</button>
-  <button ng-click="doneOrderIsOnItsWay(order.id)" >Order is on its way</button>
-  <button ng-click="doneOrderDelivered(order.id)" >Order delivered</button>
-  <ul>
-    <li ng-repeat="orderDetail in order.orderDetails" >
-      {{orderDetail.name}} | ${{orderDetail.price}}
-    </li>
-  </ul>
-  <hr/>
+<div class="col-lg-3" ng-init = 'socketConnect(); checkJobs()'>
+  
 </div>
 
-<div ui-view></div>
+<div class="col-lg-6" ng-cloak>
+  <h1>Welcome driver</h1>
+  <md-button class="md-raised md-primary" ng-click = "getJob()" ng-hide="hasJob">Give me a Job</md-button>
 
+
+  <md-content class="md-padding" layout-xs="column" layout="row">
+    <div flex-xs flex-gt-xs="100" layout="column">
+
+      <md-card ng-repeat="order in orders">
+        <md-card-header>
+          <md-card-avatar>
+            <img class="md-user-avatar" ng-src="{{order.picture}}"/>
+          </md-card-avatar>
+          <md-card-header-text>
+            <span class="md-title">{{order.name}}</span>
+            <span class="md-subhead">{{order.shippingaddress}}</span>
+            <span class="md-subhead">{{order.phone}}</span>
+          </md-card-header-text>
+        </md-card-header>
+        <md-card-title>
+          <md-card-title-text>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="start center">
+          <md-button ng-click="doneOrderIsReady(order.id, order.phone)" class="md-raised" >Order is Ready</md-button>
+          <md-button ng-click="doneOrderIsOnItsWay(order.id, order.phone)" class="md-raised" >Order is on its way</md-button>
+          <md-button ng-click="doneOrderDelivered(order.id, order.phone)" class="md-raised" >Order delivered</md-button>
+          <md-card-icon-actions>
+            <md-button class="md-icon-button" aria-label="toggle">
+            </md-button>
+          </md-card-icon-actions>
+        </md-card-actions>
+        <md-card-content>
+          <span style="font-weight: bold; text-decoration: underline;" >Delivery Instructions</span>
+          <p>
+            {{order.driverinstructions}}
+          </p>
+          <span style="font-weight: bold; text-decoration: underline;" >Products</span>
+          <ul>
+            <li ng-repeat="orderDetail in order.orderDetails" >
+              {{orderDetail.name}} | ${{orderDetail.price}}
+            </li>
+          </ul>
+        </md-card-content>
+      </md-card>
+
+    </div>
+  </md-content>
+</div>
+
+<div class="col-lg-3">
+  
 </div>

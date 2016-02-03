@@ -1,7 +1,9 @@
-var driverSide = angular.module("driverSide", ['ui.router',
+var driverSide = angular.module("driverSide",
+    ['ui.router',
+    'ngMaterial',
     'driverSide.profile']);
 
-driverSide.config(function($stateProvider, $urlRouterProvider) {
+driverSide.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider) {
     $stateProvider
     .state('login', {
         url: "/login",
@@ -19,4 +21,8 @@ driverSide.config(function($stateProvider, $urlRouterProvider) {
     
     $urlRouterProvider
     .otherwise('/login');
+
+    $mdThemingProvider.theme('default')
+      .primaryPalette('blue')
+      .accentPalette('light-blue');
 });
