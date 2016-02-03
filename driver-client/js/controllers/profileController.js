@@ -43,7 +43,6 @@ angular.module('driverSide.profile', ['ngCookies'])
     }).then(function(result){
       var job = result.data;
       job = JSON.parse(job);
-      console.log('refreshh',job);
       if (!job){
         $scope.hasJob = false;
       }else{
@@ -54,13 +53,13 @@ angular.module('driverSide.profile', ['ngCookies'])
   };
 
   $scope.doneOrderIsReady = function(orderId, phone){
-    console.log(this);
     $http({
       method: "POST",
       url: 'http://127.0.0.1:8000/api/driverNotifications/doneOrderReceived',
       data: { orderId: orderId, phone: phone }
     }).then(function(result){
-      
+      var myElement = angular.element(document.querySelector('#orderReady_' + orderId));
+      myElement.attr('disabled', true);
     });
   };
 
@@ -70,7 +69,8 @@ angular.module('driverSide.profile', ['ngCookies'])
       url: 'http://127.0.0.1:8000/api/driverNotifications/doneInProgress',
       data: { orderId: orderId, phone: phone }
     }).then(function(result){
-      
+      var myElement = angular.element(document.querySelector('#orderOnWay_' + orderId));
+      myElement.attr('disabled', true);
     });
   };
 
@@ -80,6 +80,9 @@ angular.module('driverSide.profile', ['ngCookies'])
       url: 'http://127.0.0.1:8000/api/driverNotifications/doneOntheWay',
       data: { orderId: orderId, phone: phone }
     }).then(function(result){
+      var myElement = angular.element(document.querySelector('#orderDelivered_' + orderId));
+      myElement.attr('disabled', true);
+
       $scope.ordersDone++;
       if ($scope.ordersDone === $scope.orders.length){
         $http({

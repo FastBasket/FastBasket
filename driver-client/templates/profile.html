@@ -26,9 +26,9 @@
           </md-card-title-text>
         </md-card-title>
         <md-card-actions layout="row" layout-align="start center">
-          <md-button ng-click="doneOrderIsReady(order.id, order.phone)" class="md-raised" >Order is Ready</md-button>
-          <md-button ng-click="doneOrderIsOnItsWay(order.id, order.phone)" class="md-raised" >Order is on its way</md-button>
-          <md-button ng-click="doneOrderDelivered(order.id, order.phone)" class="md-raised" >Order delivered</md-button>
+          <md-button id="orderReady_{{order.id}}" ng-click="doneOrderIsReady(order.id, order.phone)" class="md-raised" >Order is Ready</md-button>
+          <md-button id="orderOnWay_{{order.id}}" ng-click="doneOrderIsOnItsWay(order.id, order.phone)" class="md-raised" >Order is on its way</md-button>
+          <md-button id="orderDelivered_{{order.id}}" ng-click="doneOrderDelivered(order.id, order.phone)" class="md-raised" >Order delivered</md-button>
           <md-card-icon-actions>
             <md-button class="md-icon-button" aria-label="toggle">
             </md-button>
