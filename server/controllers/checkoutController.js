@@ -1,4 +1,5 @@
 var productModel = require('../models/productModel');
+var orderModel = require('../models/orderModel');
 var redis = require('redis').createClient();
 var constants = require('../config/constants');
 var stripe = require("stripe")(
@@ -6,6 +7,13 @@ var stripe = require("stripe")(
 );
 
 module.exports = {
+
+  getOrderStatus: function(req, res, next){
+    var orderId = req.params.orderId;
+    orderModel.getOrderStatus(orderId, function(status){
+      res.status(200).json(status);
+    });
+  },
   
   charge: function(req, res, next){
     var stripeToken = req.body.stripeToken;

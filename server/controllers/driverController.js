@@ -19,7 +19,7 @@ module.exports = {
   doneOrderReceived: function(req, res, next){
     var orderId = req.body.orderId;
     var phone = req.body.phone;
-
+    
     jobModel.updateOrderStatus('ready', orderId, function(err){
       if (err){
         console.log('error from controller', err);

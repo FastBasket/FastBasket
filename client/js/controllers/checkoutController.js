@@ -73,6 +73,7 @@ angular.module('fastBasket.checkout', [])
       createOrder(function(orderCreated){
         shopCart.setCart($rootScope.user.id, [])
         .then(function(){
+          localStorage.setItem("orderid", orderCreated.id);
           $state.go('finish', { order: orderCreated });
         });
       });
