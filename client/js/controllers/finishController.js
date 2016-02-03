@@ -2,11 +2,26 @@ angular.module('fastBasket.finish', [])
 .controller('finishController', function($scope, $http, $rootScope, $state, $stateParams, mySocket){
   $scope.message = "We received your order from Whole Foods";
 
-  var orderId;
-  if ($stateParams.order){
-    orderId = $stateParams.order.id;
-    mySocket.emit('create', orderId);
-  }
+  var orderId = localStorage.getItem("orderid");
+  mySocket.emit('create', orderId);
+
+  $http({
+    method: "GET",
+    url: '/api/order.getOrderStatus/' + orderId,
+  })
+  .then(function(status){
+    if (status.data === 'ready') {
+      doneOrderReceived();
+    } else if (status.data === 'inProgress') {
+      doneOrderReceived();
+      doneInProgress();
+    } else if (status.data === 'delivered') {
+      doneOrderReceived();
+      doneInProgress();
+      doneOntheWay();
+    }
+  });
+  
 
   $scope.modeOrderReceived = "indeterminate";
   $scope.showOrderReceived = true;
@@ -16,11 +31,9 @@ angular.module('fastBasket.finish', [])
   $scope.showOntheWay = false;
 
   var doneOrderReceived = function(){
-    $scope.$apply(function() {
-      $scope.modeOrderReceived = "determinate";
-      $scope.showInProgress = true;
-      $scope.message = "Your order is in the works";
-    });
+    $scope.modeOrderReceived = "determinate";
+    $scope.showInProgress = true;
+    $scope.message = "Your order is in the works";
   };
 
   var doneInProgress = function(){
