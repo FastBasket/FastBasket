@@ -94,6 +94,7 @@ angular.module('fastBasket.searchBar', ['ngCookies'])
 
   this.selectedItemChange = function(item){
     if (item && item.name.trim() !== ''){
+      $rootScope.currSearch = item.name.trim();
       $http({
         method: 'GET',
         url: '/api/product/showResults/' + item.name

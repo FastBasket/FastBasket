@@ -72,6 +72,17 @@ var fastBasket = angular.module('fastBasket',
   return socketFactory();
 })
 .factory('shopCart', function ($http, $rootScope) {
+  var getRecommendations = function(userId) {
+    return $http({
+      method: 'POST',
+      url: '/api/getRecommendations',
+      data: {userId: userId}
+    })
+    .then(function (recom) {
+      return recom.data;
+    });
+  };
+
   var getCart = function(userId) {
     return $http({
       method: 'POST',
@@ -93,12 +104,12 @@ var fastBasket = angular.module('fastBasket',
       $rootScope.recommendations = res.data.map(function(obj){
         return obj.d.properties.name;
       });
-      $rootScope.recommendations = $rootScope.recommendations.slice(0, 7);
     });
   };
 
   return {
     getCart: getCart,
-    setCart: setCart
+    setCart: setCart,
+    getRecommendations: getRecommendations
   };
 });

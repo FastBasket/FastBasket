@@ -3,9 +3,22 @@ var elastic = require('../elastic');
 var redis = require('redis').createClient();
 var neo4j = require('neo4j');
 var neo = new neo4j.GraphDatabase('http://neo4j:fastbasket@127.0.0.1:7474');
-var _ = require('underscore')
+var _ = require('underscore');
+
 
 module.exports = {
+  getRecommendations: function(req, res, next){
+    var userId = req.body.userId;
+
+    redis.get(userId + "recom", function(err, redisRes){
+      if (err) {
+        res.status(200).json(false);
+      } else {
+        res.status(200).json(redisRes);
+      }
+    });
+  },
+
   getShoppingCart: function(req, res, next){
     var userId = req.body.userId;
 
@@ -28,17 +41,16 @@ module.exports = {
       } else {
         //split json data
         terms = _.map(_.flatten(_.map(req.body.cart, function(obj){
-          return obj['name'].split(' ').concat(obj.subCategory.split(' '))
-
+          return obj['name'].split(' ').concat(obj.subCategory.split(' '));
 
         })), function(word){
           return word.toLowerCase();
-        })
+        });
         var cypherquery = 'match (a)-[r:Contains]->(b) \
         where b.name in {basket} \
         with a, count(r) as count order by count desc limit 100 \
         match (a)-[s:Contains]->(d) where not d.name in {basket} \
-        return d, count(s) as count order by count desc limit 10'
+        return d, count(s) as count order by count desc limit 7';
 
         neo.cypher({
             query: cypherquery,
@@ -46,8 +58,18 @@ module.exports = {
                 basket: terms,
             }
         },function (err, results) {
-          if(err){console.log(err)};
-          res.status(200).json(results);
+          if(err){
+            console.log(err);
+            res.sendStatus(400);
+          } else {
+            if (results.length > 0) {
+              redis.set(userId + "recom", JSON.stringify(results.map(function(obj){ return obj.d.properties.name; })) , function(err, redisRecRes){
+                res.status(200).json(results);
+              });
+            } else {
+              res.status(200).json(results);
+            }
+          }
         });
       }
     });
