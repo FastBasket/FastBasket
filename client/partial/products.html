@@ -1,15 +1,17 @@
+<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+  <md-button md-no-ink class="md-primary" ng-repeat="recom in recommendations" ng-click="searchRecommendation(recom)" >{{recom}}</md-button>
+</section>
 <div class='md-padding' layout="row" layout-wrap>
-    <md-card style="width: 300px;" ng-repeat="product in products">
-      <img ng-src="https://d2d8wwwkmhfcva.cloudfront.net/350x/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b9ddd8f0-95c8-4f39-ae1b-eaaa9789276b.jpg" class="md-card-image" alt="user avatar">
-      <md-card-content>
-        <h2>{{product.name}}</h2>
-        <p>$ {{product.price}}</p>
-      </md-card-content>
-      <div class="md-actions" layout="row" layout-align="end center">
-        <md-button class="md-icon-button" aria-label="Favorite">
-          <md-icon md-svg-icon="assets/shopping_cart.svg" ng-click="addItem(product)"></md-icon>
-        </md-button>
-      </div>
-    </md-card>
-  </div>
+  <md-card style="width: 300px;" ng-repeat="product in products">
+    <img ng-src="https://d2d8wwwkmhfcva.cloudfront.net/350x/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b9ddd8f0-95c8-4f39-ae1b-eaaa9789276b.jpg" class="md-card-image" alt="user avatar">
+    <md-card-content>
+      <h2>{{product.name}}</h2>
+      <p>$ {{product.price}}</p>
+    </md-card-content>
+    <div class="md-actions" layout="row" layout-align="end center">
+      <md-button class="md-icon-button" aria-label="Favorite">
+        <md-icon md-svg-icon="assets/shopping_cart.svg" ng-click="addItem(product)"></md-icon>
+      </md-button>
+    </div>
+  </md-card>
 </div>
