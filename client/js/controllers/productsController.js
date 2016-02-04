@@ -28,4 +28,21 @@ angular.module('fastBasket.products', [])
     .then(function(){
     });
   };
+
+  var selectedItemChange = function(text){
+    if (text && text.trim() !== ''){
+      $http({
+        method: 'GET',
+        url: '/api/product/showResults/' + text
+      })
+      .then(function(products){
+        $rootScope.products = products.data;
+      });
+    }
+  };
+
+  $scope.searchRecommendation = function(recom){
+    selectedItemChange(recom);
+  };
+  
 });

@@ -71,7 +71,7 @@ var fastBasket = angular.module('fastBasket',
 .factory('mySocket', function (socketFactory) {
   return socketFactory();
 })
-.factory('shopCart', function ($http) {
+.factory('shopCart', function ($http, $rootScope) {
   var getCart = function(userId) {
     return $http({
       method: 'POST',
@@ -90,9 +90,10 @@ var fastBasket = angular.module('fastBasket',
       data: { userId: userId, cart: cart }
     })
     .then(function (res) {
-      res.data.forEach(function(obj){
-        console.log(obj.d.properties.name)
-      })
+      $rootScope.recommendations = res.data.map(function(obj){
+        return obj.d.properties.name;
+      });
+      $rootScope.recommendations = $rootScope.recommendations.slice(0, 7);
     });
   };
 
