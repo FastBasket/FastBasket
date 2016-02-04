@@ -1,6 +1,9 @@
 var productModel = require('../models/productModel');
 var elastic = require('../elastic');
 var redis = require('redis').createClient();
+var neo4j = require('neo4j');
+var neo = new neo4j.GraphDatabase('http://neo4j:fastbasket@127.0.0.1:7474');
+var _ = require('underscore')
 
 module.exports = {
   getShoppingCart: function(req, res, next){
@@ -23,7 +26,29 @@ module.exports = {
       if (err) {
         res.sendStatus(400);
       } else {
-        res.status(200).json(true);
+        //split json data
+        terms = _.map(_.flatten(_.map(req.body.cart, function(obj){
+          return obj['name'].split(' ').concat(obj.subCategory.split(' '))
+
+
+        })), function(word){
+          return word.toLowerCase();
+        })
+        var cypherquery = 'match (a)-[r:Contains]->(b) \
+        where b.name in {basket} \
+        with a, count(r) as count order by count desc limit 100 \
+        match (a)-[s:Contains]->(d) where not d.name in {basket} \
+        return d, count(s) as count order by count desc limit 10'
+
+        neo.cypher({
+            query: cypherquery,
+            params: {
+                basket: terms,
+            }
+        },function (err, results) {
+          if(err){console.log(err)};
+          res.status(200).json(results);
+        });
       }
     });
   },
@@ -59,7 +84,7 @@ module.exports = {
             resultCategory.push(body.hits.hits[i]._source);
           }
           result = resultCategory.concat(result);
-          
+
           res.status(200).json(result);
         },
         function (err) {

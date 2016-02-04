@@ -6,8 +6,10 @@ angular.module('fastBasket.products', [])
 
     shopCart.getCart($rootScope.user.id)
     .then(function(redisRes){
-      $rootScope.shopCart = JSON.parse(redisRes);
-      calculateTotal();
+      if (redisRes !== null){
+        $rootScope.shopCart = JSON.parse(redisRes);
+        calculateTotal();
+      }
     });
   }
 
