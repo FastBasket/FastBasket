@@ -42,3 +42,5 @@ server/.DS_Store
 
 #VIM
 *.swp
+.flooignore
+
