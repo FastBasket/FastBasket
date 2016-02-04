@@ -89,8 +89,10 @@ var fastBasket = angular.module('fastBasket',
       url: '/api/cart/setCart',
       data: { userId: userId, cart: cart }
     })
-    .then(function () {
-      
+    .then(function (res) {
+      res.data.forEach(function(obj){
+        console.log(obj.d.properties.name)
+      })
     });
   };
 
