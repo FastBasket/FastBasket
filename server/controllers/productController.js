@@ -46,11 +46,27 @@ module.exports = {
         })), function(word){
           return word.toLowerCase();
         });
-        var cypherquery = 'match (a)-[r:Contains]->(b) \
-        where b.name in {basket} \
-        with a, count(r) as count order by count desc limit 100 \
-        match (a)-[s:Contains]->(d) where not d.name in {basket} \
-        return d, count(s) as count order by count desc limit 7';
+        var cypherquery = ' \
+	    match (a)-[z:Contains]->(b) where b.name in [ \
+	       "baking powder", \
+	       "eggs", \
+	       "all-purpose flour", \
+	       "raisins", \
+	       "milk", \
+	       "white sugar" \
+	     ] with a, count(z) as count1 \
+	    match (a)-[y:Contains]->(c) with a, count1, count1*100/count(y) as tf order by tf desc limit 100 \
+	    match (a)-[x:Contains]->(d) where not d.name in [ \
+	       "baking powder", \
+	       "eggs", \
+	       "all-purpose flour", \
+               "raisins", \
+               "milk", \
+               "white sugar" \
+	    ] with d, count(x) as count2 \
+	    match (e)-[w:Contains]->(d) \
+	    return d, count2, count2*100/count(w) as idf order by idf desc limit 10 \
+	    '
 
         neo.cypher({
             query: cypherquery,
@@ -76,7 +92,7 @@ module.exports = {
   },
 
   getProducts: function(req, res, next){
-    productModel.getProducts(function(err, products){
+   productModel.getProducts(function(err, products){
       if (err){
         res.sendStatus(400);
       } else {
