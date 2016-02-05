@@ -6,6 +6,7 @@ var fastBasket = angular.module('fastBasket',
   'fastBasket.products',
   'fastBasket.searchBar',
   'fastBasket.checkout',
+  'fastBasket.profile',
   'fastBasket.finish',
   'btford.socket-io',
   'ngRoute']).
@@ -57,6 +58,20 @@ var fastBasket = angular.module('fastBasket',
           "content": {
             templateUrl : 'partial/finish.html',
             controller: 'finishController as finCtrl'
+          }
+        }
+      })
+      .state('profile', {
+        url: "/profile",
+        params: { order: null },
+        views: {
+          "searchBar": {
+            templateUrl : 'partial/searchBar.html',
+            controller: 'searchBarController as ctrl'
+          },
+          "content": {
+            templateUrl : 'partial/profile.html',
+            controller: 'profileController'
           }
         }
       });

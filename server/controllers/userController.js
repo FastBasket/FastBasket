@@ -11,6 +11,17 @@ module.exports = {
     });
   },
 
+  getOrders: function(req, res, next){
+    var userId = req.params.userId;
+    userModel.getOrders(userId, function(err, orders){
+      if (err) {
+        res.sendStatus(400);
+      } else {
+        res.status(200).json(orders);
+      }
+    });
+  },
+
   insertUser: function(req, res, next){
     var userToInsert = req.body;
     userModel.insertUser(userToInsert, function(err, userCreated){
@@ -19,6 +30,18 @@ module.exports = {
         res.sendStatus(400);
       } else {
         res.status(200).json(userCreated);
+      }
+    });
+  },
+
+  update: function(req, res, next){
+    var user = req.body;
+    userModel.updateUser(user, function(err, userUpdated){
+      if (err){
+        console.log('err', err);
+        res.sendStatus(400);
+      } else {
+        res.status(200).json(true);
       }
     });
   },
