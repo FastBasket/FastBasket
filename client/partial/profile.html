@@ -1,0 +1,167 @@
+<md-content>
+  <md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="Profile">
+      <md-content class="md-padding" >
+        <form ng-submit="submitProfile()" name="userForm" novalidate>
+          <md-input-container class="md-icon-float md-block">
+            <label>Name</label>
+            <md-icon md-svg-src="assets/person.svg" class="name"></md-icon>
+            <input name="name" ng-model="user.name" type="text" required>
+            <div ng-messages="userForm.name.$error" role="alert">
+              <div ng-message="required" class="my-message" ng-show="userForm.name.$error.required && userForm.$dirty">You must your name</div>
+            </div>
+          </md-input-container>
+          <md-input-container md-no-float class="md-block">
+            <label>Phone</label>
+            <md-icon md-svg-src="assets/phone.svg"></md-icon>
+            <input name="phone" ng-model="user.phone" type="number" minlength="10" maxlength="10" required>
+            <div ng-messages="userForm.phone.$error" role="alert">
+              <div ng-message="['maxlength']" class="my-message" ng-show="userForm.phone.$error.maxlength && userForm.$dirty">Invalid phone number</div>
+              <div ng-message="required" class="my-message" ng-show="userForm.phone.$error.required && userForm.$dirty">You must supply your phone number</div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Email</label>
+            <input required type="email" name="email" ng-model="user.email"
+                   minlength="4" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+            <div ng-messages="userForm.email.$error" role="alert">
+              <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']" ng-show="userForm.email.$error.required && userForm.$dirty">
+                Your email doesn't look like an e-mail address.
+              </div>
+            </div>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Address</label>
+            <input name="address" ng-model="user.address" required>
+            <div ng-messages="userForm.address.$error" role="alert">
+              <div ng-message="required" class="my-message" ng-show="userForm.address.$error.required && userForm.$dirty" >You must supply your address</div>
+            </div>
+          </md-input-container>
+          <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>City</label>
+              <input name="city" ng-model="user.city" required>
+              <div ng-messages="userForm.city.$error" role="alert">
+                <div ng-message="required" class="my-message" ng-show="userForm.city.$error.required && userForm.$dirty">You must supply your city</div>
+              </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>State</label>
+              <md-select name="state" ng-model="user.state" required>
+                <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+                  {{state.abbrev}}
+                </md-option>
+              </md-select>
+              <div ng-messages="userForm.state.$error" role="alert">
+                <div ng-message="required" class="my-message" ng-show="userForm.state.$error.required && userForm.$dirty">You must supply your state</div>
+              </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Zip Code</label>
+              <input name="zipcode" ng-model="user.zipcode"
+                     required ng-pattern="/^[0-9]{5}$/" md-maxlength="5">
+              <div ng-messages="userForm.zipcode.$error" role="alert">
+                <div ng-message="required" class="my-message" ng-show="userForm.zipcode.$error.required && userForm.$dirty">You must supply a zip code.</div>
+                <div ng-message="pattern" class="my-message" ng-show="userForm.zipcode.$error.pattern && userForm.$dirty">That doesn't look like a valid zip
+                  code.
+                </div>
+                <div ng-message="md-maxlength" class="my-message" ng-show="userForm.zipcode.$error.md-maxlength && userForm.$dirty">
+                  Don't use the long version.
+                </div>
+              </div>
+            </md-input-container>
+          </div>
+          <md-input-container class="md-block">
+            <label>Driver Instructions</label>
+            <textarea ng-model="user.driverinstructions" columns="1" md-maxlength="150" rows="5"></textarea>
+          </md-input-container>
+          <md-button type="submit" class="md-raised md-primary" ng-disabled='userForm.$invalid' >Save</md-button>
+        </form>
+      </md-content>
+    </md-tab>
+    <md-tab label="Order History">
+      <md-content class="md-padding">
+        <div class="col-lg-3">
+  
+        </div>
+
+        <div class="col-lg-6" ng-cloak>
+          <md-content class="md-padding" layout-xs="column" layout="row">
+            <div flex-xs flex-gt-xs="100" layout="column">
+
+              <md-card ng-repeat="order in profileOrders | orderBy:'-id'">
+                <md-card-header>
+                  <md-card-header-text>
+                    <span class="md-subhead">{{order.orderdate}}</span>
+                  </md-card-header-text>
+                </md-card-header>
+                <md-card-content>
+                  <span style="" >Items Ordered</span>
+
+                  <div class="cart-items">
+                    <table class="table">
+                      <tbody>
+                        <tr ng-repeat="orderDetail in order.orderdetails">
+                          <td class="qty">
+                            <div>1</div>
+                          </td>
+                          <td>
+                            <div>{{orderDetail.name}}</div>
+                          </td>
+                          <td>
+                            <div>${{orderDetail.price}}</div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <span style="" >Shipped to</span>
+                  <div class="cart-items">
+                    <table class="table">
+                      <tr>
+                        <td>
+                          {{order.shippingaddress}}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <span style="font-weight: bold;" >Total</span>
+                  <div class="cart-items">
+                    <table class="table">
+                      <tr>
+                        <td>
+                          ${{order.total}}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="start center">
+                  <md-button class="md-icon-button" aria-label="add">
+                    <md-icon md-svg-icon="assets/shopping_cart.svg" ng-click="addItems(order)"></md-icon>
+                  </md-button>
+                  <md-card-icon-actions>
+                    <md-button class="md-icon-button" aria-label="toggle">
+                    </md-button>
+                  </md-card-icon-actions>
+                </md-card-actions>
+              </md-card>
+
+            </div>
+          </md-content>
+        </div>
+
+        <div class="col-lg-3">
+          
+        </div>
+      </md-content>
+    </md-tab>
+    <md-tab label="Popular Items">
+      <md-content class="md-padding">
+
+      </md-content>
+    </md-tab>
+  </md-tabs>
+</md-content>

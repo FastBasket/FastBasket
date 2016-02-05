@@ -21,6 +21,9 @@ module.exports = function (app, express) {
   app.post('/api/cart/getCart', productController.getShoppingCart);
   app.post('/api/cart/setCart', productController.setShoppingCart);
 
+  app.post('/api/profile/update', userController.update);
+  app.get('/api/profile/getOrders/:userId', userController.getOrders);
+
   app.get('/api/order.getOrderStatus/:orderId', checkoutController.getOrderStatus);
 
 //<--------- driverNotifications start -------->

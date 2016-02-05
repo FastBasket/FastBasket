@@ -14,7 +14,7 @@ angular.module('fastBasket.products', [])
     });
   }
 
-  if ($rootScope.recommendations === undefined || $rootScope.recommendations === null || recommendations.length === 0){
+  if ($rootScope.recommendations === undefined || $rootScope.recommendations === null || $rootScope.recommendations.length === 0){
     shopCart.getRecommendations($rootScope.user.id)
     .then(function(redisRes){
       if (redisRes !== null){

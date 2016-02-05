@@ -2,10 +2,10 @@ angular.module('fastBasket.searchBar', ['ngCookies'])
 .controller('searchBarController', function($scope, $http, $rootScope, $state, $mdSidenav, $cookies, shopCart){
   $rootScope.user = JSON.parse($cookies.get('user'));
 
-  if ($rootScope.user.phone && $rootScope.user.phone.trim().length > 0 && $rootScope.user.phone.trim().length === 10){
+  if ($rootScope.user.phone && $rootScope.user.phone.length > 0 && $rootScope.user.phone.length === 10){
     $rootScope.user.phone = parseInt($rootScope.user.phone, 10);
   }
-  if ($rootScope.user.zipcode && $rootScope.user.zipcode.trim().length > 0 && $rootScope.user.zipcode.trim().length === 5){
+  if ($rootScope.user.zipcode && $rootScope.user.zipcode.length > 0 && $rootScope.user.zipcode.length === 5){
     $rootScope.user.zipcode = parseInt($rootScope.user.zipcode, 10);
   }
 
@@ -43,6 +43,10 @@ angular.module('fastBasket.searchBar', ['ngCookies'])
         });
     };
   }
+
+  $scope.showProfile = function(){
+    $state.go('profile');
+  };
 
   //===========================================================
 
