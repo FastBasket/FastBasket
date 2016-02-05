@@ -3,6 +3,7 @@ var accountSid = process.env.TWILIO_SID;
 var authToken = process.env.TWILIO_TOKEN;
 var twilioClient = require('twilio')(accountSid, authToken);
 var jobModel = require('../models/jobModel');
+var redis = require('redis').createClient();
 
 var sendSms = function(toNumber, message, callback){
   toNumber = "+1" + toNumber;
@@ -72,5 +73,43 @@ module.exports = {
       }
     });
 
+  },
+
+  updateLocation: function(req, res, next){
+    var lat = req.body.lat;
+    var lon = req.body.lon;
+    var driverId = req.body.driverId;
+
+    if (lat === 0 && lon === 0){
+      redis.del(driverId + '_location', function(err){
+        if (err){
+          res.sendStatus(400);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    } else {
+      redis.set(driverId + '_location', JSON.stringify({ lat: lat, lon: lon, id: driverId }), function(err, redisRes){
+        if (err){
+          res.sendStatus(400);
+        } else {
+          redis.keys('*_location', function(err, keys){
+            if (err){
+              res.sendStatus(400);
+            } else {
+              redis.mget(keys, function(err, resValues){
+                if (err){
+                  res.sendStatus(400);
+                } else {
+                  console.log(resValues);
+                  io.to('store_chanel').emit('updatePositions', resValues);
+                  res.sendStatus(200);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
   }
 };

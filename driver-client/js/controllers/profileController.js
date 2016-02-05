@@ -1,5 +1,6 @@
 angular.module('driverSide.profile', ['ngCookies'])
-.controller('profileController', function($scope, $http, $rootScope, $cookies){
+.controller('profileController', function($scope, $http, $rootScope, $cookies, $state){
+
   $scope.socket;
   $scope.socket = io();
   $scope.userId = JSON.parse($cookies.get('user')).id;
@@ -7,6 +8,29 @@ angular.module('driverSide.profile', ['ngCookies'])
   $scope.ordersDone = 0;
   $scope.jobId = null;
   $scope.hasJob;
+  
+  var watchID = navigator.geolocation.watchPosition(function(position) {
+    sendPosToRedis(position.coords.latitude, position.coords.longitude, $scope.userId, function(){
+      console.log('location saved');
+    });
+  });
+
+  var sendPosToRedis = function(lat, lon, driverId, callback){
+    $http({
+      method: "POST",
+      url: 'http://127.0.0.1:8000/api/driver/updateLocation',
+      data: { driverId: driverId, lat: lat, lon: lon }
+    }).then(function(result){
+      callback();
+    });
+  };
+
+  $scope.signOut = function(){
+    navigator.geolocation.clearWatch(watchID);
+    sendPosToRedis(0,0,$scope.userId, function(){
+      $state.go('login');
+    });
+  };
 
   $rootScope.socketConnect = function(){
     $scope.socket.on('dequeue', function(job){
@@ -32,6 +56,11 @@ angular.module('driverSide.profile', ['ngCookies'])
       }).then(function(result){
         $scope.orders = result.data;
         $scope.hasJob = true;
+        watchID = navigator.geolocation.watchPosition(function(position) {
+          sendPosToRedis(position.coords.latitude, position.coords.longitude, $scope.userId, function(){
+            console.log('location saved');
+          });
+        });
       });
     });
   };
@@ -97,6 +126,10 @@ angular.module('driverSide.profile', ['ngCookies'])
           $scope.ordersDone = 0;
           $scope.orders = [];
           $scope.hasJob = false;
+          navigator.geolocation.clearWatch(watchID);
+          sendPosToRedis(0,0,$scope.userId, function(){
+            
+          });
         });
       }
     });
