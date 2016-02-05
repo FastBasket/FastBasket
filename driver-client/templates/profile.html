@@ -1,18 +1,17 @@
-<div class="col-lg-3" ng-init = 'socketConnect(); checkJobs()'>
+<div class="col-lg-2" ng-init = 'socketConnect(); checkJobs()'>
   
 </div>
 
-<div class="col-lg-6" ng-cloak>
+<div class="col-lg-8" ng-cloak>
   <h1>Welcome driver</h1>
   <md-button class="md-raised md-primary" ng-click = "getJob()" ng-hide="hasJob">Give me a Job</md-button>
   <md-button class="md-raised md-warn" ng-click = "signOut()">Sign Out</md-button>
 
+  <md-content class="md-padding" layout-xs="column" layout="column">
+    <div flex-xs layout="column" ng-repeat="order in orders">
 
-  <md-content class="md-padding" layout-xs="column" layout="row">
-    <div flex-xs flex-gt-xs="100" layout="column">
-
-      <md-card ng-repeat="order in orders">
-        <md-card-header>
+      <md-card  >
+        <md-card-header style="padding-bottom: 40px">
           <md-card-avatar>
             <img class="md-user-avatar" ng-src="{{order.picture}}"/>
           </md-card-avatar>
@@ -22,10 +21,7 @@
             <span class="md-subhead">{{order.phone}}</span>
           </md-card-header-text>
         </md-card-header>
-        <md-card-title>
-          <md-card-title-text>
-          </md-card-title-text>
-        </md-card-title>
+
         <md-card-actions layout="row" layout-align="start center">
           <md-button id="orderReady_{{order.id}}" ng-click="doneOrderIsReady(order.id, order.phone)" class="md-raised" >Order is Ready</md-button>
           <md-button id="orderOnWay_{{order.id}}" ng-click="doneOrderIsOnItsWay(order.id, order.phone)" class="md-raised" >Order is on its way</md-button>
@@ -35,17 +31,48 @@
             </md-button>
           </md-card-icon-actions>
         </md-card-actions>
+
         <md-card-content>
-          <span style="font-weight: bold; text-decoration: underline;" >Delivery Instructions</span>
-          <p>
-            {{order.driverinstructions}}
-          </p>
-          <span style="font-weight: bold; text-decoration: underline;" >Products</span>
-          <ul>
-            <li ng-repeat="orderDetail in order.orderDetails" >
-              {{orderDetail.name}} | ${{orderDetail.price}}
-            </li>
-          </ul>
+          <span style="text-decoration: underline;" >Delivery Instructions</span>
+          <div class="cart-items">
+            <table class="table">
+              <tr>
+                <td>
+                  {{order.driverinstructions}}
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <span style="text-decoration: underline;" >Items Ordered</span>
+          <div class="cart-items">
+            <table class="table">
+              <tbody>
+                <tr ng-repeat="orderDetail in order.orderDetails">
+                  <td class="qty">
+                    <div>1</div>
+                  </td>
+                  <td>
+                    <div>{{orderDetail.name}}</div>
+                  </td>
+                  <td>
+                    <div>${{orderDetail.price}}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <span style="text-decoration: underline;" >Total</span>
+          <div class="cart-items">
+            <table class="table">
+              <tr>
+                <td>
+                  ${{order.total}}
+                </td>
+              </tr>
+            </table>
+          </div>
         </md-card-content>
       </md-card>
 
@@ -53,6 +80,6 @@
   </md-content>
 </div>
 
-<div class="col-lg-3">
+<div class="col-lg-2">
   
 </div>
