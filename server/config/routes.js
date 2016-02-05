@@ -26,6 +26,8 @@ module.exports = function (app, express) {
 
   app.get('/api/order.getOrderStatus/:orderId', checkoutController.getOrderStatus);
 
+  app.post('/api/driver/updateLocation', driverController.updateLocation);
+
 //<--------- driverNotifications start -------->
 
   app.post('/api/driverNotifications/doneOrderReceived', driverController.doneOrderReceived);
