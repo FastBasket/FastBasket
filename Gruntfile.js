@@ -13,7 +13,7 @@ module.exports = function(grunt) {
           'bower install',
           'sudo service neo4j-service start',
           'sudo service elasticsearch start',
-          //'sudo service redis-server start',
+          'sudo service redis-server start',
           'sudo service postgresql start',
           'sudo service rabbitmq-server start',
           '(node batch-server/batch.js &)',
