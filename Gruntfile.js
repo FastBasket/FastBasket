@@ -29,5 +29,5 @@ module.exports = function(grunt) {
   //grunt.loadNpmTasks('grunt-contrib-uglify');
   //grunt.loadNpmTasks('grunt-contrib-concat');
 
-  grunt.registerTask('start', ['env:prod', 'shell']);
+  grunt.registerTask('start', [ 'shell']);
 }
