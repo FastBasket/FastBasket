@@ -4,19 +4,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    env :{
-
-      options : {},
-      prod: {
-      API_URL:'http://ec2-54-200-18-159.us-west-2.compute.amazonaws.com:8000/',
-      TWILIO_SID: 'ACab8ee132a8df548fb3ee7b9ea995cd84',
-      TWILIO_TOKEN: '81f262193c0549076527228e57a1fad6',
-      STRIPE_PUBLIC_KEY:'pk_test_QuMujd8pj8I5GBZLxpUu5t7v',
-      STRIPE_SECRET_KEY:'sk_test_diIA4gyirrsgzpEfEVAgsNLB',
-      FACEBOOK_APP_ID:'775002172628893',
-      FACEBOOK_APP_SECRET:'8f1b4435bd6ec495bad61fc90b5ae7ec'
-    }
-  },
     shell: {
       deploy: {
         options: { stdout: true },
