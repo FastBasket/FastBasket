@@ -7,7 +7,6 @@ var passport = require('./passport');
 
 module.exports = function (app, express) {
   app.get('/api/product/search/:text', productController.search);
-  app.get('/api/product/searchCategories/:text', productController.searchCategories);
   app.get('/api/product/showResults/:text', productController.showResults);
 
   app.post('/api/checkout/createOrder', checkoutController.checkout);
@@ -18,10 +17,16 @@ module.exports = function (app, express) {
   app.get('/api/user/getUsers', userController.getUsers);
   app.post('/api/user/', userController.insertUser);
 
+  app.post('/api/getRecommendations', productController.getRecommendations);
   app.post('/api/cart/getCart', productController.getShoppingCart);
   app.post('/api/cart/setCart', productController.setShoppingCart);
 
+  app.post('/api/profile/update', userController.update);
+  app.get('/api/profile/getOrders/:userId', userController.getOrders);
+
   app.get('/api/order.getOrderStatus/:orderId', checkoutController.getOrderStatus);
+
+  app.post('/api/driver/updateLocation', driverController.updateLocation);
 
 //<--------- driverNotifications start -------->
 

@@ -1,5 +1,6 @@
 angular.module('fastBasket.products', [])
 .controller('productsController', function($scope, $http, $rootScope, shopCart){
+  
   if ($rootScope.shopCart === undefined || $rootScope.shopCart === null){
     $rootScope.shopCart = [];
     $rootScope.shopCartTotal = 0;
@@ -9,6 +10,15 @@ angular.module('fastBasket.products', [])
       if (redisRes !== null){
         $rootScope.shopCart = JSON.parse(redisRes);
         calculateTotal();
+      }
+    });
+  }
+
+  if ($rootScope.recommendations === undefined || $rootScope.recommendations === null || $rootScope.recommendations.length === 0){
+    shopCart.getRecommendations($rootScope.user.id)
+    .then(function(redisRes){
+      if (redisRes !== null){
+        $rootScope.recommendations = JSON.parse(redisRes);
       }
     });
   }
@@ -28,4 +38,22 @@ angular.module('fastBasket.products', [])
     .then(function(){
     });
   };
+
+  var selectedItemChange = function(text){
+    if (text && text.trim() !== ''){
+      $http({
+        method: 'GET',
+        url: '/api/product/showResults/' + text
+      })
+      .then(function(products){
+        $rootScope.products = products.data;
+      });
+    }
+  };
+
+  $scope.searchRecommendation = function(recom){
+    $rootScope.currSearch = recom;
+    selectedItemChange(recom);
+  };
+
 });

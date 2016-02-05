@@ -6,6 +6,7 @@ var fastBasket = angular.module('fastBasket',
   'fastBasket.products',
   'fastBasket.searchBar',
   'fastBasket.checkout',
+  'fastBasket.profile',
   'fastBasket.finish',
   'btford.socket-io',
   'ngRoute']).
@@ -59,6 +60,20 @@ var fastBasket = angular.module('fastBasket',
             controller: 'finishController as finCtrl'
           }
         }
+      })
+      .state('profile', {
+        url: "/profile",
+        params: { order: null },
+        views: {
+          "searchBar": {
+            templateUrl : 'partial/searchBar.html',
+            controller: 'searchBarController as ctrl'
+          },
+          "content": {
+            templateUrl : 'partial/profile.html',
+            controller: 'profileController'
+          }
+        }
       });
 
     $urlRouterProvider
@@ -71,7 +86,18 @@ var fastBasket = angular.module('fastBasket',
 .factory('mySocket', function (socketFactory) {
   return socketFactory();
 })
-.factory('shopCart', function ($http) {
+.factory('shopCart', function ($http, $rootScope) {
+  var getRecommendations = function(userId) {
+    return $http({
+      method: 'POST',
+      url: '/api/getRecommendations',
+      data: {userId: userId}
+    })
+    .then(function (recom) {
+      return recom.data;
+    });
+  };
+
   var getCart = function(userId) {
     return $http({
       method: 'POST',
@@ -90,14 +116,15 @@ var fastBasket = angular.module('fastBasket',
       data: { userId: userId, cart: cart }
     })
     .then(function (res) {
-      res.data.forEach(function(obj){
-        console.log(obj.d.properties.name)
-      })
+      $rootScope.recommendations = res.data.map(function(obj){
+        return obj.d.properties.name;
+      });
     });
   };
 
   return {
     getCart: getCart,
-    setCart: setCart
+    setCart: setCart,
+    getRecommendations: getRecommendations
   };
 });
