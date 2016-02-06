@@ -14,6 +14,12 @@
     "url": "https://github.com/FastBasket/FastBasket/issues"
   },
   "homepage": "https://github.com/FastBasket/FastBasket#readme",
+  "scripts":{
+    "test": "",
+    "start": "grunt start",
+    "feedProducts":"node server/db/dbScript/app.js",
+    "feedRecommandations": ""
+  },
   "dependencies": {
     "amqplib": "^0.4.0",
     "bluebird": "^3.2.1",

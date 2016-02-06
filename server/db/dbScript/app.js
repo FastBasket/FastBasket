@@ -4,7 +4,6 @@ var pg = require('pg-then');
 var client = pg.Client('postgres://postgres@localhost:5432/fastbasket');
 
 //creates stores, categories and products table if needed
-
 client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varchar(250))').then(function () {
     return client.query('CREATE TABLE IF NOT EXISTS categories(Id serial PRIMARY KEY, Name Varchar(100), Category INTEGER NULL REFERENCES categories(Id))')
 }).then(function () {
@@ -17,7 +16,7 @@ client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varc
     var rePricePerItem = /\$.?[0-9]+(\.[0-9]+)?\/?(ea|oz|lb|lbs|diaper|pull-up|wipe|qt|.?ea|Gallon|doz|ltr|bag|sq ft|box|roll)/;
     var reFindPrice = /\$\.?[0-9]+(\.[0-9]+)?/;
 
-    fs.readFile('itemList.txt', 'utf8', function (err, file) {
+    fs.readFile(__dirname + '/itemList.txt', 'utf8', function (err, file) {
         var lines = file.split(/\r?\n/);
         var currentCategory;
         var currentSubcategory;
