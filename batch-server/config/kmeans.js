@@ -163,7 +163,5 @@ for(var x = 0; x < r; x++){
   return clusters;
 };
 
-// revert into x,y
 
 module.exports = kmeans;
-// export

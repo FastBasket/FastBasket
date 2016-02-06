@@ -5,7 +5,7 @@ var client = redis.createClient();
 
 
 module.exports = {
-  
+
   updateJobStatus: function(jobId, userId,callback){
     db.query('UPDATE jobs SET status = $1 where id = $2', [true, jobId])
       .then(function(){
@@ -54,9 +54,10 @@ module.exports = {
       .catch(function(error){
         callback(error, null);
       });
-  
+
   },
   getJob : function(userId,callback){
+    ////With out redis caching
     // db.query('select * from jobs where UserId = $1 AND status = false', [userId])
     //   .then(function(job){
     //     var result;
@@ -66,7 +67,7 @@ module.exports = {
     //       jobId = result.id;
 
     //       callback(null, result);
-    //     }else{  
+    //     }else{
     //       callback(null, null);
     //     }
 
@@ -75,7 +76,7 @@ module.exports = {
     //     console.log('err when getting job',err)
     //   })
     var redisKey = "driver" + JSON.stringify(userId);
-    
+
     client.get(redisKey, function(err, res){
       callback(null,res);
     })
@@ -112,7 +113,5 @@ module.exports = {
       callback(null, orders);
     });
   }
- 
+
 };
-
-

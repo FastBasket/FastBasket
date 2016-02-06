@@ -8,7 +8,6 @@ module.exports = function(grunt) {
       deploy: {
         options: { stdout: true },
         command: [
-          //'nodemon aggregator/agg.js',
           'npm install',
           'bower install',
           'sudo service neo4j-service start',
@@ -16,6 +15,7 @@ module.exports = function(grunt) {
           'sudo service redis-server start',
           'sudo service postgresql start',
           'sudo service rabbitmq-server start',
+          '(node aggregator/agg.js &)',
           '(node batch-server/batch.js &)',
           '(node server/server.js &)',
           '(node driver-server/driver.js &)'

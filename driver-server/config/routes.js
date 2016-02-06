@@ -29,11 +29,10 @@ module.exports = function(app,express,passport){
     });
   });
 
-//test This
   app.get('/api/myJob',function(req, res){
       var user = JSON.parse(req.cookies.user);
       var userId = user.id;
-      
+
       jobModel.getJob(userId, function(err, job){
         console.log("this is the job returned from api/myJob", job);
         res.json(job);

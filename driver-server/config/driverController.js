@@ -27,8 +27,7 @@ module.exports = function (app, express, io, amqp) {
             var fetchedJob = order.content.toString();
             var fetchedJobParse = JSON.parse(fetchedJob);
             var arrayOfOrderId = fetchedJobParse.data;
-            
-            //create job  fsdvsdv
+
             var newJob = {
               userId : userId,
               status: false
@@ -60,20 +59,16 @@ module.exports = function (app, express, io, amqp) {
                 }
               });
 
-              //add jobId to every order in the new Job
-       
-              
             }
           } else{
             console.log('no jobs in queue');
             socket.emit('dequeue', false);
           }
-  
+
           conn.close();
          }, {noAck:false});
-        });
-        // dequeue and send job to driver
 
+        });
       });
   });
   });

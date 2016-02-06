@@ -1,10 +1,13 @@
+/*
+  This script feeds the postgres database with the products and categories from the text file;
+  TODO: refactor into promises
+*/
 var readline = require('readline');
 var fs = require('fs');
 var pg = require('pg-then');
 var client = pg.Client('postgres://postgres@localhost:5432/fastbasket');
 
 //creates stores, categories and products table if needed
-
 client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varchar(250))').then(function () {
     return client.query('CREATE TABLE IF NOT EXISTS categories(Id serial PRIMARY KEY, Name Varchar(100), Category INTEGER NULL REFERENCES categories(Id))')
 }).then(function () {
@@ -17,7 +20,7 @@ client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varc
     var rePricePerItem = /\$.?[0-9]+(\.[0-9]+)?\/?(ea|oz|lb|lbs|diaper|pull-up|wipe|qt|.?ea|Gallon|doz|ltr|bag|sq ft|box|roll)/;
     var reFindPrice = /\$\.?[0-9]+(\.[0-9]+)?/;
 
-    fs.readFile('itemList.txt', 'utf8', function (err, file) {
+    fs.readFile(__dirname + '/itemList.txt', 'utf8', function (err, file) {
         var lines = file.split(/\r?\n/);
         var currentCategory;
         var currentSubcategory;
@@ -25,14 +28,9 @@ client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varc
 
         lines.forEach(function (line) {
 
-            if (line === "__END__") {
-                //client.disconnect();
-                return;
-            }
+            //in the text file - Categories end with '::' and subcategories end with ':'
+            var isItCategory = line.slice(-1) === ':' ? true : false;
 
-            var isItCategory = line.slice(-1) === ':' ? true : false; //diffrent kind of lines end with diffrent characters 
-                
-            //add item to database
             if (!isItCategory) {
                 var itemName = reName.exec(line)[0].trim();
                 var itemPrice = rePrice.exec(line);
@@ -52,7 +50,7 @@ client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varc
                 }
 
                 var pricePerItem;
-                if (regPricePerItem === null) { //incase there are no finds
+                if (regPricePerItem === null) {
                     pricePerItem = null;
                 } else {
                     pricePerItem = regPricePerItem[0].toString();
@@ -64,27 +62,18 @@ client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varc
                     tree[currentCategory].items.push([itemName, itemSize, itemSize, itemPrice, pricePerItem]);
                 }
 
-                //client.query("INSERT INTO products(Name, size, SizeUnit, Price, PriceUnit, category, subcategory ) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT DO NOTHING", [itemName, itemSize, itemSize, itemPrice, pricePerItem, currentCategoryId, currentSubcategoryId])
-
             } else {
-                if (line.slice(-2)[0] === ':') { // Sub categories have one colon at the end
+                if (line.slice(-2)[0] === ':') { // Subcategories
                     var categoryName = line.slice(0, -2);
                     currentCategory = categoryName
                     currentSubcategory = null;
 
                     tree[categoryName] = { items: [], subcategory: {} };
-                    //client.query("INSERT INTO categories (Name, Category) VALUES ($1, null) ON CONFLICT DO NOTHING", [categoryName])
-                    //var result = client.query("SELECT Id FROM categories WHERE name = ($1)", [categoryName])
-                    //currentCategoryId = result.rows[0].id;
 
-                } else {
+                } else {  //Categories
                     var subCategoryName = line.slice(0, -1);
                     currentSubcategory = subCategoryName;
-                    tree[currentCategory].subcategory[subCategoryName] = [];
-                    // client.query("INSERT INTO categories(Name, category) VALUES ($1, $2) ON CONFLICT DO NOTHING", [subCategoryName, currentCategoryId])
-                    //var result = client.query("SELECT Id FROM categories WHERE name = ($1)", [categoryName])
-                    //currentSubcategoryId = result.rows[0].id;
-
+                    tree[currentCategory].subcategory[subCategoryName] =
                 }
 
             }
@@ -120,6 +109,5 @@ client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varc
     console.log(err);
 })
     .then(function () {
-        //client.end();
+        //TODO: when refactoring use client.end(); here to end
     })
-

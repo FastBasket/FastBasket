@@ -31,9 +31,7 @@ module.exports = function (app, express) {
 //<--------- driverNotifications start -------->
 
   app.post('/api/driverNotifications/doneOrderReceived', driverController.doneOrderReceived);
-
   app.post('/api/driverNotifications/doneInProgress', driverController.doneInProgress);
-
   app.post('/api/driverNotifications/doneOntheWay', driverController.doneOntheWay);
 
 //<--------- driverNotifications start -------->
