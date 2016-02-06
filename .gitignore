@@ -44,3 +44,5 @@ server/.DS_Store
 *.swp
 .flooignore
 
+#Mac OS
+.DS_Store

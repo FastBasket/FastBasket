@@ -38,7 +38,7 @@ module.exports = function (redis) {
   });
 
 
-
+  //redis configuration instead of rabbitmq
   // redis.on("message", function (channel, message) {
   //   console.log("client1 channel " + channel + ": " + message);
   //

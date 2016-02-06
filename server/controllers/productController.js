@@ -47,6 +47,7 @@ module.exports = {
           return word.toLowerCase();
         });
 
+      // Old query - normalized and slower
       //   var cypherquery = 'match (a)-[r:Contains]->(b) \
       // where b.name in {basket} \
       // with a, count(r) as count order by count desc limit 100 \

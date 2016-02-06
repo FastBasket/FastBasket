@@ -86,6 +86,7 @@ var fastBasket = angular.module('fastBasket',
 .factory('mySocket', function (socketFactory) {
   return socketFactory();
 })
+//updates cart to backend and recives recommendations in return;
 .factory('shopCart', function ($http, $rootScope) {
   var getRecommendations = function(userId) {
     return $http({
