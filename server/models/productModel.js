@@ -1,9 +1,10 @@
 var db = require('../db/db');
+var r = require('rethinkdb');
 
 module.exports = {
 
   checkout: function(request, callback){
-    var orderParams = [request.userId, request.shippingAddress, request. total, 'pending', request.storeId, request.x, request.y];
+    var orderParams = [request.userId, request.shippingAddress, request.total, 'pending', request.storeId, request.x, request.y];
     db.one('Insert into Orders(UserId, ShippingAddress, Total, Status, StoreId, ShippingAddressPoint) ' +
             ' Values ($1, $2, $3, $4, $5, point($6, $7)) returning id', orderParams)
     .then(function(orderInserted){
@@ -23,7 +24,22 @@ module.exports = {
         db.none('update users set name = $1, phone = $2, email = $3, address = $4, city = $5, state = $6, zipcode = $7, DriverInstructions = $8 where id = $9',
           [request.user.name, request.user.phone, request.user.email, request.user.address, request.user.city, request.user.state, request.user.zipcode, request.user.driverinstructions, request.userId])
         .then(function(){
-          callback(null, orderInserted);
+
+          r.connect({ db: 'fastbasket' }).then(function(conn) {
+            var order = request;
+            order.status = 'pending';
+            order.dbId = orderInserted.id;
+            order.date = new Date();
+            order.total = parseFloat(order.total);
+
+            r.table('orders')
+            .insert(order).run(conn)
+            .finally(function() {
+              conn.close();
+              callback(null, orderInserted);
+            });
+          });
+
         });
 
       });
