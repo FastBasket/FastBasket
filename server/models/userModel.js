@@ -103,7 +103,7 @@ module.exports = {
             });
         } else {
           orderObject[orders[i].id] = {
-            id: orders[i].id,
+            id: parseInt(orders[i].id, 10),
             shippingaddress: orders[i].shippingaddress,
             total: orders[i].total,
             status: orders[i].status,
