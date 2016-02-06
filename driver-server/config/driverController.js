@@ -28,7 +28,6 @@ module.exports = function (app, express, io, amqp) {
             var fetchedJobParse = JSON.parse(fetchedJob);
             var arrayOfOrderId = fetchedJobParse.data;
 
-            //create job  fsdvsdv
             var newJob = {
               userId : userId,
               status: false
