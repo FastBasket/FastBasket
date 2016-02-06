@@ -1,6 +1,6 @@
 <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
   <div class="label" style="color: grey" ng-show="recommendations.length > 0" >Recommendations for you</div>
-  <md-button md-no-ink class="md-primary" ng-repeat="recom in recommendations" ng-click="searchRecommendation(recom)" >{{recom}}</md-button>
+  <md-button md-no-ink class="md-primary" ng-repeat="recom in recommendations track by $index" ng-click="searchRecommendation(recom)" >{{recom}}</md-button>
 </section>
 <div class='md-padding' layout="row" layout-wrap>
   <md-card style="width: 300px;" ng-repeat="product in products">
