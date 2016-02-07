@@ -33,6 +33,7 @@ client/lib/
 driver-client/client/lib/
 dump.rdb
 server/.DS_Store
+rethinkdb_data
 
 # Optional npm cache directory
 .npm

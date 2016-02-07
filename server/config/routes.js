@@ -4,6 +4,7 @@ var userController = require('../controllers/userController');
 var driverController = require('../controllers/driverController');
 var checkoutController = require('../controllers/checkoutController');
 var passport = require('./passport');
+var rethink = require('./rethinkDb');
 
 module.exports = function (app, express) {
   app.get('/api/product/search/:text', productController.search);
@@ -24,7 +25,7 @@ module.exports = function (app, express) {
   app.post('/api/profile/update', userController.update);
   app.get('/api/profile/getOrders/:userId', userController.getOrders);
 
-  app.get('/api/order.getOrderStatus/:orderId', checkoutController.getOrderStatus);
+  app.get('/api/order/getOrderStatus/:orderId', checkoutController.getOrderStatus);
 
   app.post('/api/driver/updateLocation', driverController.updateLocation);
 

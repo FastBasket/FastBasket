@@ -7,7 +7,7 @@ angular.module('fastBasket.finish', [])
 
   $http({
     method: "GET",
-    url: '/api/order.getOrderStatus/' + orderId,
+    url: '/api/order/getOrderStatus/' + orderId,
   })
   .then(function(status){
     if (status.data === 'ready') {

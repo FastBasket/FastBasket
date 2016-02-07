@@ -6,7 +6,8 @@ var fastBasket = angular.module('fastBasket',
   'fastBasket.products',
   'fastBasket.searchBar',
   'fastBasket.checkout',
-  'fastBasket.profile',
+  'fastBasket.profile',,
+  'fastBasket.admin',
   'fastBasket.finish',
   'btford.socket-io',
   'ngRoute']).
@@ -18,6 +19,15 @@ var fastBasket = angular.module('fastBasket',
         views: {
           "login": {
             templateUrl : 'partial/login.html'
+          }
+        }
+      })
+      .state('admin', {
+        url: "/admin",
+        views: {
+          "login": {
+            templateUrl : 'partial/admin.html',
+            controller: 'adminController'
           }
         }
       })

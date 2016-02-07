@@ -1,4 +1,4 @@
-var io = require('../server.js');
+var io = require('../server.js').io;
 var accountSid = process.env.TWILIO_SID;
 var authToken = process.env.TWILIO_TOKEN;
 var twilioClient = require('twilio')(accountSid, authToken);
