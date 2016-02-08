@@ -51,7 +51,7 @@ module.exports = function(app,express,passport){
     function(req, res) {
       console.log("This is the user before adding him to cookie", req.user);
       res.cookie('user', JSON.stringify(req.user));
-      res.redirect('/#/profile/dashboard');
+      res.redirect('/#/profile');
     });
 
   app.get('/api/logout', function(req, res){
