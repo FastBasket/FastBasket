@@ -8,6 +8,7 @@ module.exports.io = io;
 
 io.sockets.on('connection', function(socket) {
   socket.join('admin');
+  socket.join('store_chanel');
   
   socket.on('create', function(orderId) {
     console.log(orderId, 'room created');
