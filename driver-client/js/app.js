@@ -13,10 +13,6 @@ driverSide.config(function($stateProvider, $urlRouterProvider, $mdThemingProvide
         url: '/profile',
         templateUrl: 'templates/profile.html',
         controller: 'profileController'
-    })
-    .state('profile.dashboard', {
-        url: '/dashboard',
-        templateUrl: 'templates/dashboard.html'
     });
     
     $urlRouterProvider
