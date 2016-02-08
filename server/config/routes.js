@@ -29,6 +29,9 @@ module.exports = function (app, express) {
 
   app.post('/api/driver/updateLocation', driverController.updateLocation);
 
+  app.get('/api/store/getDashboardOrders', storeController.getDashboardOrders);
+  app.get('/api/store/getOrderInfo/:orderId', storeController.getOrderInfo);
+
 //<--------- driverNotifications start -------->
 
   app.post('/api/driverNotifications/doneOrderReceived', driverController.doneOrderReceived);

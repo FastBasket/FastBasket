@@ -4,6 +4,7 @@ var authToken = process.env.TWILIO_TOKEN;
 var twilioClient = require('twilio')(accountSid, authToken);
 var jobModel = require('../models/jobModel');
 var redis = require('redis').createClient();
+var orderModel = require('../models/orderModel');
 
 var sendSms = function(toNumber, message, callback){
   toNumber = "+1" + toNumber;
@@ -27,10 +28,12 @@ module.exports = {
         req.sendStatus(400);
       } else {
         io.to(orderId).emit('doneOrderReceived', { message: "Your order is ready to be shipped " + orderId });
-        sendSms(phone, 'Your order is ready to be shipped', function(message){
-          
+
+        orderModel.getOrderInfo(orderId, function(order){
+          io.to('store_chanel').emit('ready_order', order);
+          sendSms(phone, 'Your order is ready to be shipped', function(message){});
+          res.sendStatus(200);
         });
-        res.sendStatus(200);
       }
     });
   },
@@ -45,11 +48,12 @@ module.exports = {
         req.sendStatus(400);
       } else {
         io.to(orderId).emit('doneInProgress', { message: "Your order is on route " + orderId });
-        sendSms(phone, 'Your order is on route', function(message){
-          
-        });
 
-        res.sendStatus(200);
+        orderModel.getOrderInfo(orderId, function(order){
+          io.to('store_chanel').emit('onmyway_order', order);
+          sendSms(phone, 'Your order is on route', function(message){});
+          res.sendStatus(200);
+        });
       }
     });
 
@@ -65,11 +69,12 @@ module.exports = {
         req.sendStatus(400);
       } else {
         io.to(orderId).emit('doneOntheWay', { message: "Your order was delivered, Thanks for using FastBasket " + orderId });
-        sendSms(phone, 'Your order was delivered, Thanks for using FastBasket', function(message){
-          
-        });
 
-        res.sendStatus(200);
+        orderModel.getOrderInfo(orderId, function(order){
+          io.to('store_chanel').emit('delivered_order', order);
+          sendSms(phone, 'Your order was delivered, Thanks for using FastBasket', function(message){});
+          res.sendStatus(200);
+        });
       }
     });
 
@@ -101,7 +106,6 @@ module.exports = {
                 if (err){
                   res.sendStatus(400);
                 } else {
-                  console.log(resValues);
                   io.to('store_chanel').emit('updatePositions', resValues);
                   res.sendStatus(200);
                 }
