@@ -40,7 +40,7 @@ module.exports = {
     var request = req.body;
     productModel.checkout(request, function(err, order){
       if (err){
-        console.log(err);
+        console.log('error from checkout', err);
         res.sendStatus(400);
       } else {
         amqp.connect('amqp://localhost', function(err, conn) {

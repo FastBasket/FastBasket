@@ -1,5 +1,6 @@
 var db = require('../db/db');
-var r = require('rethinkdb');
+var io = require('../server.js').io;
+var orderModel = require('./orderModel');
 
 module.exports = {
 
@@ -25,19 +26,9 @@ module.exports = {
           [request.user.name, request.user.phone, request.user.email, request.user.address, request.user.city, request.user.state, request.user.zipcode, request.user.driverinstructions, request.userId])
         .then(function(){
 
-          r.connect({ db: 'fastbasket' }).then(function(conn) {
-            var order = request;
-            order.status = 'pending';
-            order.dbId = orderInserted.id;
-            order.date = new Date();
-            order.total = parseFloat(order.total);
-
-            r.table('orders')
-            .insert(order).run(conn)
-            .finally(function() {
-              conn.close();
-              callback(null, orderInserted);
-            });
+          orderModel.getOrderInfo(orderInserted.id, function(order){
+            io.to('store_chanel').emit('new_order', order);
+            callback(null, orderInserted);
           });
 
         });

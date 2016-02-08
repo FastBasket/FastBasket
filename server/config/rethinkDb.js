@@ -8,7 +8,8 @@ r.connect({ db: 'fastbasket' }).then(function(conn) {
 
   r.table('orders').changes().run(conn, function(err, cursor) {
     cursor.each(function(err, item) {
-      io.to('admin').emit("update_orders", item);
+      io.to('admin').emit("new_order", item);
     });
   });
+
 });
