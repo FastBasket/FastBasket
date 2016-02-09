@@ -8,7 +8,7 @@ angular.module('driverSide.profile', ['ngCookies'])
   $scope.ordersDone = 0;
   $scope.jobId = null;
   $scope.hasJob;
-  
+
   var watchID = navigator.geolocation.watchPosition(function(position) {
     sendPosToRedis(position.coords.latitude, position.coords.longitude, $scope.userId, function(){
       console.log('location saved');
@@ -19,7 +19,7 @@ angular.module('driverSide.profile', ['ngCookies'])
     $http({
       method: "POST",
       url: 'http://127.0.0.1:8000/api/driver/updateLocation',
-      data: { driverId: driverId, lat: lat, lon: lon }
+      data: { driverId: driverId, lat: lat, lon: lon, orders: $scope.orders }
     }).then(function(result){
       callback();
     });
@@ -128,7 +128,7 @@ angular.module('driverSide.profile', ['ngCookies'])
           $scope.hasJob = false;
           navigator.geolocation.clearWatch(watchID);
           sendPosToRedis(0,0,$scope.userId, function(){
-            
+
           });
         });
       }
