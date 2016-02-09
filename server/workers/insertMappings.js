@@ -6,10 +6,10 @@ elastic.indices.putMapping(
   type: "product",
   body: {
     properties: {
-      name: { type: "string", analyzer: "english" },
-      description: { type: "string", analyzer: "english" },
-      category: { type: "string", analyzer: "english" },
-      subCategory: { type: "string", analyzer: "english" },
+      name: { type: "completion", analyzer: "english" },
+      description: { type: "completion", analyzer: "english" },
+      category: { type: "completion", analyzer: "english" },
+      subCategory: { type: "completion", analyzer: "english" },
       price: { type: "string", index: "not_analyzed" },
       dbId: { type: "string", index: "not_analyzed" }
     }

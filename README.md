@@ -1,13 +1,7 @@
 # FastBasket
-
-## Same-day grocery delivery ##
+Same-day grocery delivery
 
 ## Table of Contents
-
-## Summary ##
-  FastBasket provides the most convenient grocery shopping experience. Order groceries online and track your deliveries with just a few clicks. You'll never need worry about the transportation logistics. You'll also get plenty of food recommendations to help you build delicious recipes.
-
-
 1. [Press Release](#press-release)
     1. [Problem](#problem)
     1. [Solution](#solution)
@@ -18,6 +12,9 @@
     1. [Necessary Environment Variables](#necessary-environment-variables)
     1. [Populating Databases](#populating-databases)
 1. [Architecture](#architecture)
+
+## Summary ##
+  FastBasket provides the most convenient grocery shopping experience. Order groceries online and track your deliveries with just a few clicks. You'll never need worry about the transportation logistics. You'll also get plenty of food recommendations to help you build delicious recipes.
 
 ## Press Release
 
