@@ -26,7 +26,7 @@ amqp.connect('amqp://localhost', function(err, conn) {
 
 
       storage[storeid] ? storage[storeid].push(job) : storage[storeid] = [job];
-      if(storage[storeid].length > 2){
+      if(storage[storeid].length > 1){
         var batch = JSON.stringify(storage[storeid]);
         ch.sendToQueue(q_out, new Buffer(batch), {persistent: true});
         console.log(" [x] Sent '%s'", batch);
