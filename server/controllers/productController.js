@@ -58,7 +58,7 @@ module.exports = {
 	    match (a)-[y:Contains]->(c) with a, count1, count1*100/count(y) as tf order by tf desc limit 100 \
 	    match (a)-[x:Contains]->(d) where not d.name in {basket} with d, count(x) as count2 \
 	    match (e)-[w:Contains]->(d) \
-	    return d, count2*count2*100/count(w) as idf order by idf desc limit 10 \
+	    return d, count2*count2*100/count(w) as idf order by idf desc limit 6 \
 	    '
 
         neo.cypher({

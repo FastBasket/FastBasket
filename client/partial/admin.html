@@ -1,0 +1,62 @@
+<h1>Live Store Dashboard</h1>
+<md-content>
+  <md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="Curr Orders">
+
+      <md-content>
+        <md-list>
+          <md-subheader class="md-no-sticky">New Orders</md-subheader>
+          <md-list-item class="md-3-line" ng-repeat="order in new_orders">
+            <img ng-src="{{order.user_picture}}" class="md-avatar" />
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ order.id }} | ${{order.total}} | {{order.username}}</h3>
+              <h4>{{ order.shippingaddress }}</h4>
+              <p>Driver: {{ order.drivername }}</p>
+            </div>
+          </md-list-item>
+          <md-divider></md-divider>
+
+          <md-subheader class="md-no-sticky">Orders Ready</md-subheader>
+          <md-list-item class="md-3-line" ng-repeat="order in ready_orders">
+            <img ng-src="{{order.user_picture}}" class="md-avatar" />
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ order.id }} | ${{order.total}} | {{order.username}}</h3>
+              <h4>{{ order.shippingaddress }}</h4>
+              <p>Driver: {{ order.drivername }}</p>
+            </div>
+          </md-list-item>
+          <md-divider></md-divider>
+
+          <md-subheader class="md-no-sticky">Driver In Progress</md-subheader>
+          <md-list-item class="md-3-line" ng-repeat="order in inprogress_orders">
+            <img ng-src="{{order.user_picture}}" class="md-avatar" />
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ order.id }} | ${{order.total}} | {{order.username}}</h3>
+              <h4>{{ order.shippingaddress }}</h4>
+              <p>Driver: {{ order.drivername }}</p>
+            </div>
+          </md-list-item>
+          <md-divider></md-divider>
+
+          <md-subheader class="md-no-sticky">Orders Delivered</md-subheader>
+          <md-list-item class="md-3-line" ng-repeat="order in delivered_orders">
+            <img ng-src="{{order.user_picture}}" class="md-avatar" />
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ order.id }} | ${{order.total}} | {{order.username}}</h3>
+              <h4>{{ order.shippingaddress }}</h4>
+              <p>Driver: {{ order.drivername }}</p>
+            </div>
+          </md-list-item>
+          <md-divider></md-divider>
+
+        </md-list>
+      </md-content>
+
+    </md-tab>
+    <md-tab label="Drivers">
+      <md-content class="md-padding" >
+        
+      </md-content>
+    </md-tab>
+  </md-tabs>
+</md-content>

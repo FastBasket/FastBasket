@@ -24,9 +24,12 @@ module.exports = function (app, express) {
   app.post('/api/profile/update', userController.update);
   app.get('/api/profile/getOrders/:userId', userController.getOrders);
 
-  app.get('/api/order.getOrderStatus/:orderId', checkoutController.getOrderStatus);
+  app.get('/api/order/getOrderStatus/:orderId', checkoutController.getOrderStatus);
 
   app.post('/api/driver/updateLocation', driverController.updateLocation);
+
+  app.get('/api/store/getDashboardOrders', storeController.getDashboardOrders);
+  app.get('/api/store/getOrderInfo/:orderId', storeController.getOrderInfo);
 
 //<--------- driverNotifications start -------->
 

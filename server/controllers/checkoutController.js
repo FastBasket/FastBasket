@@ -40,34 +40,19 @@ module.exports = {
     var request = req.body;
     productModel.checkout(request, function(err, order){
       if (err){
-        console.log(err);
+        console.log('error from checkout', err);
         res.sendStatus(400);
       } else {
-        console.log('made it here')
-
         amqp.connect('amqp://localhost', function(err, conn) {
           conn.createChannel(function(err, ch) {
             var q = 'q_in';
-            console.log('connected to q_in')
-
-
             var msg = JSON.stringify({ x: request.x, y: request.y, id: order.id, storeId: request.storeId });
-            console.log(msg)
             ch.assertQueue(q, {durable: true});
             ch.sendToQueue(q, new Buffer(msg), {persistent: true});
             console.log(" [x] Sent '%s'", msg);
-            res.status(200).json(order);
+            res.status(201).json(order);
           });
         });
-
-        // redis.rpush(request.storeId, JSON.stringify({ x: request.x, y: request.y, id: order.id }), function(err, redisRes){
-        //   if (err){
-        //     console.log('error from redis', err);
-        //   } else {
-        //     redis.publish('jobs', JSON.stringify({ len: redisRes, storeId: request.storeId }));
-        //   }
-        //   res.status(200).json(order);
-        // });
       }
     });
   }

@@ -1,9 +1,11 @@
 var db = require('../db/db');
+var io = require('../server.js').io;
+var orderModel = require('./orderModel');
 
 module.exports = {
 
   checkout: function(request, callback){
-    var orderParams = [request.userId, request.shippingAddress, request. total, 'pending', request.storeId, request.x, request.y];
+    var orderParams = [request.userId, request.shippingAddress, request.total, 'pending', request.storeId, request.x, request.y];
     db.one('Insert into Orders(UserId, ShippingAddress, Total, Status, StoreId, ShippingAddressPoint) ' +
             ' Values ($1, $2, $3, $4, $5, point($6, $7)) returning id', orderParams)
     .then(function(orderInserted){
@@ -23,7 +25,12 @@ module.exports = {
         db.none('update users set name = $1, phone = $2, email = $3, address = $4, city = $5, state = $6, zipcode = $7, DriverInstructions = $8 where id = $9',
           [request.user.name, request.user.phone, request.user.email, request.user.address, request.user.city, request.user.state, request.user.zipcode, request.user.driverinstructions, request.userId])
         .then(function(){
-          callback(null, orderInserted);
+
+          orderModel.getOrderInfo(orderInserted.id, function(order){
+            io.to('store_chanel').emit('new_order', order);
+            callback(null, orderInserted);
+          });
+
         });
 
       });

@@ -24,6 +24,8 @@
     "amqplib": "^0.4.0",
     "bluebird": "^3.2.1",
     "body-parser": "^1.14.2",
+    "chai": "^3.5.0",
+    "chai-things": "^0.2.0",
     "cookie-parser": "^1.4.1",
     "cors": "^2.7.1",
     "elasticsearch": "^10.1.2",
@@ -42,6 +44,7 @@
     "redis": "^2.4.2",
     "socket.io": "^1.4.4",
     "stripe": "^4.3.0",
+    "supertest": "^1.1.0",
     "twilio": "^3.3.0-edge",
     "underscore": "^1.8.3"
   }
