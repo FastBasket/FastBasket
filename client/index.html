@@ -5,8 +5,15 @@
     <link href="lib/angular-material/angular-material.css" rel="stylesheet" />
     <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="assets/style.css">
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.css' rel='stylesheet'/>
     <script src="https://cdn.socket.io/socket.io-1.4.4.js"></script>
     <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
+
+    <style>
+      body { margin:0; padding:0; }
+      .map { position:absolute; top:0; bottom:0; width:75%; }
+    </style>
   </head>
   <body>
 
@@ -14,15 +21,16 @@
     <div class="viewContainer">
       <div ui-view="login"></div>
     </div>
+    <div class="viewContainer">
+      <div ui-view="map"></div>
+    </div>
     <div class='viewContainer'>
-      <div ui-view="searchBar"></div>  
+      <div ui-view="searchBar"></div>
     </div>
     <div class='viewContainer'>
       <div ui-view="content"></div>
     </div>
   </div>
-
-  </body>
 
   <script src='lib/angular/angular.js'></script>
   <script src='lib/angular-ui-router/release/angular-ui-router.min.js'></script>
@@ -39,9 +47,12 @@
   <script src="js/controllers/checkoutController.js"></script>
   <script src="js/controllers/finishController.js"></script>
   <script src="js/controllers/profileController.js"></script>
+  <script src="js/controllers/mapController.js"></script>
   <script src="js/basket.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/shop.js"></script>
   <script src="app.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBytwzUydYLU_mL4X0hN4WvGLDfTQkWNJs" async defer></script>
+
+</body>
 </html>

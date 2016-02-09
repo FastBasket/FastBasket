@@ -8,6 +8,7 @@ var fastBasket = angular.module('fastBasket',
   'fastBasket.checkout',
   'fastBasket.profile',
   'fastBasket.finish',
+  'fastBasket.map',
   'btford.socket-io',
   'ngRoute']).
   config(function($stateProvider, $mdThemingProvider, $urlRouterProvider, $httpProvider){
@@ -72,6 +73,15 @@ var fastBasket = angular.module('fastBasket',
           "content": {
             templateUrl : 'partial/profile.html',
             controller: 'profileController'
+          }
+        }
+      })
+      .state('map', {
+        url: "/map",
+        views: {
+          "map": {
+            templateUrl : 'partial/map.html',
+            controller: 'mapController'
           }
         }
       });
