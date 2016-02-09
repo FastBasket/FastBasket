@@ -21,7 +21,7 @@ module.exports = {
   doneOrderReceived: function(req, res, next){
     var orderId = req.body.orderId;
     var phone = req.body.phone;
-    
+
     jobModel.updateOrderStatus('ready', orderId, function(err){
       if (err){
         console.log('error from controller', err);
@@ -58,7 +58,7 @@ module.exports = {
     });
 
   },
-  
+
   doneOntheWay: function(req, res, next){
     var orderId = req.body.orderId;
     var phone = req.body.phone;
@@ -84,6 +84,7 @@ module.exports = {
     var lat = req.body.lat;
     var lon = req.body.lon;
     var driverId = req.body.driverId;
+    var orders = req.body.orders;
 
     if (lat === 0 && lon === 0){
       redis.del(driverId + '_location', function(err){
@@ -94,7 +95,7 @@ module.exports = {
         }
       });
     } else {
-      redis.set(driverId + '_location', JSON.stringify({ lat: lat, lon: lon, id: driverId }), function(err, redisRes){
+      redis.set(driverId + '_location', JSON.stringify({ lat: lat, lon: lon, id: driverId, orders: orders }), function(err, redisRes){
         if (err){
           res.sendStatus(400);
         } else {

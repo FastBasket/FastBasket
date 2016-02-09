@@ -21,7 +21,6 @@ angular.module('fastBasket.finish', [])
       doneOntheWay();
     }
   });
-  
 
   $scope.modeOrderReceived = "indeterminate";
   $scope.showOrderReceived = true;
@@ -57,5 +56,23 @@ angular.module('fastBasket.finish', [])
 
   mySocket.on('doneOntheWay', function (data) {
     doneOntheWay();
+  });
+
+  mySocket.on('updatePositions', function(data){
+    var driverPosition;
+
+    for (var i=0; i<data.length; i++){
+      driverPosition = JSON.parse(data[i]);
+      if (driverPosition.orders){
+        for (var j=0; j<driverPosition.orders.length; j++){
+          if (driverPosition.orders[j].id === orderId){
+            console.log(driverPosition);
+            //TODO render driverPosition to the map
+            break;
+          }
+        }
+      }
+    }
+
   });
 });
