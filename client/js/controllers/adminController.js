@@ -42,6 +42,15 @@ angular.module('fastBasket.admin', [])
     $scope.ready_orders.push(data);
   });
 
+  mySocket.on('driver_assigned', function(data){
+    for (var i=0; i<$scope.new_orders.length; i++){
+      if (data.id === $scope.new_orders[i].id){
+        $scope.new_orders[i].drivername = data.drivername;
+        break;
+      }
+    }
+  });
+
   mySocket.on('onmyway_order', function (data) {
     for (var i=0; i<$scope.ready_orders.length; i++){
       if (data.id === $scope.ready_orders[i].id){

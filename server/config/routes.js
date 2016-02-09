@@ -4,7 +4,6 @@ var userController = require('../controllers/userController');
 var driverController = require('../controllers/driverController');
 var checkoutController = require('../controllers/checkoutController');
 var passport = require('./passport');
-var rethink = require('./rethinkDb');
 
 module.exports = function (app, express) {
   app.get('/api/product/search/:text', productController.search);
