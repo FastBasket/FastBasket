@@ -34,6 +34,77 @@ module.exports = {
         callback(order);
       }
     });
-  }
+  },
+
+  mostPopularCategories: function(callback){
+    db.query("SELECT categories.name as category, count(*) \
+              FROM OrderDetails \
+              INNER JOIN products ON orderDetails.ProductId = products.Id \
+              INNER JOIN categories ON categories.id = products.subcategory \
+              GROUP BY categories.name \
+              ORDER BY count(categories.name) desc limit 10")
+    .then(function(result){
+      callback(result);
+    });
+  },
+
+  mostSoldItems: function(callback){
+    db.query("SELECT products.name, count(*) \
+              FROM OrderDetails \
+              INNER JOIN products ON orderDetails.ProductId = products.Id \
+              GROUP BY products.name \
+              ORDER BY count(products.name) desc limit 10")
+    .then(function(result){
+      callback(result);
+    });
+  },
+
+  totalItemsSold: function(callback){
+    db.query("SELECT count(*) FROM OrderDetails")
+    .then(function(result){
+      callback(result);
+    });
+  },
+
+  totalOrders: function(callback){
+    db.query("SELECT count(*) FROM orders")
+    .then(function(result){
+      callback(result);
+    });
+  },
+
+  totalSales: function(callback){
+    db.query("SELECT sum(total) FROM orders")
+    .then(function(result){
+      callback(result);
+    });
+  },
+
+  rankHighestRevenueProduct: function(callback){
+      db.query("SELECT products.name , sum(products.price) \
+                FROM OrderDetails \
+                INNER JOIN products ON orderDetails.ProductId = products.Id \
+                GROUP BY products.name \
+                ORDER BY sum(products.price) desc limit 10")
+      .then(function(result){
+        callback(result);
+      });
+    },
+
+  avgOrderSize: function(callback){
+    db.query("SELECT count (orderDetails.id) * 1.0 / count( distinct orders.id ) \
+              FROM OrderDetails \
+              INNER JOIN orders ON orderDetails.orderId = orders.Id")
+    .then(function(result){
+      callback(result);
+    });
+  },
+
+  avgOrderSales: function(callback){
+    db.query("SELECT avg(total) FROM orders")
+    .then(function(result){
+      callback(result);
+    });
+  },
 
 };
