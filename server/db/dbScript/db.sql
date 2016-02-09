@@ -29,9 +29,11 @@ CREATE TABLE IF NOT EXISTS products (
   Id bigserial PRIMARY KEY,
   Name Varchar(100),
   Size Varchar(20),
-  SizeUnit Varchar(20),
+  ImageUrl Varchar(900),
+  /*SizeUnit Varchar(20),*/
   Price decimal(6,2),
-  PriceUnit varchar(100),
+  /*PriceUnit varchar(100),*/
+  Description Varchar(1000),
   category INTEGER NOT NULL REFERENCES Categories(Id),
   subcategory INTEGER NULL REFERENCES Categories(Id)
 );
