@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS products (
   Id bigserial PRIMARY KEY,
   Name Varchar(100),
   Size Varchar(20),
-  ImageUrl Varchar(900),
+  ImageUrl Varchar(300),
   /*SizeUnit Varchar(20),*/
   Price decimal(6,2),
   /*PriceUnit varchar(100),*/
