@@ -5,7 +5,8 @@ var client = pg.Client('postgres://postgres@localhost:5432/fastbasket');
 var parse = require('csv-parse');
 
 var rePrice = /\$[0-9]+\.[0-9]+/;
-var reRemoveBrand = /\b(?:(?!(DEAN|&|DELUCA))\w).+/ 
+var reRemoveBrand = /\b(?:(?!(DEAN|&|DELUCA))\w).+/; 
+var reURL = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 
 fs.readFile(__dirname + '/deandeluca.csv', 'utf8', function(err, file) {
   parse(file, function(err, output){
@@ -30,7 +31,7 @@ fs.readFile(__dirname + '/deandeluca.csv', 'utf8', function(err, file) {
     var Description = line[4];
     var categoryId = result.rows[0].category;
     var subcategoryId = result.rows[0].id;
-    var imageURL = line[9];
+    var imageURL = reURL.exec(line[9])[0];
 
     var item = [Name, Size, Price, imageURL, Description, categoryId, subcategoryId];
 
