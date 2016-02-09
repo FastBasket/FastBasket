@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "server/server.js",
-  "scripts": {},
+  "scripts": {
+    "test": "",
+    "start": "grunt start",
+    "feedProducts": "node server/db/dbScript/app.js",
+    "feedRecommandations": ""
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FastBasket/FastBasket.git"
@@ -14,12 +19,6 @@
     "url": "https://github.com/FastBasket/FastBasket/issues"
   },
   "homepage": "https://github.com/FastBasket/FastBasket#readme",
-  "scripts":{
-    "test": "",
-    "start": "grunt start",
-    "feedProducts":"node server/db/dbScript/app.js",
-    "feedRecommandations": ""
-  },
   "dependencies": {
     "amqplib": "^0.4.0",
     "bluebird": "^3.2.1",
@@ -28,6 +27,7 @@
     "chai-things": "^0.2.0",
     "cookie-parser": "^1.4.1",
     "cors": "^2.7.1",
+    "csv-parse": "^1.0.1",
     "elasticsearch": "^10.1.2",
     "express": "^4.10.2",
     "express-session": "^1.13.0",

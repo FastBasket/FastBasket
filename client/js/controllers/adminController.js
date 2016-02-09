@@ -58,7 +58,7 @@ angular.module('fastBasket.admin', [])
         break;
       }
     }
-    
+
     $scope.inprogress_orders.push(data);
   });
 
@@ -69,7 +69,7 @@ angular.module('fastBasket.admin', [])
         break;
       }
     }
-    
+
     $scope.delivered_orders.push(data);
   });
 

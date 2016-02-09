@@ -8,7 +8,14 @@ productModel.getProducts(function(err, products){
     var bulkBody = [];
     products.forEach(function(product){
       bulkBody.push({index: { _index: 'elastic_products', _type: 'products', _id: product.id }});
-      bulkBody.push({ name: product.name, price: product.price, category: product.categoryname, subCategory: product.subcategoryname, dbId: product.id });
+      bulkBody.push({
+        name: product.name,
+        price: product.price,
+        category: product.categoryname,
+        subCategory: product.subcategoryname,
+        dbId: product.id,
+        imageUrl: product.imageurl
+      });
     });
 
     elastic.bulk({
