@@ -80,7 +80,7 @@ client.query('CREATE TABLE IF NOT EXISTS Stores(Id serial PRIMARY KEY, Name varc
         })
         for (var key in tree) {
             (function (key) {
-                client.query("INSERT INTO categories (Name, Category) VALUES ($1, null) ON CONFLICT DO NOTHING", [key])
+                client.query("INSERT INTO categories (Name, Category) VALUES ($1, null) ON CONFLICT DO NOTHING RETURNING id", [key])
                     .then(function () {
                         return client.query("SELECT Id FROM categories WHERE name = ($1)", [key])
                     })
