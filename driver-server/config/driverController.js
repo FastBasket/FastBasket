@@ -1,10 +1,10 @@
 var jobModel = require('../../server/models/jobModel');
+var orderModel = require('../../server/models/orderModel');
 
 
 module.exports = function (app, express, io, amqp) {
 
   io.on('connection', function(socket){
-
     console.log('a driver connected');
 
     socket.on('request', function(userId){
@@ -47,8 +47,6 @@ module.exports = function (app, express, io, amqp) {
                     jobModel.updateOrder(item.id, jobCreated.id, function(orderUpdated){
                       if (err){
                         console.log('err',err);
-                      } else {
-                        console.log('orderUpdated!:', item.id);
                       }
                     });
                   });
