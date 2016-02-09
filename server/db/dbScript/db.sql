@@ -47,7 +47,7 @@ Create Table IF NOT EXISTS Orders (
   StoreId serial REFERENCES Stores (Id),
   JobId BIGINT REFERENCES Jobs (Id),
   Status Varchar(10),
-  Time   timestamp DEFAULT current_timestamp
+  orderdate timestamp DEFAULT current_timestamp
 );
 
 Create Table IF NOT EXISTS OrderDetails (
