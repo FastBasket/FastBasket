@@ -11,7 +11,8 @@ elastic.indices.putMapping(
       category: { type: "string", analyzer: "english" },
       subCategory: { type: "string", analyzer: "english" },
       price: { type: "string", index: "not_analyzed" },
-      dbId: { type: "string", index: "not_analyzed" }
+      dbId: { type: "string", index: "not_analyzed" },
+      imageUrl: { type: "string", index: "not_analyzed" },
     }
   }
 },
