@@ -20,19 +20,19 @@ Create Table IF NOT EXISTS Users(
 );
 
 CREATE TABLE IF NOT EXISTS categories(
-  Id serial PRIMARY KEY, 
-  Name Varchar(100), 
+  Id serial PRIMARY KEY,
+  Name Varchar(100),
   Category INTEGER NULL REFERENCES categories(Id)
 );
-  
+
 CREATE TABLE IF NOT EXISTS products (
-  Id bigserial PRIMARY KEY, 
+  Id bigserial PRIMARY KEY,
   Name Varchar(100),
-  Size Varchar(20), 
-  SizeUnit Varchar(20), 
-  Price decimal(6,2), 
-  PriceUnit varchar(100), 
-  category INTEGER NOT NULL REFERENCES Categories(Id), 
+  Size Varchar(20),
+  SizeUnit Varchar(20),
+  Price decimal(6,2),
+  PriceUnit varchar(100),
+  category INTEGER NOT NULL REFERENCES Categories(Id),
   subcategory INTEGER NULL REFERENCES Categories(Id)
 );
 
@@ -44,7 +44,8 @@ Create Table IF NOT EXISTS Orders (
   Total decimal(6,2),
   StoreId serial REFERENCES Stores (Id),
   JobId BIGINT REFERENCES Jobs (Id),
-  Status Varchar(10)
+  Status Varchar(10),
+  Time   timestamp DEFAULT current_timestamp
 );
 
 Create Table IF NOT EXISTS OrderDetails (
