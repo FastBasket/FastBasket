@@ -21,13 +21,13 @@ Create Table IF NOT EXISTS Users(
 
 CREATE TABLE IF NOT EXISTS categories(
   Id serial PRIMARY KEY,
-  Name Varchar(100),
+  Name Varchar(100) NOT NULL UNIQUE,
   Category INTEGER NULL REFERENCES categories(Id)
 );
 
 CREATE TABLE IF NOT EXISTS products (
   Id bigserial PRIMARY KEY,
-  Name Varchar(100),
+  Name Varchar(100) NOT NULL UNIQUE,
   Size Varchar(20),
   ImageUrl Varchar(300),
   /*SizeUnit Varchar(20),*/
@@ -36,6 +36,12 @@ CREATE TABLE IF NOT EXISTS products (
   Description Varchar(1000),
   category INTEGER NOT NULL REFERENCES Categories(Id),
   subcategory INTEGER NULL REFERENCES Categories(Id)
+);
+
+Create Table IF NOT EXISTS Jobs(
+  Id bigserial PRIMARY KEY,
+  Status boolean,
+  UserId bigserial REFERENCES Users (Id)
 );
 
 Create Table IF NOT EXISTS Orders (
@@ -55,12 +61,6 @@ Create Table IF NOT EXISTS OrderDetails (
   OrderId bigserial REFERENCES Orders (Id),
   ProductId bigserial REFERENCES Products (Id),
   Price decimal(6,2)
-);
-
-Create Table IF NOT EXISTS Jobs(
-  Id bigserial PRIMARY KEY,
-  Status boolean,
-  UserId bigserial REFERENCES Users (Id)
 );
 
 insert into Stores(name) Values ('test store')
