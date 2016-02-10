@@ -22,6 +22,11 @@ angular.module('fastBasket.map', [])
     var fitBoundsCoords = [parsedDriverLocation.lat,parsedDriverLocation.lon];
     fitBoundsArray.push(fitBoundsCoords);
 
+    var arrAdd = [];
+    for (var j=0; j<parsedDriverLocation.orders.length; j++){
+      arrAdd.push(parsedDriverLocation.orders[j].shippingaddress);
+    }
+
     var current = {
       "type": "Feature",
       "geometry": {
@@ -29,9 +34,8 @@ angular.module('fastBasket.map', [])
         "coordinates": coords
       },
       "properties": {
-        "title": "djkhsfa",
-        "description": "1714 14th St NW, Washington DC",
-        "image": "https://farm9.staticflickr.com/8604/15769066303_3e4dcce464_n.jpg",
+        "title": "Current Job",
+        "address": arrAdd,
         "icon": {
             "iconUrl": "https://cdn0.iconfinder.com/data/icons/Car_Icon_Set_BevelAndEmboss-Net/54/car.png",
             "iconSize": [40, 20], // size of the icon
@@ -52,13 +56,21 @@ angular.module('fastBasket.map', [])
     var marker = e.layer,
       feature = marker.feature;
     marker.setIcon(L.icon(feature.properties.icon));
-    var content = '<h2>'+ feature.properties.title+'<\/h2>' + '<img src="'+feature.properties.image+'" alt="">';
+    var content = '<h2>'+ feature.properties.title+'<\/h2>';
+    content += '<ul>';
+    for (var i=0; i<feature.properties.address.length; i++){
+      content += "<li>"
+      content += feature.properties.address[i];
+      content += "<\/li>"
+    }
+    content += '<\/ul>';
     marker.bindPopup(content);
   });
   myLayer.setGeoJSON(geojson);
   mapTooltipsJS.scrollWheelZoom.disable();
 };
   mySocket.on('updatePositions', function(driverLocations){
+    console.log('from mapController',driverLocations);
     loadMap(driverLocations);
   });
 

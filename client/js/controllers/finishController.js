@@ -65,9 +65,6 @@ angular.module('fastBasket.finish', [])
       if (driverPosition.orders){
         for (var j=0; j<driverPosition.orders.length; j++){
           if (driverPosition.orders[j].id === orderId){
-            if (mapTooltipsJS === undefined && myLayer === undefined){
-              initMap();
-            }
             loadMap([driverPosition]);
             break;
           }
@@ -80,11 +77,9 @@ angular.module('fastBasket.finish', [])
 var mapTooltipsJS;
 var myLayer;
 
-var initMap = function(){
-  L.mapbox.accessToken = 'pk.eyJ1IjoiY3BlbmFycmlldGEiLCJhIjoiY2lrN2l1cG5vMDF0eHY0a3RiODJ2aGJ0bSJ9.fAuGhHCAg4Z98unqNzUaEg';
-  mapTooltipsJS = L.mapbox.map('map-tooltips-js', 'mapbox.streets').setView([37.7836966, -122.4089664], 11)
-  myLayer = L.mapbox.featureLayer().addTo(mapTooltipsJS);
-}
+L.mapbox.accessToken = 'pk.eyJ1IjoiY3BlbmFycmlldGEiLCJhIjoiY2lrN2l1cG5vMDF0eHY0a3RiODJ2aGJ0bSJ9.fAuGhHCAg4Z98unqNzUaEg';
+mapTooltipsJS = L.mapbox.map('map-tooltips-js', 'mapbox.streets').setView([37.7836966, -122.4089664], 11)
+myLayer = L.mapbox.featureLayer().addTo(mapTooltipsJS);
 
 var loadMap = function(driverLocations){
   var fitBoundsArray = [];
@@ -159,7 +154,7 @@ var loadMap = function(driverLocations){
     var marker = e.layer,
       feature = marker.feature;
     marker.setIcon(L.icon(feature.properties.icon));
-    var content = '<h2>'+ feature.properties.title+'<\/h2>' + '<img src="'+feature.properties.image+'" alt="">';
+    var content = '<h2>'+ feature.properties.title+'<\/h2>';
     marker.bindPopup(content);
   });
   myLayer.setGeoJSON(geojson);
