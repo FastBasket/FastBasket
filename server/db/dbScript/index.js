@@ -15,15 +15,21 @@ fs.readFile(__dirname + '/deandeluca.csv', 'utf8', function(err, file) {
       if (line.length>1){ 
 	var category = line[2];
 	return client.query("INSERT INTO categories (Name, Category) VALUES ($1, null) ON CONFLICT DO NOTHING RETURNING id", [category])
-      .then(function(result){
-	var categoryId = result.rows[0].id;
-	var subcategory = line[3];
-	if(subcategory){
-	  return client.query("INSERT INTO categories(Name, category) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING id, category", [subcategory, categoryId])
-	}else{
-	  return new Promise.resolve({ rows: [ { category : categoryId , id : null} ] } );
-	}
-      }) 
+      .then(function(){
+	return client.query("SELECT id from categories where Name = $1", [line[2]]) 
+      })
+    .then(function(result){
+      var categoryId = result.rows[0].id;
+      var subcategory = line[3];
+      if(subcategory){
+	return client.query("INSERT INTO categories(Name, category) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING id, category", [subcategory, categoryId])
+      .then(function(){
+	return client.query('SELECT (select id from categories where name = $1) AS "category", (select id from categories where name = $2) AS "id"', [line[2], line[3]]); 
+      })
+      }else{
+	return new Promise.resolve({ rows: [ { category : categoryId , id : null} ] } );
+      }
+    }) 
     .then(function(result){
       var Name = reRemoveBrand.exec(line[1])[0];
       var Size = line[5];
