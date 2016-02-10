@@ -24,6 +24,7 @@
     "angular-ui-router": "~0.2.15",
     "angular-material": "~1.0.1",
     "angular-socket-io": "~0.7.0",
-    "angular-cookies": "^1.4.9"
+    "angular-cookies": "^1.4.9",
+    "angular-google-chart": "^0.1.0"
   }
 }

@@ -46,7 +46,7 @@ module.exports = {
                       INNER JOIN products ON orderDetails.ProductId = products.Id \
                       INNER JOIN categories ON categories.id = products.subcategory \
                       GROUP BY categories.name \
-                      ORDER BY count(categories.name) desc limit 10"),
+                      ORDER BY count(categories.name) desc limit 5"),
             t.query("SELECT products.name, count(*) as mostSoldItems \
                       FROM OrderDetails \
                       INNER JOIN products ON orderDetails.ProductId = products.Id \
