@@ -30,6 +30,7 @@ module.exports = function (app, express) {
 
   app.get('/api/store/getDashboardOrders', storeController.getDashboardOrders);
   app.get('/api/store/getOrderInfo/:orderId', storeController.getOrderInfo);
+  app.get('/api/store/getStoreStats', storeController.getStoreStats);
 
 //<--------- driverNotifications start -------->
 
