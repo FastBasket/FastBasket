@@ -36,75 +36,84 @@ module.exports = {
     });
   },
 
-  mostPopularCategories: function(callback){
-    db.query("SELECT categories.name as category, count(*) \
-              FROM OrderDetails \
-              INNER JOIN products ON orderDetails.ProductId = products.Id \
-              INNER JOIN categories ON categories.id = products.subcategory \
-              GROUP BY categories.name \
-              ORDER BY count(categories.name) desc limit 10")
-    .then(function(result){
-      callback(result);
+  //------------------ Dashborad stats ---------------------------------------------------------------
+
+  getStoreStats: function(callback){
+    db.tx(function (t) {
+        return t.batch([
+            t.query("SELECT categories.name as category, count(*) as mostPopularCategories \
+                      FROM OrderDetails \
+                      INNER JOIN products ON orderDetails.ProductId = products.Id \
+                      INNER JOIN categories ON categories.id = products.subcategory \
+                      GROUP BY categories.name \
+                      ORDER BY count(categories.name) desc limit 10"),
+            t.query("SELECT products.name, count(*) as mostSoldItems \
+                      FROM OrderDetails \
+                      INNER JOIN products ON orderDetails.ProductId = products.Id \
+                      GROUP BY products.name \
+                      ORDER BY count(products.name) desc limit 10"),
+            t.query("SELECT count(*) as totalItemsSold FROM OrderDetails"),
+            t.query("SELECT count(*) as totalOrders FROM orders"),
+            t.query("SELECT sum(total) as totalSales FROM orders"),
+            t.query("SELECT products.name , sum(products.price) as rankHighestRevenueProduct \
+                      FROM OrderDetails \
+                      INNER JOIN products ON orderDetails.ProductId = products.Id \
+                      GROUP BY products.name \
+                      ORDER BY sum(products.price) desc limit 10"),
+            t.query("SELECT count (orderDetails.id) * 1.0 / count( distinct orders.id ) as avgOrderSize \
+                      FROM OrderDetails \
+                      INNER JOIN orders ON orderDetails.orderId = orders.Id"),
+            t.query("SELECT avg(total) as avgOrderSales FROM orders"),
+            t.query("SELECT categories.name as category, count(*) as mostPopularCategories, date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM OrderDetails \
+                      INNER JOIN products ON orderDetails.ProductId = products.Id \
+                      INNER JOIN categories ON categories.id = products.subcategory \
+                      INNER JOIN orders ON orderDetails.orderId = orders.Id \
+                      GROUP BY categories.name, timestamp \
+                      ORDER BY timestamp desc, count(*) desc limit 100"),
+            t.query("SELECT products.name, count(*) as MostSoldItemsPerHour, date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM OrderDetails \
+                      INNER JOIN products ON orderDetails.ProductId = products.Id \
+                      INNER JOIN orders ON orderDetails.orderId = orders.Id \
+                      GROUP BY products.name, timestamp \
+                      ORDER BY timestamp desc , count(*) desc limit 100"),
+            t.query("SELECT categories.name, sum(products.price) as highestRevenueCategoryPerHour , date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM OrderDetails \
+                      INNER JOIN products ON orderDetails.ProductId = products.Id \
+                      INNER JOIN categories ON categories.id = products.subcategory \
+                      INNER JOIN orders ON orderDetails.orderId = orders.Id \
+                      GROUP BY categories.name , timestamp \
+                      ORDER BY timestamp desc, sum(products.price) desc limit 100"),
+            t.query("SELECT products.name , sum(products.price) as highestRevenueItemPerHour , date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM OrderDetails \
+                      INNER JOIN products ON orderDetails.ProductId = products.Id \
+                      INNER JOIN orders ON orderDetails.orderId = orders.Id \
+                      GROUP BY products.name, timestamp \
+                      ORDER BY timestamp desc, sum(products.price) desc limit 100"),
+            t.query("SELECT count (orderDetails.id) * 1.0 / count( distinct orders.id ) as avgOrderSizePerHour, date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM OrderDetails  \
+                      INNER JOIN orders ON orderDetails.orderId = orders.Id \
+                      GROUP BY timestamp"),
+            t.query("SELECT avg(total) as avgOrderSales, date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM orders \
+                      GROUP BY timestamp"),
+            t.query("SELECT count(*) as totalItemsSoldPerHour, date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM OrderDetails \
+                      INNER JOIN orders ON orderDetails.orderId = orders.Id \
+                      GROUP BY timestamp"),
+            t.query("SELECT count(*) as totalOrdersPerHour, date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM orders \
+                      GROUP BY timestamp"),
+            t.query("SELECT sum(total) as totalSalesPerHour, date_trunc('hour',orders.orderdate) as timestamp \
+                      FROM orders \
+                      GROUP BY timestamp")
+        ]);
+    })
+    .then(function (data) {
+      callback(null, data);
+    })
+    .catch(function (error) {
+      callback(error, null);
     });
-  },
-
-  mostSoldItems: function(callback){
-    db.query("SELECT products.name, count(*) \
-              FROM OrderDetails \
-              INNER JOIN products ON orderDetails.ProductId = products.Id \
-              GROUP BY products.name \
-              ORDER BY count(products.name) desc limit 10")
-    .then(function(result){
-      callback(result);
-    });
-  },
-
-  totalItemsSold: function(callback){
-    db.query("SELECT count(*) FROM OrderDetails")
-    .then(function(result){
-      callback(result);
-    });
-  },
-
-  totalOrders: function(callback){
-    db.query("SELECT count(*) FROM orders")
-    .then(function(result){
-      callback(result);
-    });
-  },
-
-  totalSales: function(callback){
-    db.query("SELECT sum(total) FROM orders")
-    .then(function(result){
-      callback(result);
-    });
-  },
-
-  rankHighestRevenueProduct: function(callback){
-      db.query("SELECT products.name , sum(products.price) \
-                FROM OrderDetails \
-                INNER JOIN products ON orderDetails.ProductId = products.Id \
-                GROUP BY products.name \
-                ORDER BY sum(products.price) desc limit 10")
-      .then(function(result){
-        callback(result);
-      });
-    },
-
-  avgOrderSize: function(callback){
-    db.query("SELECT count (orderDetails.id) * 1.0 / count( distinct orders.id ) \
-              FROM OrderDetails \
-              INNER JOIN orders ON orderDetails.orderId = orders.Id")
-    .then(function(result){
-      callback(result);
-    });
-  },
-
-  avgOrderSales: function(callback){
-    db.query("SELECT avg(total) FROM orders")
-    .then(function(result){
-      callback(result);
-    });
-  },
-
+  }
 };

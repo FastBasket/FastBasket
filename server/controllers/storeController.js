@@ -23,5 +23,15 @@ module.exports = {
     orderModel.getOrderInfo(orderId, function(order){
       res.status(200).json(order);
     });
+  },
+
+  getStoreStats: function(req, res, next){
+    orderModel.getStoreStats(function(err, results){
+      if (err) {
+        res.sendStatus(400);
+      } else {
+        res.status(200).json(results);
+      }
+    });
   }
 };
