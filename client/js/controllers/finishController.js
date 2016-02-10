@@ -65,8 +65,10 @@ angular.module('fastBasket.finish', [])
       if (driverPosition.orders){
         for (var j=0; j<driverPosition.orders.length; j++){
           if (driverPosition.orders[j].id === orderId){
-            console.log(driverPosition);
-            loadMap([driverPosition], driverPosition.orders[j]);
+            if (mapTooltipsJS === undefined && myLayer === undefined){
+              initMap();
+            }
+            loadMap([driverPosition]);
             break;
           }
         }
@@ -75,11 +77,16 @@ angular.module('fastBasket.finish', [])
   });
 
 //--------------------------Driver Start----------------------------------------------------
-L.mapbox.accessToken = 'pk.eyJ1IjoiY3BlbmFycmlldGEiLCJhIjoiY2lrN2l1cG5vMDF0eHY0a3RiODJ2aGJ0bSJ9.fAuGhHCAg4Z98unqNzUaEg';
-var mapTooltipsJS = L.mapbox.map('map-tooltips-js', 'mapbox.streets').setView([37.8, -96], 10)
-var myLayer = L.mapbox.featureLayer().addTo(mapTooltipsJS);
+var mapTooltipsJS;
+var myLayer;
 
-var loadMap = function(driverLocations, orderInformation){
+var initMap = function(){
+  L.mapbox.accessToken = 'pk.eyJ1IjoiY3BlbmFycmlldGEiLCJhIjoiY2lrN2l1cG5vMDF0eHY0a3RiODJ2aGJ0bSJ9.fAuGhHCAg4Z98unqNzUaEg';
+  mapTooltipsJS = L.mapbox.map('map-tooltips-js', 'mapbox.streets').setView([37.7836966, -122.4089664], 11)
+  myLayer = L.mapbox.featureLayer().addTo(mapTooltipsJS);
+}
+
+var loadMap = function(driverLocations){
   var fitBoundsArray = [];
   //Object coming from redis: ["{"lat":37.7837156,"lon":-122.40927529999999,"id":"5"}", "{"lat":37.7837156,"lon":-122.40927529999999,"id":"4"}"]
   //create new array to store parsed redis value
@@ -102,9 +109,6 @@ var loadMap = function(driverLocations, orderInformation){
         "coordinates": coords
       },
       "properties": {
-        "title": "djkhsfa",
-        "description": "1714 14th St NW, Washington DC",
-        "image": "https://farm9.staticflickr.com/8604/15769066303_3e4dcce464_n.jpg",
         "icon": {
             "iconUrl": "https://cdn0.iconfinder.com/data/icons/Car_Icon_Set_BevelAndEmboss-Net/54/car.png",
             "iconSize": [40, 20], // size of the icon
@@ -114,6 +118,36 @@ var loadMap = function(driverLocations, orderInformation){
         }
       }
     }
+    geojson.push(current);
+  }
+
+  var ordersLocationArr = driverLocations[0].orders;
+  for (var j=0; j<ordersLocationArr.length; j++){
+    var coords = [ordersLocationArr[j].shippingaddresspoint.y, ordersLocationArr[j].shippingaddresspoint.x];
+    var fitBoundsCoords = [ordersLocationArr[j].shippingaddresspoint.x, ordersLocationArr[j].shippingaddresspoint.y];
+    fitBoundsArray.push(fitBoundsCoords);
+
+    var current = {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": coords
+      },
+      "properties": {
+        "icon": {
+            "iconUrl": "http://192.185.84.204/~procrc/wp-content/uploads/2014/12/favicon.png",
+            "iconSize": [30, 30], // size of the icon
+            "iconAnchor": [15, 15], // point of the icon which will correspond to marker's location
+            "popupAnchor": [0, -15], // point from which the popup should open relative to the iconAnchor
+            "className": "dot"
+        }
+      }
+    }
+
+    if (parseInt(ordersLocationArr[j].id, 10) !== parseInt(orderId, 10)){
+      current.properties.icon.iconUrl = "https://www.briarcliff.edu/media/394037/marker.png"
+    }
+
     geojson.push(current);
   }
 
