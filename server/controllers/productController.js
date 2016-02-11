@@ -5,6 +5,17 @@ var neo4j = require('neo4j');
 var neo = new neo4j.GraphDatabase('http://neo4j:fastbasket@127.0.0.1:7474');
 var _ = require('underscore');
 
+var getProductHistoryOfUserId = function(userId, callback){
+  redis.smembers(userId + '_orderhistory', function(err, reply) {
+    var orderhistory = [];
+
+    if (!err){
+      orderhistory = reply;
+    }
+
+    callback(orderhistory);
+  });
+};
 
 module.exports = {
   getRecommendations: function(req, res, next){
@@ -41,22 +52,21 @@ module.exports = {
       } else {
         //split json data
         terms = _.map(_.flatten(_.map(req.body.cart, function(obj){
-          return obj['name'].split(' ').concat(obj.subCategory.split(' '));
-
+          return obj.name.split(' ').concat(obj.subCategory.split(' '));
         })), function(word){
           return word.toLowerCase();
         });
 
-        var cypherquery = ' \
-  	    match (a)-[z:Contains]->(b) \
-          where b.name in {basket} with a, count(z) as count1 \
-  	    match (a)-[y:Contains]->(c) \
-          with a, count1, count1*100/count(y) as tf order by tf desc limit 100 \
-  	    match (a)-[x:Contains]->(d) \
-          where not d.name in {basket} with d, count(x) as count2 order by count2 desc limit 25\
-  	    match (e)-[w:Contains]->(d) \
-    	    return d, count2*100/count(w) as idf order by idf desc limit 5 \
-  	    '
+        var cypherquery =
+  	    'match (a)-[z:Contains]->(b) ' +
+          'where b.name in {basket} with a, count(z) as count1 ' +
+  	    'match (a)-[y:Contains]->(c) ' +
+          'with a, count1, count1*100/count(y) as tf order by tf desc limit 1000 ' +
+  	    'match (a)-[x:Contains]->(d) ' +
+          'where not d.name in {basket} with d, count(x) as count2 order by count2 desc limit 250 ' +
+          'where count2 > 1 ' +
+  	    'match (e)-[w:Contains]->(d) ' +
+    	    'return d, count2*100/count(w) as idf order by idf desc limit 5 ';
 
         neo.cypher({
             query: cypherquery,
@@ -93,72 +103,60 @@ module.exports = {
 
   search: function(req, res, next){
     var textToSearch = req.params.text;
-    elastic.search({
-      type: 'products',
-      body: {
-        query: {
-          bool: {
-            should: [
-              {
-                match_phrase: {
-                  name: {
-                    query: textToSearch,
-                    fuzziness: 10,
-                    prefix_length: 1
-                  }
-                }
-              },
-              {
-                match_phrase: {
-                  category: {
-                    query: textToSearch,
-                    fuzziness: 10,
-                    prefix_length: 1
-                  }
-                }
-              },
-              {
-                match_phrase: {
-                  subCategory: {
-                    query: textToSearch,
-                    fuzziness: 10,
-                    prefix_length: 1
-                  }
-                }
-              }
-            ]
-          }
-        }
-      },
-      size: 5
-    })
-    .then(function(body){
-      var result = [];
-      for (var i=0; i<body.hits.hits.length; i++){
-        result.push(body.hits.hits[i]._source);
-      }
+    var userId = req.params.userId;
 
-      // //=========== appending categories =================
+    getProductHistoryOfUserId(userId, function(orderHistory){
       elastic.search({
-        type:'categories',
+        index: 'elastic_products',
+        type: 'products',
         body: {
+          size: 5,
           query: {
             bool: {
               should: [
                 {
-                  match_phrase: {
-                    name: {
+                  function_score: {
+                    query: {
+                      match: {
+                        _all: textToSearch
+                      }
+                    },
+                    functions: [{
+                      filter: { terms: { dbId: orderHistory }},
+                      weight: 10
+                    }]
+                  }
+                },
+                {
+                  match: {
+                    _all: {
                       query: textToSearch,
-                      fuzziness: 10,
-                      prefix_length: 1
+                      fuzziness: 1,
+                      prefix_length: 2
                     }
                   }
                 }
               ]
             }
           }
-        },
-        size: 2 })
+        }
+      })
+      .then(function(body){
+        var result = [];
+        for (var i=0; i<body.hits.hits.length; i++){
+          result.push(body.hits.hits[i]._source);
+        }
+        // //=========== appending categories =================
+        elastic.search({
+          index: 'elastic_products',
+          type: 'categories',
+          body: {
+            size: 2,
+            query: {
+              match: { _all: textToSearch },
+            }
+          }
+        })
         .then(function(body){
           var resultCategory = [];
           for (var i=0; i<body.hits.hits.length; i++){
@@ -172,67 +170,67 @@ module.exports = {
           console.log(err);
           res.sendStatus(400);
         });
-      // //========== appending categories ==================
+        // //========== appending categories ==================
 
-    },
-    function (err) {
-      console.log(err);
-      res.sendStatus(400);
+      },
+      function (err) {
+        console.log(err);
+        res.sendStatus(400);
+      });
     });
   },
 
   showResults: function(req, res, next){
     var textToSearch = req.params.text;
-    elastic.search({
-      type: 'products',
-      body: {
-        query: {
-          bool: {
-            should: [
-              {
-                match_phrase: {
-                  name: {
-                    query: textToSearch,
-                    fuzziness: 10,
-                    prefix_length: 1
+    var userId = req.params.userId;
+
+    getProductHistoryOfUserId(userId, function(orderHistory){
+      elastic.search({
+        index: 'elastic_products',
+        type: 'products',
+        body: {
+          size: 50,
+          query: {
+            bool: {
+              should: [
+                {
+                  function_score: {
+                    query: {
+                      match: {
+                        _all: textToSearch
+                      }
+                    },
+                    functions: [{
+                      filter: { terms: { dbId: orderHistory }},
+                      weight: 10
+                    }]
+                  }
+                },
+                {
+                  match: {
+                    _all: {
+                      query: textToSearch,
+                      fuzziness: 1,
+                      prefix_length: 2
+                    }
                   }
                 }
-              },
-              {
-                match_phrase: {
-                  category: {
-                    query: textToSearch,
-                    fuzziness: 10,
-                    prefix_length: 1
-                  }
-                }
-              },
-              {
-                match_phrase: {
-                  subCategory: {
-                    query: textToSearch,
-                    fuzziness: 10,
-                    prefix_length: 1
-                  }
-                }
-              }
-            ]
+              ]
+            }
           }
         }
+      })
+      .then(function(body){
+        var result = [];
+        for (var i=0; i<body.hits.hits.length; i++){
+          result.push(body.hits.hits[i]._source);
+        }
+        res.status(200).json(result);
       },
-      size: 100
-    })
-    .then(function(body){
-      var result = [];
-      for (var i=0; i<body.hits.hits.length; i++){
-        result.push(body.hits.hits[i]._source);
-      }
-      res.status(200).json(result);
-    },
-    function (err) {
-      console.log(err);
-      res.sendStatus(400);
+      function (err) {
+        console.log(err);
+        res.sendStatus(400);
+      });
     });
   }
-
 };
