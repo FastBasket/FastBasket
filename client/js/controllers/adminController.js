@@ -252,8 +252,6 @@ angular.module('fastBasket.admin', ['googlechart'])
       }
     });
 
-    console.log(hours);
-
     rows = rows.concat(hours);
 
     $scope.mostpopularcategoriesPerHour.type = "AreaChart";

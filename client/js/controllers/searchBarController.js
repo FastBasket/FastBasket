@@ -73,7 +73,7 @@ angular.module('fastBasket.searchBar', ['ngCookies'])
   function elasticSearch(text){
     return $http({
       method: 'GET',
-      url: '/api/product/search/' + text
+      url: '/api/product/search/' + text + '/' + $rootScope.user.id
     })
     .then(function(result){
       return result.data;
@@ -87,7 +87,7 @@ angular.module('fastBasket.searchBar', ['ngCookies'])
       return [];
     }
   };
-  
+
   this.searchTextChange = function(text){
     if (text && text.trim() !== ''){
       return elasticSearch(text);
@@ -101,7 +101,7 @@ angular.module('fastBasket.searchBar', ['ngCookies'])
       $rootScope.currSearch = item.name.trim();
       $http({
         method: 'GET',
-        url: '/api/product/showResults/' + item.name
+        url: '/api/product/showResults/' + item.name + '/' + $rootScope.user.id
       })
       .then(function(products){
         $rootScope.products = products.data;

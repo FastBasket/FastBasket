@@ -55,7 +55,7 @@ angular.module('fastBasket.checkout', [])
         console.log(response);
       });
     });
-    
+
   };
 
   // ============== stripe ===========================
@@ -71,6 +71,9 @@ angular.module('fastBasket.checkout', [])
     })
     .then(function successCallback(result){
       createOrder(function(orderCreated){
+        $rootScope.shopCart = [];
+        $rootScope.shopCartTotal = 0;
+        $rootScope.products = [];
         shopCart.setCart($rootScope.user.id, [])
         .then(function(){
           localStorage.setItem("orderid", orderCreated.id);

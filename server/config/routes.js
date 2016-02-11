@@ -6,8 +6,8 @@ var checkoutController = require('../controllers/checkoutController');
 var passport = require('./passport');
 
 module.exports = function (app, express) {
-  app.get('/api/product/search/:text', productController.search);
-  app.get('/api/product/showResults/:text', productController.showResults);
+  app.get('/api/product/search/:text/:userId', productController.search);
+  app.get('/api/product/showResults/:text/:userId', productController.showResults);
 
   app.post('/api/checkout/createOrder', checkoutController.checkout);
   app.post('/api/checkout/charge', checkoutController.charge);

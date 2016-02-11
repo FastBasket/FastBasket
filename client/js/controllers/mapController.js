@@ -11,7 +11,7 @@ angular.module('fastBasket.map', [])
   //Object coming from redis: ["{"lat":37.7837156,"lon":-122.40927529999999,"id":"5"}", "{"lat":37.7837156,"lon":-122.40927529999999,"id":"4"}"]
   //create new array to store parsed redis value
   var driverLocations = driverLocations;
-  console.log("here are the new Driver Locations: ", driverLocations)
+  console.log("here are the new Driver Locations: ", driverLocations);
   //create a geojson array
   var geojson = [];
   //take redis object and loop over it, parse each value and create a new key for long, lat, and add it gejson object)

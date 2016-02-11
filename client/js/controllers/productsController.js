@@ -1,6 +1,6 @@
 angular.module('fastBasket.products', [])
 .controller('productsController', function($scope, $http, $rootScope, shopCart){
-  
+
   if ($rootScope.shopCart === undefined || $rootScope.shopCart === null){
     $rootScope.shopCart = [];
     $rootScope.shopCartTotal = 0;
@@ -43,7 +43,7 @@ angular.module('fastBasket.products', [])
     if (text && text.trim() !== ''){
       $http({
         method: 'GET',
-        url: '/api/product/showResults/' + text
+        url: '/api/product/showResults/' + text + '/' + $rootScope.user.id
       })
       .then(function(products){
         $rootScope.products = products.data;
