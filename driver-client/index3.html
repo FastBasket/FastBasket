@@ -1,0 +1,232 @@
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:900,400' rel='stylesheet' type='text/css'>
+<title>
+</title>
+<style>
+
+.landing {
+    z-index: 0;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background-color: black;
+}
+
+.bg{
+  min-width: 1087px;
+  min-height: 724px;
+  height: 100%;
+  width: 100%;
+  opacity: .95;
+}
+.landing-wrapper {
+    height: 80%;
+}
+/*.driverInstructions{
+    background-color: black;
+    top:80%;
+    left:20%;
+    height:20%;
+    width:80%
+}*/
+.content-wrapper{
+	min-height:0;
+  top: 15%;
+  left: 15%;
+  width: 75%;
+  height: 95%;
+  overflow:hidden;
+  position: relative;
+
+}
+.task-pane{
+
+  width:50%;
+  position: absolute;
+  top: 0; bottom: 0;
+}
+.tbl-div {
+    width:50%;
+    float:right;
+}
+.nav{
+  z-index: 1;
+  position: fixed;
+  width:100%;
+  height:auto;
+  float:left;
+  top: 10px; left: 20px;
+}
+.nested-pane1{
+  width:100%;
+  height:45%;
+}
+.nested-pane2{
+  top:55%;
+  width:100%;
+  height:45%;
+}
+.nested-pane2{
+  top:55%;
+  width:100%;
+  height:45%;
+}
+.nested-pane3{
+  top:30px
+  left:30px;
+  position:relative;
+  width:100%;
+  height:100%;
+}
+.dd{
+  font-family: 'Source Sans Pro', sans-serif;
+  color: white;
+  font-size:55;
+  font-weight:900;
+  padding-top: 20%;
+  padding-left:10%;
+}
+#dd2{
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #424242;
+  font-size:40;
+  font-weight:900;
+}
+#dd2_underTitle{
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #424242;
+  font-size:35;
+  font-weight:400;
+}
+.deliveryText{
+  font-family: 'Source Sans Pro', sans-serif;
+  color: white;
+  font-size:35;
+  font-weight: 400;
+  text-align: center;
+}
+.loginForm{
+  background-color: white;
+  margin-top:10%;
+  margin-left:10%;
+  margin-right:10%;
+  margin-bottom: 10%;
+  border-radius: 3px;
+  height:90%;
+  top:10%;
+  left:10%;
+}
+.firstText{
+  margin-left:10%;
+  margin-right:10%;
+  padding-top:10%;
+  text-align: center;
+}
+#coupon{
+  margin-top:20px;
+  width: 80%;
+  padding-left:10%;
+  padding-right:10%;
+}
+#login{
+  border-radius: 3px;
+  background-color: #7abf4b;
+  margin-top:10px;
+  width: 80%;
+  height: 50px;
+  margin-left:10%;
+  margin-right:10%;
+  text-align: center;
+  padding-top: 10px;
+
+}
+#facebook{
+  font-family: 'Source Sans Pro', sans-serif;
+  color: white;
+  font-size:25;
+  font-weight:900;
+}
+#store{
+  padding-top: 20px;
+  margin-left:10%;
+  margin-right:10%;
+  text-align: center;
+}
+#storeText1{
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size:20;
+  font-weight:400;
+  color: #424242;
+}
+#storeText{
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size:20;
+  font-weight:900;
+  color: #7abf4b;
+  text-decoration: underline;
+}
+#giffy{
+  background-color: black;
+
+  height:auto;
+  margin-top: 2%;
+  margin-left:10%;
+  margin-right:10%
+}
+#giffyImage{
+  width:100%;
+}
+
+a {
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+  <div class = "nav">
+      <img src="/assets/logo.png" alt="FastBasket"></img>
+  </div>
+
+  <div class="landing-wrapper">
+      <div class="landing">
+        <img src="/assets/driverBackground.jpg" class="bg" alt="Splash Page Image"></img>
+
+      </div>
+        <div class="content-wrapper">
+          <div class = "driverInstructions"></div>
+          <div class = "task-pane">
+            <div class = "nested-pane1">
+                <div class="dd">
+                  FASTBASKET NEEDS PARTNERS LIKE YOU.
+                </div>
+            </div>
+          </div>
+
+      <div class = "tbl-div">
+        <div class = "nested-pane3">
+          <div class = "loginForm">
+            <div class ="firstText">
+              <span id ="dd2">WELCOME DRIVER</span>
+                </br>
+              <span id ="dd2_underTitle">Join with just 1 click</span>
+            </div>
+            <div id ="login">
+              <a href="/api/auth/facebook">
+                <span id ="facebook">Login with facebook</span>
+              </a>
+            </div>
+            <div id ="giffy">
+              <img id ="giffyImage" src="assets/driver.gif" alt="Driver Giffy" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

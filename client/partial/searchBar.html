@@ -1,9 +1,6 @@
 <md-toolbar>
   <div class="md-toolbar-tools">
-    <h1>
-      <span><a href="/#/search" style="color: white">Fast Basket</a></span>
-    </h1>
-
+    <img src="assets/white_logo.png" alt="" style="margin-top: 15px" />
     <span flex></span>
 
     <md-autocomplete
@@ -14,7 +11,7 @@
         md-items="item in ctrl.querySearch(ctrl.searchText)"
         md-item-text="item.name"
         md-min-length="0"
-        placeholder="Search..." 
+        placeholder="Search..."
         style="width: 400px"
         ng-Keypress="ctrl.checkEnter($event)"
         >
@@ -33,7 +30,7 @@
     <md-button class="md-icon-button" aria-label="cart">
       <md-icon md-svg-icon="assets/shoppingcart.svg" ng-click="toggleRight()" ng-hide="isOpenRight()" ></md-icon>
     </md-button>
-    
+
   </div>
 </md-toolbar>
 
@@ -43,7 +40,7 @@
   </md-toolbar>
   <md-content ng-controller="RightCtrl" layout-padding>
     <div class="warehouse-cart-header">
-      
+
     </div>
     <div class="cart-items">
       <table class="table">
