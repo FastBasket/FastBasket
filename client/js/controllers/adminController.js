@@ -132,6 +132,8 @@ angular.module('fastBasket.admin', ['googlechart'])
       {id: "c", label: "Products", type: "string"},
       {id: "p", label: "Products Sold", type: "number"}
     ], "rows": rows};
+    $scope.mostpopularcategories.options = {
+    } 
   };
 
   var buildChart_mostsolditems = function(data){
@@ -177,6 +179,9 @@ angular.module('fastBasket.admin', ['googlechart'])
       {id: "c", label: "Hour", type: "string"},
       {id: "p", label: "Orders", type: "number"}
     ], "rows": rows};
+    $scope.totalordersperhour.options = {
+      colors: ['#e0440e']
+    }
   };
 
   var buildChart_avgordersalesperhour = function(data){
@@ -192,6 +197,9 @@ angular.module('fastBasket.admin', ['googlechart'])
       {id: "c", label: "Hour", type: "string"},
       {id: "p", label: "Sales ($)", type: "number"}
     ], "rows": rows};
+    $scope.avgordersalesperhour.options = {
+      colors: ['#64DD17']
+    }
   };
 
   var buildChart_mostpopularcategoriesPerHour = function(data){
