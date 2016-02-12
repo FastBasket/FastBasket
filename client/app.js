@@ -11,6 +11,7 @@ var fastBasket = angular.module('fastBasket',
   'fastBasket.finish',
   'fastBasket.map',
   'btford.socket-io',
+  'fastBasket.login',
   'ngRoute']).
   config(function($stateProvider, $mdThemingProvider, $urlRouterProvider, $httpProvider){
 
@@ -19,7 +20,8 @@ var fastBasket = angular.module('fastBasket',
         url: "/login",
         views: {
           "login": {
-            templateUrl : 'partial/login.html'
+            templateUrl : 'partial/login.html',
+            controller: 'loginController'
           }
         }
       })
