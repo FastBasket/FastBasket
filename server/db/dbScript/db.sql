@@ -30,9 +30,7 @@ CREATE TABLE IF NOT EXISTS products (
   Name Varchar(100) NOT NULL UNIQUE,
   Size Varchar(20),
   ImageUrl Varchar(300),
-  /*SizeUnit Varchar(20),*/
   Price decimal(6,2),
-  /*PriceUnit varchar(100),*/
   Description Varchar(1000),
   category INTEGER NOT NULL REFERENCES Categories(Id),
   subcategory INTEGER NULL REFERENCES Categories(Id)
@@ -63,4 +61,4 @@ Create Table IF NOT EXISTS OrderDetails (
   Price decimal(6,2)
 );
 
-insert into Stores(name) Values ('test store')
+insert into Stores(name) Values ('test store');
