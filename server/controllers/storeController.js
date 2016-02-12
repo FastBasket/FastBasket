@@ -28,6 +28,7 @@ module.exports = {
   getStoreStats: function(req, res, next){
     orderModel.getStoreStats(function(err, results){
       if (err) {
+	console.log(err);
         res.sendStatus(400);
       } else {
         res.status(200).json(results);
