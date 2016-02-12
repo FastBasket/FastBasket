@@ -10,7 +10,7 @@ module.exports = function (app, express) {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   app.use(cookieParser());
-  app.use(express.static(__dirname + '/../../driver-client'));  
+  app.use(express.static(__dirname + '/../../driver-client'));
   app.use(session({
     secret: constants.SESSION_KEY,
     resave: false,
@@ -23,4 +23,4 @@ module.exports = function (app, express) {
       res.status(401).send('invalid token');
     }
   });
-}
+};
